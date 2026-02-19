@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>nasqwww — Interface</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ========================================
+       CSS CUSTOM PROPERTIES
+    ======================================== */
+    :root {
+      --bg:        #0a0a0f;
+      --purple:    #8f00ff;
+      --cyan:      #00f0ff;
+      --red:       #ff003c;
+      --white:     #e8e8ff;
+      --dim:       #4a4a6a;
+      --font-mono: 'Share Tech Mono', monospace;
+      --font-head: 'Orbitron', sans-serif;
+      --font-body: 'Rajdhani', sans-serif;
+    }
+
+    /* ========================================
+       RESET & BASE
+    ======================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ========================================
+       LOADER
+    ======================================== */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      transition: opacity 0.7s ease, visibility 0.7s ease;
+    }
+    #loader.hidden { opacity: 0; visibility: hidden; }
+
+    .loader-bar-wrap {
+      width: 220px;
+      height: 2px;
+      background: #1a1a2e;
+      position: relative;
+      overflow: hidden;
+    }
+    .loader-bar {
+      position: absolute;
+      left: -100%;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      animation: loaderSlide 1.5s cubic-bezier(.77,0,.18,1) forwards;
+    }
+    @keyframes loaderSlide {
+      0%   { left: -100%; }
+      100% { left: 0%; }
+    }
+    .loader-text {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .2em;
+      color: var(--cyan);
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ========================================
+       CANVAS — PARTICLE / STAR BACKGROUND
+    ======================================== */
+    #stars-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ========================================
+       SCANLINES OVERLAY
+    ======================================== */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.03) 0px,
+        rgba(0,0,0,0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ========================================
+       NAVIGATION
+    ======================================== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,15,0.75);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(143,0,255,0.15);
+      opacity: 0;
+      animation: fadeDown .8s .3s ease forwards;
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .nav-logo {
+      font-family: var(--font-head);
+      font-size: .85rem;
+      font-weight: 700;
+      letter-spacing: .25em;
+      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .18em;
+      color: var(--dim);
+      text-transform: uppercase;
+      transition: color .3s, text-shadow .3s;
+    }
+    .nav-links a:hover {
+      color: var(--cyan);
+      text-shadow: 0 0 12px var(--cyan);
+    }
+    /* Volume toggle button */
+    #vol-btn {
+      background: none;
+      border: 1px solid rgba(0,240,255,0.25);
+      color: var(--dim);
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .1em;
+      padding: .35rem .75rem;
+      cursor: pointer;
+      transition: all .3s;
+    }
+    #vol-btn:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 14px rgba(0,240,255,0.3);
+    }
+
+    /* ========================================
+       SECTIONS — SHARED
+    ======================================== */
+    section {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 2rem;
+    }
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .4em;
+      color: var(--purple);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 2.5rem;
+      background: linear-gradient(135deg, var(--white) 40%, var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ---- Scroll reveal ---- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .85s ease, transform .85s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ========================================
+       HERO SECTION
+    ======================================== */
+    #hero { text-align: center; gap: 0; }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      letter-spacing: .5em;
+      color: var(--cyan);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeIn 1s .9s ease forwards;
+    }
+
+    /* ---- GLITCH NAME ---- */
+    .glitch-name {
+      font-family: var(--font-head);
+      font-size: clamp(3.5rem, 12vw, 9rem);
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      position: relative;
+      display: inline-block;
+      background: linear-gradient(135deg, var(--white), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0;
+      animation: fadeIn .6s 1.1s ease forwards, glitchAnim 4.5s 2s infinite;
+      filter: drop-shadow(0 0 22px rgba(0,240,255,0.35));
+    }
+    .glitch-name::before,
+    .glitch-name::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      font-family: var(--font-head);
+      font-size: inherit;
+      font-weight: 900;
+      letter-spacing: inherit;
+    }
+    .glitch-name::before {
+      background: linear-gradient(135deg, var(--red), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glitchTop 4.5s 2s infinite;
+      clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    }
+    .glitch-name::after {
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glitchBot 4.5s 2s infinite;
+      clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    }
+    @keyframes glitchAnim {
+      0%,88%,100% { transform: none; }
+      89%  { transform: skewX(-1.5deg); }
+      90%  { transform: skewX(1.5deg); }
+      91%  { transform: skewX(0); }
+    }
+    @keyframes glitchTop {
+      0%,88%,100% { transform: none; opacity: 0; }
+      89%  { transform: translate(-4px, -2px); opacity: .75; }
+      90%  { transform: translate(4px, 1px);  opacity: .5; }
+      91%  { transform: translate(0); opacity: 0; }
+    }
+    @keyframes glitchBot {
+      0%,88%,100% { transform: none; opacity: 0; }
+      89%  { transform: translate(4px, 2px);  opacity: .75; }
+      90%  { transform: translate(-4px, -1px); opacity: .5; }
+      91%  { transform: translate(0); opacity: 0; }
+    }
+
+    /* ---- Typing tagline ---- */
+    .hero-tagline {
+      font-family: var(--font-mono);
+      font-size: clamp(.85rem, 2vw, 1.1rem);
+      color: var(--dim);
+      margin-top: 1.6rem;
+      min-height: 1.6em;
+      opacity: 0;
+      animation: fadeIn .6s 1.5s ease forwards;
+    }
+    .cursor-blink {
+      display: inline-block;
+      width: .5em; height: 1em;
+      background: var(--cyan);
+      margin-left: 2px;
+      animation: blink .75s step-end infinite;
+      vertical-align: text-bottom;
+    }
+
+    /* ---- CTA Buttons ---- */
+    .hero-cta {
+      display: flex;
+      gap: 1.2rem;
+      margin-top: 2.8rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeIn .8s 2s ease forwards;
+    }
+    .btn {
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: .9rem 2.4rem;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .3s;
+      display: inline-block;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      color: #080812;
+      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+      font-weight: 700;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 36px rgba(0,240,255,0.45);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--cyan);
+      border: 1px solid rgba(0,240,255,0.4);
+      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    }
+    .btn-ghost:hover {
+      background: rgba(0,240,255,0.07);
+      border-color: var(--cyan);
+      transform: translateY(-3px);
+      box-shadow: 0 0 26px rgba(0,240,255,0.25);
+    }
+
+    /* Scroll hint */
+    .scroll-hint {
+      margin-top: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+      opacity: 0;
+      animation: fadeIn 1s 2.6s ease forwards;
+    }
+    .scroll-hint span {
+      font-family: var(--font-mono);
+      font-size: .55rem;
+      letter-spacing: .35em;
+      color: var(--dim);
+    }
+    .scroll-line {
+      width: 1px; height: 52px;
+      background: linear-gradient(to bottom, var(--cyan), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { transform: scaleY(1); opacity: .5; }
+      50%      { transform: scaleY(1.4); opacity: 1; }
+    }
+
+    /* ========================================
+       ABOUT SECTION
+    ======================================== */
+    #about {
+      background: linear-gradient(180deg, transparent, rgba(143,0,255,0.03) 50%, transparent);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      max-width: 1000px;
+      width: 100%;
+      align-items: center;
+    }
+    .about-avatar {
+      max-width: 300px;
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+    }
+    .avatar-frame {
+      width: 100%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(143,0,255,0.3);
+      position: relative;
+      overflow: hidden;
+      background: rgba(143,0,255,0.04);
+    }
+    .avatar-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(143,0,255,0.08), rgba(0,240,255,0.04));
+    }
+    /* Top-left corner accent */
+    .avatar-frame::after {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px;
+      width: 26px; height: 26px;
+      border-top: 2px solid var(--cyan);
+      border-left: 2px solid var(--cyan);
+    }
+    .corner-br {
+      position: absolute;
+      bottom: -1px; right: -1px;
+      width: 26px; height: 26px;
+      border-bottom: 2px solid var(--purple);
+      border-right: 2px solid var(--purple);
+    }
+    .avatar-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-head);
+      font-size: 5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .about-text p {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: rgba(232,232,255,0.68);
+      margin-bottom: 1.2rem;
+      font-weight: 300;
+    }
+    .about-text p strong { color: var(--cyan); font-weight: 600; }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-top: 1.5rem;
+    }
+    .tag {
+      font-family: var(--font-mono);
+      font-size: .6rem;
+      letter-spacing: .15em;
+      padding: .3rem .8rem;
+      border: 1px solid rgba(143,0,255,0.35);
+      color: var(--purple);
+      transition: all .3s;
+      cursor: default;
+    }
+    .tag:hover {
+      background: rgba(143,0,255,0.12);
+      border-color: var(--purple);
+      box-shadow: 0 0 14px rgba(143,0,255,0.3);
+    }
+
+    /* ========================================
+       PROJECTS SECTION
+    ======================================== */
+    #projects {
+      background: linear-gradient(180deg, transparent, rgba(0,240,255,0.02) 50%, transparent);
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      width: 100%;
+    }
+    .project-card {
+      border: 1px solid rgba(143,0,255,0.2);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.015);
+      transition: transform .3s, box-shadow .3s, border-color .3s;
+      cursor: pointer;
+    }
+    /* Top shimmer on hover */
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .45s ease;
+    }
+    .project-card:hover::before { transform: scaleX(1); }
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,240,255,0.07);
+      border-color: rgba(0,240,255,0.3);
+    }
+    .project-num {
+      font-family: var(--font-mono);
+      font-size: .58rem;
+      letter-spacing: .3em;
+      color: var(--purple);
+      margin-bottom: .8rem;
+    }
+    .project-name {
+      font-family: var(--font-head);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: .7rem;
+      color: var(--white);
+    }
+    .project-desc {
+      font-size: .9rem;
+      color: rgba(232,232,255,0.48);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-top: 1.2rem;
+    }
+    .project-tag {
+      font-family: var(--font-mono);
+      font-size: .54rem;
+      letter-spacing: .12em;
+      padding: .2rem .55rem;
+      border: 1px solid rgba(0,240,255,0.2);
+      color: rgba(0,240,255,0.5);
+    }
+    .project-link {
+      position: absolute;
+      bottom: 1.2rem; right: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: .58rem;
+      letter-spacing: .2em;
+      color: var(--dim);
+      transition: color .3s;
+    }
+    .project-card:hover .project-link { color: var(--cyan); }
+
+    /* ========================================
+       CONTACT SECTION
+    ======================================== */
+    #contact {
+      background: linear-gradient(180deg, transparent, rgba(255,0,60,0.02) 50%, transparent);
+    }
+    .contact-wrap {
+      max-width: 640px;
+      width: 100%;
+      text-align: center;
+    }
+    .contact-wrap > p {
+      font-size: 1rem;
+      color: rgba(232,232,255,0.52);
+      line-height: 1.9;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: left;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-field { display: flex; flex-direction: column; gap: .4rem; }
+    label {
+      font-family: var(--font-mono);
+      font-size: .58rem;
+      letter-spacing: .25em;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+    input, textarea {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(143,0,255,0.2);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: .95rem;
+      padding: .75rem 1rem;
+      outline: none;
+      resize: vertical;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 18px rgba(0,240,255,0.12);
+    }
+    textarea { min-height: 140px; }
+    .form-submit { align-self: flex-end; }
+    .social-links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .social-link {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .2em;
+      color: var(--dim);
+      text-transform: uppercase;
+      position: relative;
+      transition: color .3s;
+    }
+    .social-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--cyan);
+      transition: width .3s;
+    }
+    .social-link:hover { color: var(--cyan); }
+    .social-link:hover::after { width: 100%; }
+
+    /* ========================================
+       FOOTER
+    ======================================== */
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2.5rem;
+      border-top: 1px solid rgba(143,0,255,0.1);
+      font-family: var(--font-mono);
+      font-size: .56rem;
+      letter-spacing: .28em;
+      color: var(--dim);
+    }
+    footer span { color: var(--red); }
+
+    /* ========================================
+       AMBIENT GLOW ORBS (decorative bg blobs)
+    ======================================== */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: .11;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 {
+      width: 400px; height: 400px;
+      background: var(--purple);
+      top: -120px; left: -120px;
+      animation: orbFloat 13s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 320px; height: 320px;
+      background: var(--cyan);
+      bottom: 8%; right: -80px;
+      animation: orbFloat 17s ease-in-out 4s infinite reverse;
+    }
+    @keyframes orbFloat {
+      0%,100% { transform: translate(0,0); }
+      50%      { transform: translate(30px, 40px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========================================
+       RESPONSIVE
+    ======================================== */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-avatar { max-width: 200px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 500px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== LOADER ===== -->
+  <div id="loader">
+    <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+    <div class="loader-text">INITIALIZING INTERFACE...</div>
+  </div>
+
+  <!-- Ambient glow orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <!-- Particle / star canvas -->
+  <canvas id="stars-canvas"></canvas>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav>
+    <div class="nav-logo">NQW://</div>
+    <ul class="nav-links">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <!-- Ambient audio toggle — muted by default -->
+    <button id="vol-btn" title="Toggle ambient sound">◎ MUTED</button>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section id="hero">
+    <div class="hero-eyebrow">// SYSTEM ONLINE — WELCOME TO THE GRID</div>
+
+    <!-- Glitch effect requires data-text matching the inner text -->
+    <h1 class="glitch-name" data-text="nasqwww">nasqwww</h1>
+
+    <p class="hero-tagline">
+      <span id="typing-text"></span><span class="cursor-blink"></span>
+    </p>
+
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">VIEW PROJECTS</a>
+      <a href="#contact" class="btn btn-ghost">ESTABLISH LINK</a>
+    </div>
+
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      <span>SCROLL</span>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about">
+    <div class="section-label reveal">// SECTOR 02 — ABOUT</div>
+    <div class="about-grid">
+      <div class="about-avatar reveal">
+        <div class="avatar-frame">
+          <div class="avatar-inner">NQ</div>
+          <div class="corner-br"></div>
+        </div>
+      </div>
+      <div class="about-text reveal">
+        <h2 class="section-title">Identity Protocol</h2>
+        <p>
+          Designation: <strong>nasqwww</strong>. A digital craftsman operating at the intersection
+          of code and design — building interfaces that feel alive, systems that think fast.
+        </p>
+        <p>
+          Specializing in <strong>full-stack development</strong>, creative front-end engineering,
+          and immersive digital experiences. Every pixel deliberate. Every interaction intentional.
+        </p>
+        <div class="skill-tags">
+          <span class="tag">TYPESCRIPT</span>
+          <span class="tag">REACT</span>
+          <span class="tag">NODE.JS</span>
+          <span class="tag">PYTHON</span>
+          <span class="tag">THREE.JS</span>
+          <span class="tag">WEBGL</span>
+          <span class="tag">UI / UX</span>
+          <span class="tag">AI / ML</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section id="projects">
+    <div class="section-label reveal">// SECTOR 03 — PROJECTS</div>
+    <h2 class="section-title reveal">Mission Log</h2>
+
+    <div class="projects-grid reveal">
+
+      <div class="project-card">
+        <div class="project-num">// PROJECT_01</div>
+        <div class="project-name">NEXUS INTERFACE</div>
+        <p class="project-desc">Real-time data visualization dashboard with live WebSocket feeds and 3D chart rendering in the browser.</p>
+        <div class="project-tags">
+          <span class="project-tag">REACT</span>
+          <span class="project-tag">D3.JS</span>
+          <span class="project-tag">WEBSOCKET</span>
+        </div>
+        <span class="project-link">→ VIEW</span>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">// PROJECT_02</div>
+        <div class="project-name">VOID PROTOCOL</div>
+        <p class="project-desc">AI-powered code assistant with semantic search, context-aware completions and vector database integration.</p>
+        <div class="project-tags">
+          <span class="project-tag">PYTHON</span>
+          <span class="project-tag">LANGCHAIN</span>
+          <span class="project-tag">FASTAPI</span>
+        </div>
+        <span class="project-link">→ VIEW</span>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">// PROJECT_03</div>
+        <div class="project-name">PHANTOM ENGINE</div>
+        <p class="project-desc">Procedural world generator on WebGL — infinite terrain, dynamic weather systems, day/night cycles.</p>
+        <div class="project-tags">
+          <span class="project-tag">THREE.JS</span>
+          <span class="project-tag">GLSL</span>
+          <span class="project-tag">WEBGPU</span>
+        </div>
+        <span class="project-link">→ VIEW</span>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">// PROJECT_04</div>
+        <div class="project-name">CIPHER RELAY</div>
+        <p class="project-desc">End-to-end encrypted messaging platform with zero-knowledge proofs and decentralized identity.</p>
+        <div class="project-tags">
+          <span class="project-tag">RUST</span>
+          <span class="project-tag">WEB3</span>
+          <span class="project-tag">CRYPTOGRAPHY</span>
+        </div>
+        <span class="project-link">→ VIEW</span>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">// PROJECT_05</div>
+        <div class="project-name">SYNAPSE UI</div>
+        <p class="project-desc">Open-source cyberpunk component library — 60+ components, dark-mode native, zero dependencies.</p>
+        <div class="project-tags">
+          <span class="project-tag">TYPESCRIPT</span>
+          <span class="project-tag">STORYBOOK</span>
+          <span class="project-tag">CSS</span>
+        </div>
+        <span class="project-link">→ VIEW</span>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">// PROJECT_06</div>
+        <div class="project-name">ORBIT SCAN</div>
+        <p class="project-desc">Network security scanner with ML anomaly detection, real-time threat mapping and automated incident response.</p>
+        <div class="project-tags">
+          <span class="project-tag">PYTHON</span>
+          <span class="project-tag">TENSORFLOW</span>
+          <span class="project-tag">DOCKER</span>
+        </div>
+        <span class="project-link">→ VIEW</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact">
+    <div class="section-label reveal">// SECTOR 04 — CONTACT</div>
+    <div class="contact-wrap">
+      <h2 class="section-title reveal">Open Channel</h2>
+      <p class="reveal">
+        Want to build something extraordinary? Have an idea that needs a skilled hand to execute?
+        Transmit your message and I'll respond within 24 cycles.
+      </p>
+
+      <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="name">IDENTIFIER</label>
+            <input type="text" id="name" placeholder="Your name" />
+          </div>
+          <div class="form-field">
+            <label for="email">RELAY ADDRESS</label>
+            <input type="email" id="email" placeholder="your@email.com" />
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="subject">SUBJECT HEADER</label>
+          <input type="text" id="subject" placeholder="What's the mission?" />
+        </div>
+        <div class="form-field">
+          <label for="message">TRANSMISSION</label>
+          <textarea id="message" placeholder="Describe your project..."></textarea>
+        </div>
+        <div class="form-submit">
+          <button type="submit" class="btn btn-primary">TRANSMIT →</button>
+        </div>
+      </form>
+
+      <div class="social-links reveal">
+        <a href="#" class="social-link">GITHUB</a>
+        <a href="#" class="social-link">TWITTER</a>
+        <a href="#" class="social-link">LINKEDIN</a>
+        <a href="#" class="social-link">DISCORD</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <p>© 2025 nasqwww — BUILT WITH <span>♥</span> AND TOO MUCH CAFFEINE</p>
+  </footer>
+
+  <!-- ========================================
+       JAVASCRIPT — ALL EMBEDDED
+  ======================================== -->
+  <script>
+    /* ------------------------------------------------
+       1. LOADER — hide after page load + animation
+    ------------------------------------------------ */
+    window.addEventListener('load', () => {
+      // Wait for bar animation (1.5s) + small buffer
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+      }, 1700);
+    });
+
+    /* ------------------------------------------------
+       2. PARTICLE / STAR CANVAS
+    ------------------------------------------------ */
+    (function initStars() {
+      const canvas = document.getElementById('stars-canvas');
+      const ctx    = canvas.getContext('2d');
+      let W, H;
+      let stars    = [];
+      let shooters = [];
+
+      // Resize canvas to full viewport
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+
+      function rand(min, max) { return min + Math.random() * (max - min); }
+
+      // Create a single twinkling star object
+      function makeStar() {
+        return {
+          x:     rand(0, W),
+          y:     rand(0, H),
+          r:     rand(0.3, 1.6),
+          alpha: rand(0.2, 0.9),
+          speed: rand(0.008, 0.035),
+          dir:   Math.random() < 0.5 ? 1 : -1
+        };
+      }
+
+      // Create a shooting-star object
+      function makeShooter() {
+        return {
+          x:     rand(0, W),
+          y:     rand(0, H * 0.4),
+          len:   rand(80, 190),
+          speed: rand(12, 24),
+          alpha: 1,
+          angle: Math.PI / 5  // ~36°
+        };
+      }
+
+      function init() {
+        resize();
+        stars = Array.from({ length: 230 }, makeStar);
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        // Draw twinkling stars
+        for (const s of stars) {
+          s.alpha += s.speed * s.dir;
+          if (s.alpha >= 0.9 || s.alpha <= 0.15) s.dir *= -1;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(200,210,255,${s.alpha})`;
+          ctx.fill();
+        }
+
+        // Occasionally spawn a shooting star
+        if (Math.random() < 0.004) shooters.push(makeShooter());
+
+        // Draw and advance shooting stars
+        for (let i = shooters.length - 1; i >= 0; i--) {
+          const sh = shooters[i];
+          const ex = sh.x + Math.cos(sh.angle) * sh.len;
+          const ey = sh.y + Math.sin(sh.angle) * sh.len;
+          const g  = ctx.createLinearGradient(sh.x, sh.y, ex, ey);
+          g.addColorStop(0, `rgba(0,240,255,0)`);
+          g.addColorStop(1, `rgba(0,240,255,${sh.alpha})`);
+          ctx.beginPath();
+          ctx.moveTo(sh.x, sh.y);
+          ctx.lineTo(ex, ey);
+          ctx.strokeStyle = g;
+          ctx.lineWidth   = 1;
+          ctx.stroke();
+          sh.x    += Math.cos(sh.angle) * sh.speed;
+          sh.y    += Math.sin(sh.angle) * sh.speed;
+          sh.alpha -= 0.028;
+          if (sh.alpha <= 0) shooters.splice(i, 1);
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', resize);
+      init();
+      draw();
+    })();
+
+    /* ------------------------------------------------
+       3. TYPING / TYPEWRITER ANIMATION
+    ------------------------------------------------ */
+    (function initTyping() {
+      const phrases = [
+        'Full-Stack Developer.',
+        'Creative Technologist.',
+        'UI / UX Engineer.',
+        'Open-Source Contributor.',
+        'Digital Architect.'
+      ];
+
+      const el = document.getElementById('typing-text');
+      let pi = 0, ci = 0, deleting = false;
+
+      function tick() {
+        const phrase = phrases[pi];
+
+        if (!deleting) {
+          // Type forward
+          el.textContent = phrase.slice(0, ++ci);
+          if (ci === phrase.length) {
+            deleting = true;
+            setTimeout(tick, 1900);
+            return;
+          }
+          setTimeout(tick, 65);
+        } else {
+          // Erase backward
+          el.textContent = phrase.slice(0, --ci);
+          if (ci === 0) {
+            deleting = false;
+            pi = (pi + 1) % phrases.length;
+            setTimeout(tick, 320);
+            return;
+          }
+          setTimeout(tick, 38);
+        }
+      }
+
+      // Delay start until after initial animations
+      setTimeout(tick, 2200);
+    })();
+
+    /* ------------------------------------------------
+       4. SCROLL REVEAL (IntersectionObserver)
+    ------------------------------------------------ */
+    (function initReveal() {
+      const observer = new IntersectionObserver(
+        entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+        { threshold: 0.14 }
+      );
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    })();
+
+    /* ------------------------------------------------
+       5. AMBIENT AUDIO — Web Audio API drone
+         (no external audio file required)
+    ------------------------------------------------ */
+    (function initAudio() {
+      let audioCtx, masterGain, running = false;
+
+      // Build a simple ambient drone with 3 oscillators
+      function buildAmbience() {
+        audioCtx    = new (window.AudioContext || window.webkitAudioContext)();
+        masterGain  = audioCtx.createGain();
+        masterGain.gain.value = 0;         // start silent
+        masterGain.connect(audioCtx.destination);
+
+        // Helper: create oscillator connected to master
+        function addOsc(freq, type, detuneAmt, vol) {
+          const osc  = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.value = freq;
+          osc.detune.value    = detuneAmt;
+          gain.gain.value     = vol;
+          osc.connect(gain);
+          gain.connect(masterGain);
+          osc.start();
+        }
+
+        addOsc(55,  'sine',     0,  0.12);  // Sub bass root
+        addOsc(110, 'sine',     5,  0.07);  // Octave up, slight detune
+        addOsc(165, 'triangle',-4,  0.05);  // Fifth above, soft
+        addOsc(220, 'sine',     8,  0.03);  // Two octaves up
+      }
+
+      const btn = document.getElementById('vol-btn');
+
+      btn.addEventListener('click', () => {
+        // Build on first interaction (browser autoplay policy)
+        if (!audioCtx) buildAmbience();
+
+        if (!running) {
+          // Fade in
+          masterGain.gain.setTargetAtTime(0.55, audioCtx.currentTime, 0.6);
+          btn.textContent = '◉ AMBIENT';
+          running = true;
+        } else {
+          // Fade out
+          masterGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.6);
+          btn.textContent = '◎ MUTED';
+          running = false;
+        }
+      });
+    })();
+
+    /* ------------------------------------------------
+       6. CONTACT FORM — demo feedback
+    ------------------------------------------------ */
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('[type="submit"]');
+      const orig = btn.textContent;
+      btn.textContent = 'TRANSMITTED ✓';
+      btn.style.background = 'linear-gradient(135deg, #00c896, #00f0ff)';
+      setTimeout(() => {
+        btn.textContent   = orig;
+        btn.style.background = '';
+        e.target.reset();
+      }, 3200);
+    }
+  </script>
+
+</body>
+</html>
