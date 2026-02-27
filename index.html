@@ -3,589 +3,331 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-
-<!-- ─── Primary SEO ────────────────────────────────────────── -->
 <title>nasqdrop — curated internet</title>
-<meta name="description" content="nasqdrop is a curated stream of the internet. One powerful website, every day. No algorithm. No ads. No noise."/>
-<meta name="author"      content="nasqwww"/>
-<meta name="keywords"    content="nasqdrop, curated internet, website of the day, web discovery, design tools, ai tools, interactive web, nasqwww"/>
-<meta name="robots"      content="index, follow"/>
-<link rel="canonical"    href="https://nasqwww.github.io/nasqdrop/"/>
-
-<!-- ─── Open Graph ─────────────────────────────────────────── -->
-<meta property="og:type"        content="website"/>
-<meta property="og:site_name"   content="nasqdrop"/>
-<meta property="og:title"       content="nasqdrop — curated internet"/>
-<meta property="og:description" content="One powerful website, every day. Curated by nasqwww. No algorithm. No ads."/>
-<meta property="og:url"         content="https://nasqwww.github.io/nasqdrop/"/>
-
-<!-- ─── Twitter Card ───────────────────────────────────────── -->
-<meta name="twitter:card"        content="summary"/>
-<meta name="twitter:site"        content="@nasqwww"/>
-<meta name="twitter:creator"     content="@nasqwww"/>
-<meta name="twitter:title"       content="nasqdrop — curated internet"/>
+<meta name="description" content="nasqdrop is a curated stream of the internet. One powerful website, every day. No algorithm. No ads."/>
+<meta name="author" content="nasqwww"/>
+<meta name="keywords" content="nasqdrop, curated internet, website of the day, web discovery, interactive web, nasqwww"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://nasqwww.github.io/nasqdrop/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="nasqdrop"/>
+<meta property="og:title" content="nasqdrop — curated internet"/>
+<meta property="og:description" content="One powerful website, every day. No algorithm. No ads."/>
+<meta property="og:url" content="https://nasqwww.github.io/nasqdrop/"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:site" content="@nasqwww"/>
+<meta name="twitter:title" content="nasqdrop — curated internet"/>
 <meta name="twitter:description" content="One powerful website, every day. No algorithm. No ads."/>
-
-<!-- ─── Theme ──────────────────────────────────────────────── -->
 <meta name="theme-color" content="#080808"/>
-
-<!-- ─── Favicon: black + acid-green ND monogram ───────────── -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23080808'/%3E%3Cpath d='M6 24V8h3l8 10.4V8h3v16h-3L9 13.6V24H6z' fill='%23b8ff00'/%3E%3Cpath d='M22 8h5c3.3 0 5 2 5 8s-1.7 8-5 8h-5V8zm3 13h1.8c1.5 0 2.2-1 2.2-5s-.7-5-2.2-5H25v10z' fill='%23b8ff00'/%3E%3C/svg%3E"/>
-
-<!-- ─── Fonts ───────────────────────────────────────────────── -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='3' fill='%23080808'/%3E%3Ctext x='3' y='24' font-family='Arial Black%2Csans-serif' font-weight='900' font-size='17' fill='%23b8ff00'%3END%3C/text%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-
 <style>
-/* ================================================================
-   DESIGN TOKENS
-   ================================================================ */
 :root {
-  /* surface */
-  --ink:      #080808;
-  --ink-1:    #0f0f0f;
-  --ink-2:    #161616;
-  --ink-3:    #1d1d1d;
-
-  /* text */
-  --paper:    #E8E6E1;
-  --p70:      rgba(232,230,225,.70);
-  --p40:      rgba(232,230,225,.40);
-  --p18:      rgba(232,230,225,.18);
-  --p10:      rgba(232,230,225,.10);
-  --p05:      rgba(232,230,225,.05);
-  --p02:      rgba(232,230,225,.02);
-
-  /* brand */
-  --acid:     #b8ff00;
-  --acid-lo:  rgba(184,255,0,.07);
-
-  /* type */
-  --f-disp:   'Anton', sans-serif;
-  --f-body:   'IBM Plex Mono', monospace;
-
-  /* motion */
-  --ease:     cubic-bezier(0.16,1,0.3,1);
+  --ink:   #080808; --ink-1: #0f0f0f; --ink-2: #161616;
+  --paper: #E8E6E1;
+  --p70:   rgba(232,230,225,.70); --p40: rgba(232,230,225,.40);
+  --p18:   rgba(232,230,225,.18); --p10: rgba(232,230,225,.10);
+  --p06:   rgba(232,230,225,.06); --p03: rgba(232,230,225,.03);
+  --acid:  #b8ff00; --acid-lo: rgba(184,255,0,.07);
+  --f-d:   'Anton', sans-serif; --f-b: 'IBM Plex Mono', monospace;
+  --ease:  cubic-bezier(0.16,1,0.3,1);
 }
-
-/* ================================================================
-   RESET
-   ================================================================ */
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
 html { font-size:16px; scroll-behavior:smooth; }
 body {
-  background: var(--ink);
-  color: var(--paper);
-  font-family: var(--f-body);
-  line-height: 1.6;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background:var(--ink); color:var(--paper);
+  font-family:var(--f-b); line-height:1.6;
+  overflow-x:hidden; -webkit-font-smoothing:antialiased;
 }
-a { color: inherit; text-decoration: none; }
-button { background: none; border: none; font: inherit; color: inherit; }
+a { color:inherit; text-decoration:none; }
+button { background:none; border:none; font:inherit; color:inherit; }
 
-/* ================================================================
-   NOISE LAYER
-   ================================================================ */
+/* NOISE */
 #noise {
-  position: fixed; inset: 0; z-index: 9000; pointer-events: none;
-  opacity: .028;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  position:fixed; inset:0; z-index:9000; pointer-events:none;
+  opacity:.028;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
 }
 
-/* ================================================================
-   CURSOR
-   ================================================================ */
-* { cursor: none !important; }
+/* CURSOR */
+* { cursor:none !important; }
 #cur {
-  position: fixed; z-index: 9999; pointer-events: none;
-  width: 7px; height: 7px;
-  background: var(--acid);
-  border-radius: 50%;
-  transform: translate(-50%,-50%);
-  transition: width .16s var(--ease), height .16s var(--ease),
-              background .16s, opacity .2s;
-  mix-blend-mode: exclusion;
-  will-change: left, top;
+  position:fixed; z-index:9999; pointer-events:none;
+  width:7px; height:7px; background:var(--acid); border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:width .16s var(--ease),height .16s var(--ease),opacity .2s;
+  mix-blend-mode:exclusion; will-change:left,top;
 }
-#cur.on-link { width: 44px; height: 44px; }
+#cur.big { width:44px; height:44px; }
 
-/* ================================================================
-   NAV
-   ================================================================ */
+/* NAV */
 #nav {
-  position: fixed; top:0; left:0; right:0; z-index:800;
-  height: 52px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 48px;
-  background: var(--ink);
-  border-bottom: 1px solid var(--p10);
+  position:fixed; top:0; left:0; right:0; z-index:800;
+  height:52px; display:flex; align-items:center; justify-content:space-between;
+  padding:0 48px; background:var(--ink); border-bottom:1px solid var(--p10);
 }
-
-/* Logo */
 .nav-logo {
-  font-family: var(--f-disp);
-  font-size: 1.15rem;
-  letter-spacing: .05em;
-  color: var(--paper);
-  position: relative;
-  display: inline-block;
-  padding-bottom: 2px;
+  font-family:var(--f-d); font-size:1.15rem; letter-spacing:.05em;
+  color:var(--paper); position:relative; display:inline-block; padding-bottom:2px;
 }
-/* "drop" part in acid */
-.nav-logo .accent { color: var(--acid); }
-/* animated underline — acid bar grows left→right on hover */
+.nav-logo .nd { color:var(--acid); }
 .nav-logo::after {
-  content: '';
-  position: absolute; bottom: -1px; left: 0;
-  width: 0; height: 1px;
-  background: var(--acid);
-  transition: width .32s var(--ease);
+  content:''; position:absolute; bottom:-1px; left:0;
+  width:0; height:1px; background:var(--acid);
+  transition:width .32s var(--ease);
 }
-.nav-logo:hover::after { width: 100%; }
-
-/* Live badge */
+.nav-logo:hover::after { width:100%; }
 .nav-center {
-  display: flex; align-items: center; gap: 7px;
-  font-size: .58rem; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--p40);
+  display:flex; align-items:center; gap:7px;
+  font-size:.58rem; letter-spacing:.16em; text-transform:uppercase; color:var(--p40);
 }
 .live-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--acid);
-  animation: livePulse 2s ease-in-out infinite;
+  width:5px; height:5px; border-radius:50%; background:var(--acid);
+  animation:livePulse 2s ease-in-out infinite;
 }
 @keyframes livePulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(184,255,0,.55); }
-  50%      { box-shadow: 0 0 0 4px rgba(184,255,0,0); }
+  0%,100% { box-shadow:0 0 0 0 rgba(184,255,0,.55); }
+  50%     { box-shadow:0 0 0 4px rgba(184,255,0,0); }
 }
-
-/* Right cluster */
-.nav-right { display: flex; align-items: center; gap: 28px; }
+.nav-right { display:flex; align-items:center; gap:28px; }
 .nav-link {
-  font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--p40);
-  transition: color .14s;
-  position: relative;
+  font-size:.58rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--p40); transition:color .14s; position:relative;
 }
 .nav-link::after {
-  content: '';
-  position: absolute; bottom: -2px; left: 0;
-  width: 0; height: 1px;
-  background: var(--acid);
-  transition: width .2s var(--ease);
+  content:''; position:absolute; bottom:-2px; left:0;
+  width:0; height:1px; background:var(--acid); transition:width .2s var(--ease);
 }
-.nav-link:hover { color: var(--acid); }
-.nav-link:hover::after { width: 100%; }
-
-/* Lang toggle */
-.lang-toggle {
-  display: flex;
-  border: 1px solid var(--p10);
-  height: 26px; overflow: hidden;
-}
+.nav-link:hover { color:var(--acid); }
+.nav-link:hover::after { width:100%; }
+.lang-toggle { display:flex; border:1px solid var(--p10); height:26px; overflow:hidden; }
 .lang-btn {
-  font-family: var(--f-body);
-  font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
-  padding: 0 9px; height: 100%;
-  color: var(--p40);
-  transition: background .14s, color .14s;
+  font-family:var(--f-b); font-size:.58rem; letter-spacing:.1em; text-transform:uppercase;
+  padding:0 9px; height:100%; color:var(--p40); transition:background .14s,color .14s;
 }
-.lang-btn.active { background: var(--acid); color: var(--ink); }
+.lang-btn.active { background:var(--acid); color:var(--ink); }
 
-/* ================================================================
-   HERO
-   ================================================================ */
-#hero {
-  min-height: 100svh;
-  padding-top: 52px;
-  display: grid;
-  grid-template-rows: 1fr auto;
-  position: relative;
-}
-
+/* HERO */
+#hero { min-height:100svh; padding-top:52px; display:grid; grid-template-rows:1fr auto; }
 .hero-main {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid var(--p10);
+  display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--p10);
 }
-
-/* ── Left column: issue number ── */
 .hero-l {
-  padding: 60px 48px;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  border-right: 1px solid var(--p10);
+  padding:60px 48px; display:flex; flex-direction:column; justify-content:flex-end;
+  border-right:1px solid var(--p10);
 }
-
 .hero-eyebrow {
-  font-size: .56rem; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--p40);
-  margin-bottom: 20px;
-  opacity: 0; animation: up .5s var(--ease) .05s forwards;
+  font-size:.56rem; letter-spacing:.2em; text-transform:uppercase; color:var(--p40);
+  margin-bottom:20px; opacity:0; animation:up .5s var(--ease) .05s forwards;
 }
-
 .hero-num {
-  font-family: var(--f-disp);
-  font-size: clamp(100px, 17vw, 220px);
-  line-height: .86;
-  letter-spacing: -.02em;
-  color: var(--paper);
-  user-select: none;
-  position: relative;
-  opacity: 0; animation: up .7s var(--ease) .1s forwards;
+  font-family:var(--f-d); font-size:clamp(100px,17vw,220px);
+  line-height:.86; letter-spacing:-.02em; color:var(--paper);
+  user-select:none; position:relative; opacity:0; animation:up .7s var(--ease) .1s forwards;
 }
-/* acid underline reveals after number loads */
 .hero-num::after {
-  content: '';
-  position: absolute; bottom: -2px; left: 0;
-  width: 100%; height: 3px;
-  background: var(--acid);
-  transform: scaleX(0); transform-origin: left;
-  animation: lineGrow .45s var(--ease) 1.05s forwards;
+  content:''; position:absolute; bottom:-2px; left:0;
+  width:100%; height:3px; background:var(--acid);
+  transform:scaleX(0); transform-origin:left;
+  animation:lineGrow .45s var(--ease) 1.05s forwards;
 }
-@keyframes lineGrow { to { transform: scaleX(1); } }
-
+@keyframes lineGrow { to { transform:scaleX(1); } }
 .hero-date {
-  margin-top: 18px;
-  font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--p40);
-  opacity: 0; animation: up .5s var(--ease) .28s forwards;
+  margin-top:18px; font-size:.6rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--p40); opacity:0; animation:up .5s var(--ease) .28s forwards;
 }
+.hero-stats { display:flex; gap:28px; margin-top:36px; opacity:0; animation:up .5s var(--ease) .4s forwards; }
+.stat-n { font-family:var(--f-d); font-size:1.35rem; line-height:1; color:var(--paper); }
+.stat-l { font-size:.54rem; letter-spacing:.12em; text-transform:uppercase; color:var(--p40); margin-top:5px; }
 
-.hero-stats {
-  display: flex; gap: 28px;
-  margin-top: 36px;
-  opacity: 0; animation: up .5s var(--ease) .4s forwards;
-}
-.stat-n {
-  font-family: var(--f-disp);
-  font-size: 1.35rem; line-height: 1; color: var(--paper);
-}
-.stat-l {
-  font-size: .54rem; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--p40); margin-top: 5px;
-}
-
-/* ── Right column: today's site ── */
 .hero-r {
-  padding: 60px 48px;
-  display: flex; flex-direction: column; justify-content: center;
-  gap: 22px;
-  opacity: 0; animation: up .7s var(--ease) .18s forwards;
+  padding:60px 48px; display:flex; flex-direction:column; justify-content:center;
+  gap:22px; opacity:0; animation:up .7s var(--ease) .18s forwards;
 }
-
-.chip-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.chip-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 .chip {
-  display: inline-flex; align-items: center;
-  font-size: .56rem; letter-spacing: .16em; text-transform: uppercase;
-  padding: 3px 10px;
-  border: 1px solid var(--acid); color: var(--acid);
-  width: fit-content;
-  /* subtle blink-in */
-  animation: chipBlink 3.5s ease-in-out infinite;
+  display:inline-flex; align-items:center;
+  font-size:.56rem; letter-spacing:.16em; text-transform:uppercase;
+  padding:3px 10px; border:1px solid var(--acid); color:var(--acid); width:fit-content;
 }
-@keyframes chipBlink {
-  0%,90%,100% { opacity: 1; }
-  95%         { opacity: .5; }
-}
-.chip-seen {
-  border-color: var(--p18); color: var(--p40);
-  animation: none;
-  display: none;
-}
-.chip-seen.on { display: inline-flex; }
-
+.chip-seen { border-color:var(--p18); color:var(--p40); display:none; }
+.chip-seen.on { display:inline-flex; }
 .hero-title {
-  font-family: var(--f-disp);
-  font-size: clamp(1.6rem, 3.2vw, 2.8rem);
-  letter-spacing: .02em; text-transform: uppercase;
-  line-height: 1.02; color: var(--paper);
+  font-family:var(--f-d); font-size:clamp(1.6rem,3.2vw,2.8rem);
+  letter-spacing:.02em; text-transform:uppercase; line-height:1.02; color:var(--paper);
 }
-
-.hero-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.hero-tags { display:flex; flex-wrap:wrap; gap:6px; }
 .tag {
-  font-size: .52rem; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--p40); border: 1px solid var(--p10);
-  padding: 2px 8px;
-  transition: color .14s, border-color .14s;
+  font-size:.52rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--p40); border:1px solid var(--p10); padding:2px 8px;
+  transition:color .14s,border-color .14s,transform .14s; display:inline-block;
 }
-.tag:hover { color: var(--acid); border-color: rgba(184,255,0,.35); }
-
-.hero-desc {
-  font-size: .77rem; line-height: 1.82;
-  color: var(--p70); max-width: 44ch;
-}
-
-/* CTA buttons */
-.hero-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-
+.tag:hover { color:var(--acid); border-color:rgba(184,255,0,.35); transform:translateY(-1px); }
+.hero-desc { font-size:.77rem; line-height:1.82; color:var(--p70); max-width:44ch; }
+.hero-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
 .btn-open {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-family: var(--f-disp);
-  font-size: .9rem; letter-spacing: .08em; text-transform: uppercase;
-  background: var(--acid); color: var(--ink);
-  padding: 13px 26px;
-  width: fit-content;
-  position: relative; overflow: hidden;
-  transition: gap .2s var(--ease);
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--f-d); font-size:.9rem; letter-spacing:.08em; text-transform:uppercase;
+  background:var(--acid); color:var(--ink); padding:13px 26px;
+  width:fit-content; position:relative; overflow:hidden; transition:gap .2s var(--ease);
 }
-/* shimmer on hover */
 .btn-open::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: #fff; transform: translateX(-101%);
-  transition: transform .22s var(--ease);
+  content:''; position:absolute; inset:0; background:#fff;
+  transform:translateX(-101%); transition:transform .22s var(--ease);
 }
-.btn-open:hover::before { transform: translateX(0); }
-.btn-open:hover { gap: 18px; }
-.btn-open > * { position: relative; z-index: 1; }
-
+.btn-open:hover::before { transform:translateX(0); }
+.btn-open:hover { gap:18px; }
+.btn-open > * { position:relative; z-index:1; }
 .btn-random {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-family: var(--f-body);
-  font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--p40); border: 1px solid var(--p10);
-  padding: 8px 14px;
-  transition: color .14s, border-color .14s;
+  display:inline-flex; align-items:center; gap:7px;
+  font-family:var(--f-b); font-size:.58rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--p40); border:1px solid var(--p10); padding:8px 14px;
+  transition:color .14s,border-color .14s;
 }
-.btn-random:hover { color: var(--paper); border-color: var(--p40); }
+.btn-random:hover { color:var(--paper); border-color:var(--p40); }
 
-/* ── Ticker strip ── */
-.ticker-wrap {
-  height: 42px; overflow: hidden;
-  border-top: 1px solid var(--p05);
-  display: flex; align-items: center;
-}
+/* TICKER */
+.ticker-wrap { height:40px; overflow:hidden; border-top:1px solid var(--p06); display:flex; align-items:center; }
 .ticker-track {
-  display: flex; gap: 0; white-space: nowrap;
-  animation: tickerScroll 44s linear infinite;
-  will-change: transform;
+  display:flex; white-space:nowrap;
+  animation:ticker 50s linear infinite; will-change:transform;
 }
 .ticker-item {
-  display: flex; align-items: center;
-  font-size: .55rem; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--p18); padding: 0 22px;
-  border-right: 1px solid var(--p05);
+  font-size:.55rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--p10); padding:0 22px; border-right:1px solid var(--p06);
 }
-.ticker-item b { color: var(--acid); margin-right: 7px; font-weight: 400; }
-@keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.ticker-item b { color:var(--acid); margin-right:7px; font-weight:400; }
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
-/* ================================================================
-   ARCHIVE
-   ================================================================ */
-#archive {
-  padding: 92px 48px;
-  max-width: 1440px; margin: 0 auto;
-}
-
-/* Header */
+/* ARCHIVE */
+#archive { padding:88px 48px; max-width:1440px; margin:0 auto; }
 .arch-head {
-  display: flex; align-items: flex-end; justify-content: space-between;
-  gap: 20px; flex-wrap: wrap;
-  margin-bottom: 44px;
-  padding-bottom: 22px;
-  border-bottom: 1px solid var(--p10);
+  display:flex; align-items:flex-end; justify-content:space-between;
+  margin-bottom:44px; padding-bottom:20px; border-bottom:1px solid var(--p10);
+  gap:20px; flex-wrap:wrap;
 }
 .arch-heading {
-  font-family: var(--f-disp);
-  font-size: clamp(2.2rem, 4.5vw, 4rem);
-  letter-spacing: .04em; text-transform: uppercase;
-  line-height: 1;
+  font-family:var(--f-d); font-size:clamp(2.2rem,4.5vw,4rem);
+  letter-spacing:.04em; text-transform:uppercase; line-height:1;
 }
-.arch-heading em { color: var(--acid); font-style: normal; }
-
-/* Controls */
-.arch-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.filter-list   { display: flex; gap: 5px; flex-wrap: wrap; }
-
+.arch-heading em { color:var(--acid); font-style:normal; }
+.arch-controls { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.filter-list { display:flex; gap:5px; flex-wrap:wrap; }
 .filter-btn {
-  font-family: var(--f-body);
-  font-size: .54rem; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--p40); border: 1px solid var(--p10);
-  padding: 3px 9px;
-  transition: color .14s, border-color .14s, background .14s;
+  font-family:var(--f-b); font-size:.55rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--p40); border:1px solid var(--p10); padding:4px 10px;
+  transition:all .14s;
 }
-.filter-btn:hover  { color: var(--paper); border-color: var(--p40); }
-.filter-btn.active { color: var(--acid);  border-color: var(--acid); background: var(--acid-lo); }
-
+.filter-btn:hover { color:var(--paper); border-color:var(--p40); }
+.filter-btn.active { color:var(--acid); border-color:var(--acid); background:var(--acid-lo); }
 .count-badge {
-  font-size: .54rem; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--p40); border: 1px solid var(--p10);
-  padding: 3px 9px;
-  white-space: nowrap;
+  font-size:.55rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--p40); padding:4px 10px; border:1px solid var(--p10);
 }
-
-/* Grid */
 .arch-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 1px;
-  background: var(--p05);
-  border: 1px solid var(--p05);
+  display:grid; grid-template-columns:repeat(12,1fr);
+  gap:1px; background:var(--p06); border:1px solid var(--p06);
 }
-
-/* Column-span rhythm — varies every 7 items */
-.arch-card:nth-child(7n+1) { grid-column: span 7; }
-.arch-card:nth-child(7n+2) { grid-column: span 5; }
-.arch-card:nth-child(7n+3) { grid-column: span 4; }
-.arch-card:nth-child(7n+4) { grid-column: span 4; }
-.arch-card:nth-child(7n+5) { grid-column: span 4; }
-.arch-card:nth-child(7n+6) { grid-column: span 6; }
-.arch-card:nth-child(7n+0) { grid-column: span 6; }
-
 .arch-card {
-  background: var(--ink);
-  padding: 26px 22px;
-  display: flex; flex-direction: column; gap: 9px;
-  position: relative; overflow: hidden;
-  opacity: 0; transform: translateY(8px);
-  transition: background .18s;
+  background:var(--ink); padding:26px 22px;
+  display:flex; flex-direction:column; gap:9px;
+  position:relative; overflow:hidden; transition:background .18s;
+  opacity:0; transform:translateY(10px);
 }
-.arch-card.reveal { animation: up .42s var(--ease) forwards; }
-.arch-card:hover  { background: var(--ink-2); }
-
-/* acid left accent line */
+.arch-card.show { animation:up .42s var(--ease) forwards; }
+.arch-card:hover { background:var(--ink-2); }
 .arch-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; bottom: 0; width: 2px;
-  background: var(--acid);
-  transform: scaleY(0); transform-origin: bottom;
-  transition: transform .2s var(--ease);
+  content:''; position:absolute; top:0; left:0; bottom:0; width:2px;
+  background:var(--acid); transform:scaleY(0); transform-origin:bottom;
+  transition:transform .2s var(--ease);
 }
-.arch-card:hover::before { transform: scaleY(1); }
-
-.arch-num {
-  font-family: var(--f-disp);
-  font-size: 2.6rem; line-height: 1;
-  color: var(--p05); user-select: none;
-  transition: color .18s;
+.arch-card:hover::before { transform:scaleY(1); }
+.arch-card:nth-child(7n+1) { grid-column:span 7; }
+.arch-card:nth-child(7n+2) { grid-column:span 5; }
+.arch-card:nth-child(7n+3) { grid-column:span 4; }
+.arch-card:nth-child(7n+4) { grid-column:span 4; }
+.arch-card:nth-child(7n+5) { grid-column:span 4; }
+.arch-card:nth-child(7n+6) { grid-column:span 6; }
+.arch-card:nth-child(7n+0) { grid-column:span 6; }
+.arch-n {
+  font-family:var(--f-d); font-size:2.6rem; line-height:1;
+  color:var(--p06); user-select:none; transition:color .18s;
 }
-.arch-card:hover .arch-num { color: rgba(184,255,0,.09); }
-
-.arch-date  { font-size: .55rem; letter-spacing: .15em; text-transform: uppercase; color: var(--acid); }
-.arch-name  { font-family: var(--f-disp); font-size: 1.05rem; letter-spacing: .02em; text-transform: uppercase; line-height: 1.1; color: var(--paper); }
-.arch-desc  { font-size: .68rem; line-height: 1.72; color: var(--p40); flex: 1; }
-.arch-tags  { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
-.arch-tags  .tag { font-size: .5rem; }
-
+.arch-card:hover .arch-n { color:rgba(184,255,0,.1); }
+.arch-d { font-size:.55rem; letter-spacing:.14em; text-transform:uppercase; color:var(--acid); }
+.arch-t { font-family:var(--f-d); font-size:1.05rem; letter-spacing:.02em; text-transform:uppercase; line-height:1.1; color:var(--paper); }
+.arch-desc { font-size:.68rem; line-height:1.7; color:var(--p40); flex:1; }
+.arch-tags { display:flex; flex-wrap:wrap; gap:5px; margin-top:2px; }
+.arch-tags .tag { font-size:.5rem; }
 .arch-arrow {
-  position: absolute; top: 18px; right: 18px;
-  font-size: .7rem; color: var(--acid);
-  opacity: 0; transform: translate(-4px,4px);
-  transition: opacity .18s, transform .18s var(--ease);
+  position:absolute; top:18px; right:18px; font-size:.7rem; letter-spacing:.06em;
+  color:var(--acid); opacity:0; transform:translate(-4px,4px);
+  transition:opacity .18s,transform .18s var(--ease);
 }
-.arch-card:hover .arch-arrow { opacity: 1; transform: translate(0,0); }
-
-.arch-seen-label {
-  position: absolute; top: 18px; right: 18px;
-  font-size: .5rem; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--p18); opacity: 0;
+.arch-card:hover .arch-arrow { opacity:1; transform:translate(0,0); }
+.arch-seen {
+  position:absolute; top:18px; right:18px; font-size:.5rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--p18); opacity:0;
 }
-.arch-card.seen .arch-seen-label { opacity: 1; }
-.arch-card.seen .arch-arrow      { display: none; }
-
-/* Locked future */
-.arch-card.locked {
-  pointer-events: none;
-  opacity: .08 !important;
-  transform: none !important;
-}
-
-/* Infinite scroll sentinel */
-#sentinel { height: 1px; }
-
-/* Footer state */
+.arch-card.seen .arch-seen { opacity:1; }
+.arch-card.seen .arch-arrow { display:none; }
+.arch-card.locked { pointer-events:none; opacity:.1 !important; transform:none !important; }
+#sentinel { height:1px; }
 .arch-foot {
-  margin-top: 36px;
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px;
-  border-top: 1px solid var(--p05);
-  font-size: .56rem; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--p18);
+  margin-top:32px; display:flex; align-items:center; justify-content:center;
+  padding:18px; border-top:1px solid var(--p06);
+  font-size:.55rem; letter-spacing:.14em; text-transform:uppercase; color:var(--p18);
 }
-.arch-foot.loading::after { content: '...'; color: var(--p40); animation: dots 1s steps(3) infinite; }
-.arch-foot.end::after     { content: attr(data-msg); }
-@keyframes dots { 0% { content: '·'; } 33% { content: '··'; } 66% { content: '···'; } }
+.arch-foot.end::after { content:attr(data-msg); }
 
-/* ================================================================
-   FOOTER
-   ================================================================ */
+/* FOOTER */
 #footer {
-  border-top: 1px solid var(--p10);
-  padding: 28px 48px;
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 14px; flex-wrap: wrap;
+  border-top:1px solid var(--p10); padding:26px 48px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; flex-wrap:wrap;
 }
-.foot-copy {
-  font-size: .56rem; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--p40);
-}
-.foot-copy a { color: var(--acid); transition: opacity .14s; }
-.foot-copy a:hover { opacity: .7; }
-.foot-phil {
-  font-size: .56rem; letter-spacing: .07em;
-  color: var(--p18); font-style: italic;
-  text-align: center;
-}
-.foot-mark {
-  font-family: var(--f-disp);
-  font-size: 1.5rem; letter-spacing: .04em;
-  color: var(--p05);
-  /* micro hover: lift on hover */
-  transition: color .2s;
-}
-.foot-mark:hover { color: var(--acid-lo); }
+.foot-copy { font-size:.55rem; letter-spacing:.1em; text-transform:uppercase; color:var(--p40); }
+.foot-copy a { color:var(--acid); transition:opacity .14s; }
+.foot-copy a:hover { opacity:.7; }
+.foot-phil { font-size:.55rem; letter-spacing:.07em; color:var(--p18); font-style:italic; text-align:center; }
+.foot-mark { font-family:var(--f-d); font-size:1.5rem; letter-spacing:.04em; color:var(--p06); transition:color .2s; }
+.foot-mark:hover { color:rgba(184,255,0,.12); }
 
-/* ================================================================
-   KEYFRAMES
-   ================================================================ */
-@keyframes up {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0);    }
-}
+@keyframes up { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
-/* ================================================================
-   RESPONSIVE
-   ================================================================ */
-@media (max-width: 920px) {
-  #nav { padding: 0 24px; }
-  .nav-center { display: none; }
-  .hero-main  { grid-template-columns: 1fr; }
-  .hero-l     { padding: 44px 24px; border-right: none; border-bottom: 1px solid var(--p10); }
-  .hero-r     { padding: 40px 24px; }
-  #archive    { padding: 64px 24px; }
-  .arch-card  { grid-column: span 12 !important; }
-  .arch-grid  { grid-template-columns: 1fr; }
-  #footer     { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .arch-head  { flex-direction: column; align-items: flex-start; }
+@media (max-width:920px) {
+  #nav{padding:0 24px} .nav-center{display:none}
+  .hero-main{grid-template-columns:1fr}
+  .hero-l{padding:44px 24px;border-right:none;border-bottom:1px solid var(--p10)}
+  .hero-r{padding:40px 24px}
+  #archive{padding:64px 24px}
+  .arch-card{grid-column:span 12 !important}
+  .arch-grid{grid-template-columns:1fr}
+  #footer{flex-direction:column;align-items:flex-start;gap:10px}
+  .arch-head{flex-direction:column;align-items:flex-start}
 }
-@media (max-width: 580px) {
-  .hero-num   { font-size: clamp(72px, 22vw, 130px); }
-  .nav-right  { gap: 14px; }
+@media (max-width:580px) {
+  .hero-num{font-size:clamp(72px,22vw,130px)}
+  .nav-right{gap:14px}
 }
 </style>
 </head>
 <body>
-
 <div id="noise"></div>
 <div id="cur"></div>
 
-<!-- ================================================================
-     NAV
-     ================================================================ -->
 <nav id="nav">
-  <a href="#" class="nav-logo">nasq<span class="accent">drop</span></a>
-
+  <!-- translate="no" prevents browser auto-translation of the brand name -->
+  <a href="#" class="nav-logo" translate="no">nasq<span class="nd">drop</span></a>
   <div class="nav-center">
     <div class="live-dot"></div>
     <span data-i18n="nav_live">Updated daily</span>
   </div>
-
   <div class="nav-right">
     <a href="#archive" class="nav-link" data-i18n="nav_archive">Archive</a>
-    <a href="https://github.com/nasqwww" target="_blank" class="nav-link" rel="noopener">nasqwww ↗</a>
+    <a href="https://github.com/nasqwww" target="_blank" class="nav-link" rel="noopener" translate="no">nasqwww ↗</a>
     <div class="lang-toggle" id="langToggle">
       <button class="lang-btn" data-lang="en">EN</button>
       <button class="lang-btn" data-lang="ru">RU</button>
@@ -593,67 +335,44 @@ button { background: none; border: none; font: inherit; color: inherit; }
   </div>
 </nav>
 
-<!-- ================================================================
-     HERO
-     ================================================================ -->
 <section id="hero">
   <div class="hero-main">
-
-    <!-- Left: issue number -->
     <div class="hero-l">
       <p class="hero-eyebrow" data-i18n="hero_issue">Issue №</p>
       <div class="hero-num" id="heroNum">001</div>
-      <p  class="hero-date"  id="heroDate">—</p>
+      <p class="hero-date" id="heroDate">—</p>
       <div class="hero-stats">
-        <div class="stat">
-          <div class="stat-n" id="statTotal">—</div>
-          <div class="stat-l" data-i18n="stat_curated">Curated sites</div>
-        </div>
-        <div class="stat">
-          <div class="stat-n" id="statDays">—</div>
-          <div class="stat-l" data-i18n="stat_days">Days running</div>
-        </div>
+        <div class="stat"><div class="stat-n" id="statTotal">—</div><div class="stat-l" data-i18n="stat_curated">Curated sites</div></div>
+        <div class="stat"><div class="stat-n" id="statDays">—</div><div class="stat-l" data-i18n="stat_days">Days running</div></div>
       </div>
     </div>
-
-    <!-- Right: today's drop -->
     <div class="hero-r">
       <div class="chip-row">
-        <div class="chip"      data-i18n="chip_today">Today's drop</div>
+        <div class="chip" data-i18n="chip_today">Today's drop</div>
         <div class="chip chip-seen" id="chipSeen" data-i18n="chip_seen">✓ Already seen</div>
       </div>
       <h1 class="hero-title" id="heroTitle">—</h1>
-      <div class="hero-tags"  id="heroTags"></div>
-      <p  class="hero-desc"   id="heroDesc">—</p>
+      <div class="hero-tags" id="heroTags"></div>
+      <p class="hero-desc" id="heroDesc">—</p>
       <div class="hero-actions">
         <a class="btn-open" id="heroLink" href="#" target="_blank" rel="noopener">
           <span data-i18n="btn_open">Open site</span>
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-            <path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5"
-              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
         <button class="btn-random" id="btnRandom">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-            <path d="M1 3h8M7 1l2 2-2 2M11 9H3M5 7l-2 2 2 2"
-              stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1 3h8M7 1l2 2-2 2M11 9H3M5 7l-2 2 2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           <span data-i18n="btn_random">Random</span>
         </button>
       </div>
     </div>
-
   </div>
-
-  <!-- Ticker -->
-  <div class="ticker-wrap">
-    <div class="ticker-track" id="ticker"></div>
-  </div>
+  <div class="ticker-wrap"><div class="ticker-track" id="ticker"></div></div>
 </section>
 
-<!-- ================================================================
-     ARCHIVE
-     ================================================================ -->
 <section id="archive">
   <div class="arch-head">
     <h2 class="arch-heading"><em>//</em> <span data-i18n="arch_title">Archive</span></h2>
@@ -662,341 +381,263 @@ button { background: none; border: none; font: inherit; color: inherit; }
       <div class="count-badge" id="countBadge"></div>
     </div>
   </div>
-
-  <div class="arch-grid"  id="archGrid"></div>
+  <div class="arch-grid" id="archGrid"></div>
   <div id="sentinel"></div>
-  <div class="arch-foot"  id="archFoot" data-msg="—"></div>
+  <div class="arch-foot" id="archFoot" data-msg="—"></div>
 </section>
 
-<!-- ================================================================
-     FOOTER
-     ================================================================ -->
 <footer id="footer">
-  <p class="foot-copy">
-    © 2025 <a href="https://github.com/nasqwww" target="_blank" rel="noopener">nasqwww</a>
-    · nasqdrop
-  </p>
-  <p class="foot-phil" data-i18n="foot_phil">
-    The internet is vast. nasqdrop finds the parts worth your time.
-  </p>
-  <div class="foot-mark" aria-hidden="true">ND</div>
+  <p class="foot-copy">© 2025 <a href="https://github.com/nasqwww" target="_blank" rel="noopener" translate="no">nasqwww</a> · <span translate="no">nasqdrop</span></p>
+  <p class="foot-phil" data-i18n="foot_phil">The internet is vast. nasqdrop finds the parts worth your time.</p>
+  <div class="foot-mark" aria-hidden="true" translate="no">ND</div>
 </footer>
 
-<!-- ================================================================
-     SCRIPT
-     ================================================================ -->
 <script>
 'use strict';
 
-/* ================================================================
-   I18N
-   ================================================================ */
+/* ── I18N ─────────────────────────────────────────────────────── */
 const I18N = {
   en: {
-    nav_live:     'Updated daily',
-    nav_archive:  'Archive',
-    hero_issue:   'Issue №',
-    stat_curated: 'Curated sites',
-    stat_days:    'Days running',
-    chip_today:   "Today's drop",
-    chip_seen:    '✓ Already seen',
-    btn_open:     'Open site',
-    btn_random:   'Random',
-    arch_title:   'Archive',
-    arch_end:     '— end of archive —',
-    arch_seen:    'seen',
-    foot_phil:    'The internet is vast. nasqdrop finds the parts worth your time.',
-    filter_all:   'All',
-    locked_lbl:   'Coming soon',
+    nav_live:'Updated daily', nav_archive:'Archive', hero_issue:'Issue №',
+    stat_curated:'Curated sites', stat_days:'Days running',
+    chip_today:"Today's drop", chip_seen:'✓ Already seen',
+    btn_open:'Open site', btn_random:'Random', arch_title:'Archive',
+    arch_end:'— end of archive —', arch_seen:'seen',
+    foot_phil:'The internet is vast. nasqdrop finds the parts worth your time.',
+    filter_all:'All', locked_lbl:'Coming soon',
   },
   ru: {
-    nav_live:     'Обновляется каждый день',
-    nav_archive:  'Архив',
-    hero_issue:   'Выпуск №',
-    stat_curated: 'Сайтов собрано',
-    stat_days:    'Дней работы',
-    chip_today:   'Дроп сегодня',
-    chip_seen:    '✓ Уже смотрел',
-    btn_open:     'Открыть сайт',
-    btn_random:   'Случайный',
-    arch_title:   'Архив',
-    arch_end:     '— конец архива —',
-    arch_seen:    'просмотрено',
-    foot_phil:    'Интернет огромен. nasqdrop находит то, что стоит твоего времени.',
-    filter_all:   'Все',
-    locked_lbl:   'Скоро',
+    nav_live:'Обновляется каждый день', nav_archive:'Архив', hero_issue:'Выпуск №',
+    stat_curated:'Сайтов собрано', stat_days:'Дней работы',
+    chip_today:'Дроп сегодня', chip_seen:'✓ Уже смотрел',
+    btn_open:'Открыть сайт', btn_random:'Случайный', arch_title:'Архив',
+    arch_end:'— конец архива —', arch_seen:'просмотрено',
+    foot_phil:'Интернет огромен. nasqdrop находит то, что стоит твоего времени.',
+    filter_all:'Все', locked_lbl:'Скоро',
   }
 };
-
 let lang = localStorage.getItem('nq_lang') || 'en';
-const t  = key => (I18N[lang] || I18N.en)[key] || key;
+const t = k => (I18N[lang] || I18N.en)[k] || k;
 
 function applyI18n() {
   document.documentElement.lang = lang;
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    el.textContent = t(el.dataset.i18n);
-  });
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.lang === lang);
-  });
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('.lang-btn').forEach(b => { b.classList.toggle('active', b.dataset.lang === lang); });
   const foot = document.getElementById('archFoot');
   if (foot.classList.contains('end')) foot.dataset.msg = t('arch_end');
 }
 
-/* ================================================================
-   DATA — 200 real curated websites
-   ================================================================ */
+/* ── SITES DATA ───────────────────────────────────────────────── */
 const SITES = [
-  // ── AI ────────────────────────────────────────────────────
-  { id:1,   url:'https://claude.ai',                                     tags:['ai'],               title:{en:'Claude'},                          description:{en:"Anthropic's AI — thoughtful, nuanced, capable of deep reasoning across any domain.",ru:'ИИ-ассистент Anthropic — вдумчивый, способен к глубоким рассуждениям по любой теме.'} },
-  { id:2,   url:'https://midjourney.com',                                tags:['ai','art'],          title:{en:'Midjourney'},                       description:{en:'Text-to-image AI that produces painterly, cinematic visuals unlike anything else.',ru:'Нейросеть для генерации изображений, создающая кинематографические иллюстрации.'} },
-  { id:3,   url:'https://openai.com/sora',                               tags:['ai','video'],        title:{en:'Sora'},                             description:{en:"OpenAI's text-to-video model. Type a scene, watch it become a short film.",ru:'Модель OpenAI для генерации видео. Напечатай сцену — получи короткий фильм.'} },
-  { id:4,   url:'https://perplexity.ai',                                 tags:['ai','search'],       title:{en:'Perplexity'},                       description:{en:'AI-powered search that cites sources and actually answers questions.',ru:'ИИ-поиск, цитирующий источники и реально отвечающий на вопросы.'} },
-  { id:5,   url:'https://elevenlabs.io',                                 tags:['ai','audio'],        title:{en:'ElevenLabs'},                       description:{en:'Best-in-class AI voice cloning and text-to-speech. Frighteningly realistic.',ru:'Клонирование голоса и синтез речи. Пугающе реалистично.'} },
-  { id:6,   url:'https://gamma.app',                                     tags:['ai','design'],       title:{en:'Gamma'},                            description:{en:'AI generates beautiful presentations, docs, and websites from a single prompt.',ru:'ИИ создаёт красивые презентации и сайты из одного промпта.'} },
-  { id:7,   url:'https://pika.art',                                      tags:['ai','video'],        title:{en:'Pika'},                             description:{en:'Turn images and text into expressive short videos with a few clicks.',ru:'Превращай изображения и текст в выразительные короткие видео.'} },
-  { id:8,   url:'https://huggingface.co/spaces',                         tags:['ai','ml'],           title:{en:'HuggingFace Spaces'},               description:{en:'Thousands of live ML demos in your browser — from FLUX to LLaMA.',ru:'Тысячи живых ML-демо прямо в браузере — от FLUX до LLaMA.'} },
-  { id:9,   url:'https://krea.ai',                                       tags:['ai','art'],          title:{en:'Krea'},                             description:{en:'Real-time AI image generation that follows your brush strokes live.',ru:'Генерация изображений в реальном времени — следует за мазками кисти.'} },
-  { id:10,  url:'https://websim.ai',                                     tags:['ai','tech'],         title:{en:'WebSim'},                           description:{en:"Simulate any website that doesn't exist yet with AI. Imagination made real.",ru:'Симулируй любой сайт, которого ещё нет, с помощью ИИ.'} },
+  // ── INTERACTIVE / DO STUFF ────────────────────────────────────
+  { id:1,  url:'https://neal.fun',                                 tags:['interactive'],      title:{en:'Neal.fun',ru:'Neal.fun'},                            description:{en:'A portal of addictive interactive toys — spend hours on things that barely exist.',ru:'Портал интерактивных игрушек — часами залипаешь на вещах, которые едва существуют.'} },
+  { id:2,  url:'https://pointerpointer.com',                       tags:['interactive'],      title:{en:'Pointer Pointer'},                                   description:{en:'Move your cursor anywhere on screen. It finds a photo of someone pointing exactly there.',ru:'Двигай курсором — находит фото человека, который указывает именно туда.'} },
+  { id:3,  url:'https://theuselessweb.com',                        tags:['interactive'],      title:{en:'The Useless Web'},                                   description:{en:'One button. One random weird website. Infinite descent into beautiful nonsense.',ru:'Одна кнопка. Один случайный странный сайт. Бесконечное погружение в прекрасный абсурд.'} },
+  { id:4,  url:'https://www.patatap.com',                          tags:['interactive','music'], title:{en:'Patatap'},                                        description:{en:'Every keyboard key triggers a unique sound and animation. Make music you can see.',ru:'Каждая клавиша — уникальный звук и анимация. Создавай музыку, которую видно.'} },
+  { id:5,  url:'https://weavesilk.com',                            tags:['interactive','art'], title:{en:'Silk'},                                            description:{en:'Draw symmetrical silk patterns with your mouse. Every stroke blooms into something new.',ru:'Рисуй симметричные шёлковые узоры мышью. Каждый штрих расцветает чем-то новым.'} },
+  { id:6,  url:'https://paveldogreat.github.io/WebGL-Fluid-Simulation/', tags:['interactive','webgl'], title:{en:'WebGL Fluid'},                             description:{en:'Fluid dynamics in your browser. Move through liquid light. Insanely satisfying.',ru:'Симуляция жидкости в браузере. Двигайся сквозь жидкий свет. Невероятно приятно.'} },
+  { id:7,  url:'https://zoomquilt.org',                            tags:['interactive','art'], title:{en:'Zoomquilt'},                                       description:{en:'An infinite zooming painting with no beginning and no end. Fall forever.',ru:'Бесконечное зумирование в картину без начала и конца. Падай вечно.'} },
+  { id:8,  url:'https://www.incredibox.com',                       tags:['interactive','music'], title:{en:'Incredibox'},                                    description:{en:'Drag sound icons onto characters to layer beats. No music theory needed.',ru:'Перетаскивай иконки звуков на персонажей. Никакой теории музыки не нужно.'} },
+  { id:9,  url:'https://quickdraw.withgoogle.com',                 tags:['interactive','ai'], title:{en:'Quick, Draw!'},                                     description:{en:"Draw something. Google's neural net guesses what it is in 20 seconds.",ru:'Нарисуй что-нибудь. Нейросеть Google угадывает за 20 секунд.'} },
+  { id:10, url:'https://www.windows93.net',                        tags:['interactive','retro'], title:{en:'Windows 93'},                                   description:{en:'A fully operational fake OS from an alternate 1993. Rabbit hole guaranteed.',ru:'Полноценная фейковая ОС из альтернативного 1993 года. Кроличья нора гарантирована.'} },
+  { id:11, url:'https://dust.supply',                              tags:['interactive','art'], title:{en:'Dust'},                                            description:{en:'Move your mouse. Particles follow, scatter, and settle like real dust.',ru:'Двигай мышкой. Частицы следуют, рассеиваются и оседают как настоящая пыль.'} },
+  { id:12, url:'https://www.geoguessr.com',                        tags:['interactive','game'], title:{en:'GeoGuessr'},                                      description:{en:"Dropped somewhere on Earth via Street View. Guess where. World's best geography game.",ru:'Тебя бросают куда-то на Земле через Street View. Угадай где.'} },
+  { id:13, url:'https://skribbl.io',                               tags:['interactive','game'], title:{en:'skribbl.io'},                                     description:{en:'Multiplayer online Pictionary. Draw badly, guess desperately, laugh constantly.',ru:'Мультиплеерный Pictionary. Рисуй плохо, угадывай отчаянно, смейся постоянно.'} },
+  { id:14, url:'https://www.sporcle.com',                          tags:['interactive','game'], title:{en:'Sporcle'},                                        description:{en:'Millions of quizzes on every topic imaginable. Trivia heaven.',ru:'Миллионы викторин на любую тему. Рай для тривии.'} },
+  { id:15, url:'https://www.typeracer.com',                        tags:['interactive','game'], title:{en:'TypeRacer'},                                      description:{en:'Race other humans by typing book passages. Competitive typing at its best.',ru:'Гонки с людьми через набор текста из книг. Лучший соревновательный тайпинг.'} },
+  { id:16, url:'https://www.hackertyper.com',                      tags:['interactive','game'], title:{en:'Hacker Typer'},                                   description:{en:'Type any keys. Looks like you\'re hacking the mainframe. Ridiculous and perfect.',ru:'Жми любые клавиши — выглядишь как хакер взламывающий мейнфрейм.'} },
+  { id:17, url:'https://randomstreetview.com',                     tags:['interactive','maps'], title:{en:'Random Street View'},                             description:{en:'Teleport to a random place on Earth via Street View. Every click is a mystery.',ru:'Телепортируйся в случайное место на Земле. Каждый клик — тайна.'} },
+  { id:18, url:'https://www.donothingfor2minutes.com',             tags:['interactive'],      title:{en:'Do Nothing For 2 Minutes'},                         description:{en:'Listen to ocean waves and do nothing for two minutes. Harder than it sounds.',ru:'Слушай океан и ничего не делай 2 минуты. Сложнее, чем кажется.'} },
+  { id:19, url:'https://www.pixilart.com',                         tags:['interactive','art'], title:{en:'Pixilart'},                                        description:{en:'Pixel art editor in your browser. Draw, animate, share with thousands.',ru:'Пиксельный редактор в браузере. Рисуй, анимируй, делись с тысячами.'} },
+  { id:20, url:'https://www.aggie.io',                             tags:['interactive','art'], title:{en:'Aggie.io'},                                        description:{en:'Real-time collaborative drawing. Multiple people, one canvas, infinite chaos.',ru:'Совместный рисунок в реальном времени. Несколько людей, один холст, бесконечный хаос.'} },
+  { id:21, url:'https://kleki.com',                                tags:['interactive','art'], title:{en:'Kleki'},                                           description:{en:'A serious browser paint tool. Layers, brushes, effects — no download needed.',ru:'Серьёзный браузерный инструмент для рисования. Слои, кисти, эффекты — без загрузки.'} },
+  { id:22, url:'https://www.autodraw.com',                         tags:['interactive','ai'], title:{en:'AutoDraw'},                                         description:{en:'Draw anything badly. AI recognizes your scribble and offers professional alternatives.',ru:'Рисуй плохо. ИИ распознаёт каракули и предлагает профессиональные варианты.'} },
+  { id:23, url:'https://musiclab.chromeexperiments.com',           tags:['interactive','music'], title:{en:'Chrome Music Lab'},                              description:{en:"Google's music experiments — shared piano, spectrograms, rhythm builders.",ru:'Музыкальные эксперименты Google — пианино, спектрограммы, построители ритма.'} },
+  { id:24, url:'https://www.incredibox.com',                       tags:['interactive','music'], title:{en:'Incredibox v10'},                                description:{en:'The newest version. Drag, mix, and feel like a real music producer.',ru:'Новейшая версия. Перетаскивай, смешивай — чувствуй себя настоящим музыкальным продюсером.'} },
+  { id:25, url:'https://touchpianist.com',                         tags:['interactive','music'], title:{en:'Touch Pianist'},                                 description:{en:'Tap any key to the rhythm. AI plays the notes, you control the timing.',ru:'Нажимай любую клавишу в ритм. ИИ играет ноты, ты контролируешь тайминг.'} },
+  { id:26, url:'https://www.beatsurfer.com',                       tags:['interactive','music'], title:{en:'Beat Surfer'},                                   description:{en:'Visualize music as a 3D landscape you fly through. Trippy and hypnotic.',ru:'Визуализируй музыку как 3D-пейзаж, сквозь который летишь. Трипово и гипнотично.'} },
+  { id:27, url:'https://noisedeck.app',                            tags:['interactive','music'], title:{en:'Noisedeck'},                                     description:{en:'Browser synthesizer with real-time visuals. Make electronic sounds without any expertise.',ru:'Браузерный синтезатор с визуализацией в реальном времени. Без опыта.'} },
+  { id:28, url:'https://www.patatap.com',                          tags:['interactive','music'], title:{en:'Patatap Classic'},                               description:{en:'Original version. Infinite combinations of sounds and geometric animations.',ru:'Оригинальная версия. Бесконечные комбинации звуков и геометрических анимаций.'} },
+  { id:29, url:'https://www.ableton.com/en/learning-music',        tags:['interactive','music'], title:{en:'Learning Music by Ableton'},                     description:{en:'Learn how music works through interactive exercises. From Ableton, for everyone.',ru:'Узнай как работает музыка через интерактивные упражнения от Ableton.'} },
+  { id:30, url:'https://experiments.withgoogle.com/collection/ai', tags:['interactive','ai'], title:{en:'Google AI Experiments'},                           description:{en:'Playful AI experiments from Google. Draw with music, teach machines, explore.',ru:'Игривые ИИ-эксперименты от Google. Рисуй музыкой, обучай машины, исследуй.'} },
 
-  // ── INTERACTIVE ──────────────────────────────────────────
-  { id:11,  url:'https://neal.fun',                                      tags:['interactive'],       title:{en:'Neal.fun'},                         description:{en:'A collection of addictive interactive toys — spend time well, or waste it gloriously.',ru:'Коллекция интерактивных игрушек. Потрать время с пользой или впустую.'} },
-  { id:12,  url:'https://pointerpointer.com',                            tags:['interactive'],       title:{en:'Pointer Pointer'},                  description:{en:'Move your cursor anywhere. The site finds a photo of someone pointing exactly there.',ru:'Двигай курсором — сайт находит фото указывающего именно туда.'} },
-  { id:13,  url:'https://theuselessweb.com',                             tags:['interactive'],       title:{en:'The Useless Web'},                  description:{en:'One button. One random weird website. Infinite descent.',ru:'Одна кнопка. Один случайный странный сайт. Бесконечное падение.'} },
-  { id:14,  url:'https://zoomquilt.org',                                 tags:['interactive','art'], title:{en:'Zoomquilt'},                        description:{en:'An infinite zooming painting — a surrealist world with no beginning and no end.',ru:'Бесконечное зумирование в сюрреалистическую картину без начала и конца.'} },
-  { id:15,  url:'https://www.patatap.com',                               tags:['interactive','music'],title:{en:'Patatap'},                         description:{en:'Every keyboard key triggers a unique sound and animation. Make music visually.',ru:'Каждая клавиша — уникальный звук и анимация. Создавай музыку визуально.'} },
-  { id:16,  url:'https://www.windows93.net',                             tags:['interactive','retro'],title:{en:'Windows 93'},                      description:{en:"A fully operational fake OS from an alternate 1993. More content than you'd expect.",ru:'Полноценная фейковая ОС из альтернативного 1993 года.'} },
-  { id:17,  url:'https://dust.supply',                                   tags:['interactive','art'], title:{en:'Dust'},                             description:{en:'Move your mouse. Particles follow, scatter, and settle like real dust.',ru:'Частицы следуют за мышью, рассеиваются и оседают как пыль.'} },
-  { id:18,  url:'https://www.incredibox.com',                            tags:['interactive','music'],title:{en:'Incredibox'},                      description:{en:'Drag sound icons onto characters to build layered beats. No music theory required.',ru:'Перетаскивай иконки звуков на персонажей — создавай биты. Без теории музыки.'} },
-  { id:19,  url:'https://quickdraw.withgoogle.com',                      tags:['interactive','ai'],  title:{en:'Quick, Draw!'},                     description:{en:"Draw something. Google's neural net guesses what it is in 20 seconds.",ru:'Рисуй — нейросеть Google угадывает что это за 20 секунд.'} },
-  { id:20,  url:'https://www.geoguessr.com',                             tags:['interactive','game'],title:{en:'GeoGuessr'},                        description:{en:'Dropped somewhere on Earth. Use visual clues to guess where you are.',ru:'Тебя бросают в случайное место на Земле. Угадай где ты по визуальным подсказкам.'} },
+  // ── ART & VISUALS ─────────────────────────────────────────────
+  { id:31, url:'https://www.shadertoy.com',                        tags:['art','webgl'],      title:{en:'Shadertoy'},                                        description:{en:'Community painting galaxies and oceans in pure math. The web\'s best generative gallery.',ru:'Сообщество рисует галактики и океаны чистой математикой. Лучшая генеративная галерея.'} },
+  { id:32, url:'https://generativeartistry.com',                   tags:['art','code'],       title:{en:'Generative Artistry'},                              description:{en:'Tutorials recreating iconic generative artworks with code. Beautiful and educational.',ru:'Туториалы по воссозданию культовых генеративных работ кодом.'} },
+  { id:33, url:'https://openprocessing.org',                       tags:['art','code'],       title:{en:'OpenProcessing'},                                   description:{en:'Community for creative coding in p5.js and Processing. Thousands of visual sketches.',ru:'Комьюнити творческого кодинга на p5.js и Processing. Тысячи визуальных набросков.'} },
+  { id:34, url:'https://tholman.com/texter',                       tags:['art','interactive'], title:{en:'Texter'},                                          description:{en:'Draw with the text you type. Your words become the brush.',ru:'Рисуй текстом, который печатаешь. Твои слова становятся кистью.'} },
+  { id:35, url:'https://www.artbreeder.com',                       tags:['art','ai'],         title:{en:'Artbreeder'},                                       description:{en:'Blend and evolve images with AI sliders. Portraits morph into surreal landscapes.',ru:'Смешивай и эволюционируй изображения с ИИ-слайдерами.'} },
+  { id:36, url:'https://www.are.na',                               tags:['art','design'],     title:{en:'Are.na'},                                           description:{en:'A platform for saving and connecting ideas. Anti-social media for deep thinkers.',ru:'Платформа для сохранения идей. Антисоцсеть для глубоких мыслителей.'} },
+  { id:37, url:'https://www.deviantart.com/tag/generative',        tags:['art'],              title:{en:'Generative on DeviantArt'},                         description:{en:'A living feed of generative and algorithmic art from thousands of artists.',ru:'Живая лента генеративного искусства тысяч художников.'} },
+  { id:38, url:'https://stars.chromeexperiments.com',              tags:['art','webgl'],      title:{en:'100,000 Stars'},                                    description:{en:'Interactive 3D map of the 100,000 stars nearest to our sun. Scale-defying.',ru:'Интерактивная 3D-карта 100 000 звёзд, ближайших к Солнцу.'} },
+  { id:39, url:'https://haikei.app',                               tags:['art','design'],     title:{en:'Haikei'},                                           description:{en:'Generate unique SVG blobs, waves, and gradients for projects. Endlessly customizable.',ru:'Генерируй уникальные SVG-блобы, волны и градиенты. Бесконечная настройка.'} },
+  { id:40, url:'https://www.geogebra.org',                         tags:['art','math'],       title:{en:'GeoGebra'},                                         description:{en:'Interactive math tools — geometry, algebra, graphing. Surprisingly beautiful.',ru:'Интерактивные математические инструменты — геометрия, алгебра, графики. Неожиданно красиво.'} },
 
-  // ── ART ───────────────────────────────────────────────────
-  { id:21,  url:'https://weavesilk.com',                                 tags:['art'],               title:{en:'Silk'},                             description:{en:'Draw symmetrical silk-like patterns with your mouse. Every stroke is a new flower.',ru:'Рисуй симметричные шёлковые узоры мышью. Каждый штрих — новый цветок.'} },
-  { id:22,  url:'https://www.shadertoy.com',                             tags:['art','webgl'],       title:{en:'Shadertoy'},                        description:{en:'Community of coders painting galaxies, portals, and oceans in pure math.',ru:'Сообщество кодеров, рисующих галактики и порталы чистой математикой.'} },
-  { id:23,  url:'https://generativeartistry.com',                        tags:['art','code'],        title:{en:'Generative Artistry'},              description:{en:'Tutorials recreating iconic generative art pieces with code.',ru:'Туториалы по воссозданию культовых генеративных работ кодом.'} },
-  { id:24,  url:'https://tholman.com/texter',                            tags:['art','interactive'], title:{en:'Texter'},                           description:{en:'Draw with the text you type. Your words become the brush strokes.',ru:'Рисуй текстом, который печатаешь. Твои слова становятся мазками.'} },
-  { id:25,  url:'https://www.artbreeder.com',                            tags:['art','ai'],          title:{en:'Artbreeder'},                       description:{en:'Blend and evolve images using latent space sliders. Portraits morph into landscapes.',ru:'Смешивай изображения с помощью слайдеров латентного пространства.'} },
-  { id:26,  url:'https://openprocessing.org',                            tags:['art','code'],        title:{en:'OpenProcessing'},                   description:{en:'Community for creative coding sketches in p5.js and Processing.',ru:'Комьюнити для творческого кодинга на p5.js и Processing.'} },
-  { id:27,  url:'https://www.deviantart.com/tag/generative',             tags:['art'],               title:{en:'Generative on DeviantArt'},          description:{en:'A living feed of generative and algorithmic art by thousands of artists.',ru:'Живая лента генеративного искусства тысяч художников.'} },
-  { id:28,  url:'https://codeandvisuals.com',                            tags:['art','design'],      title:{en:'Code & Visuals'},                   description:{en:'Creative coding experiments and visual essays by an independent studio.',ru:'Эксперименты с кодом и визуальные эссе независимой студии.'} },
-  { id:29,  url:'https://www.are.na',                                    tags:['art','design'],      title:{en:'Are.na'},                           description:{en:'A platform for saving and connecting ideas. Anti-social media for thinkers.',ru:'Платформа для сохранения и связи идей. Антисоцсеть для мыслителей.'} },
-  { id:30,  url:'https://www.behance.net/galleries/graphic-design',      tags:['art','design'],      title:{en:'Behance Graphic Design'},            description:{en:"Adobe's creative portfolio platform. Graphic design from every corner of the world.",ru:'Платформа творческих портфолио Adobe. Графический дизайн со всего мира.'} },
+  // ── WEBGL / 3D ────────────────────────────────────────────────
+  { id:41, url:'https://bruno-simon.com',                          tags:['webgl','game'],     title:{en:'Bruno Simon Portfolio'},                            description:{en:'Drive a toy car through a 3D portfolio. The most fun way to show work ever made.',ru:'Езди на игрушечной машине по 3D-портфолио. Самый веселый портфолио в истории.'} },
+  { id:42, url:'https://www.ro.me',                                tags:['webgl','art'],      title:{en:'3 Dreams of Black'},                                description:{en:'An interactive WebGL film by Chris Milk & Google. Poetic and technically stunning.',ru:'Интерактивный WebGL-фильм от Криса Милка и Google. Поэтично и технически блестяще.'} },
+  { id:43, url:'https://www.active-theory.com',                    tags:['webgl','design'],   title:{en:'Active Theory'},                                    description:{en:'Portfolio of one of the world\'s greatest interactive studios. Every project raises the bar.',ru:'Портфолио одной из лучших интерактивных студий. Каждый проект поднимает планку.'} },
+  { id:44, url:'https://lusion.co',                                tags:['webgl','design'],   title:{en:'Lusion'},                                           description:{en:'Creative studio that turns websites into WebGL art. The craft here is unreal.',ru:'Студия, превращающая сайты в WebGL-искусство. Ремесло здесь нереальное.'} },
+  { id:45, url:'https://oimo.io/works',                            tags:['webgl','art'],      title:{en:'Yoichi Kobayashi'},                                 description:{en:'Mesmerising interactive 3D works by a Japanese creative coder. Pure craft.',ru:'Завораживающие интерактивные 3D-работы японского творческого кодера.'} },
+  { id:46, url:'https://herebedragons.io',                         tags:['webgl'],            title:{en:'Here Be Dragons'},                                  description:{en:'A single beautiful WebGL dragon. Technically and aesthetically exceptional.',ru:'Один красивый WebGL-дракон. Технически и эстетически исключительный.'} },
+  { id:47, url:'https://www.gsap.com/showcase',                    tags:['webgl','design'],   title:{en:'GSAP Showcase'},                                    description:{en:'The best animation work on the web, all powered by GreenSock.',ru:'Лучшие анимационные работы в вебе на GreenSock.'} },
+  { id:48, url:'https://spline.design',                            tags:['webgl','design'],   title:{en:'Spline'},                                           description:{en:'Design and publish 3D for the web without writing code. Drag-and-drop 3D.',ru:'Дизайн и публикация 3D для веба без кода. 3D с перетаскиванием.'} },
+  { id:49, url:'https://experiments.withgoogle.com',               tags:['webgl','interactive'], title:{en:'Google Experiments'},                            description:{en:'Creative experiments with AI, web tech, and 3D from Google\'s teams.',ru:'Творческие эксперименты с ИИ, веб-технологиями и 3D от команд Google.'} },
+  { id:50, url:'https://codepen.io/trending',                      tags:['webgl','design'],   title:{en:'CodePen Trending'},                                 description:{en:'The hottest creative coding demos right now. CSS magic, JS art, WebGL tricks.',ru:'Самые горячие демо творческого кодинга прямо сейчас.'} },
 
-  // ── WEBGL ─────────────────────────────────────────────────
-  { id:31,  url:'https://paveldogreat.github.io/WebGL-Fluid-Simulation/',tags:['webgl','interactive'],title:{en:'WebGL Fluid'},                     description:{en:'Incredibly satisfying fluid dynamics in your browser. Move your mouse through liquid light.',ru:'Невероятно приятная симуляция жидкости. Двигай мышью сквозь жидкий свет.'} },
-  { id:32,  url:'https://www.ro.me',                                     tags:['webgl','art'],       title:{en:'3 Dreams of Black'},                description:{en:'An interactive WebGL film by Chris Milk & Google. Poetic and technically stunning.',ru:'Интерактивный WebGL-фильм от Криса Милка и Google. Поэтично и технически блестяще.'} },
-  { id:33,  url:'https://www.active-theory.com',                         tags:['webgl','design'],    title:{en:'Active Theory'},                    description:{en:"Portfolio of one of the world's best interactive studios. Every project is a benchmark.",ru:'Портфолио одной из лучших интерактивных студий мира.'} },
-  { id:34,  url:'https://bruno-simon.com',                               tags:['webgl','game'],      title:{en:'Bruno Simon Portfolio'},            description:{en:'A full portfolio as a 3D game. Drive a car through projects in Three.js.',ru:'Полное портфолио как 3D-игра. Езди на машине по проектам на Three.js.'} },
-  { id:35,  url:'https://lusion.co',                                     tags:['webgl','design'],    title:{en:'Lusion'},                           description:{en:'Creative studio that treats every project as a WebGL artwork.',ru:'Креативная студия, превращающая каждый проект в WebGL-произведение.'} },
-  { id:36,  url:'https://oimo.io/works',                                 tags:['webgl','art'],       title:{en:'Yoichi Kobayashi'},                 description:{en:'Mesmerising interactive 3D works by a Japanese creative coder.',ru:'Завораживающие 3D-работы японского творческого кодера.'} },
-  { id:37,  url:'https://herebedragons.io',                              tags:['webgl'],             title:{en:'Here Be Dragons'},                  description:{en:'A lovingly crafted WebGL dragon. Technically impressive, aesthetically delightful.',ru:'Тщательно проработанный WebGL-дракон. Технически и эстетически прекрасен.'} },
-  { id:38,  url:'https://stars.chromeexperiments.com',                   tags:['webgl','creative'],  title:{en:'100,000 Stars'},                    description:{en:'An interactive 3D map of the stars nearest to our sun.',ru:'Интерактивная 3D-карта звёзд, ближайших к нашему Солнцу.'} },
-  { id:39,  url:'https://experiments.withgoogle.com',                    tags:['webgl','interactive'],title:{en:'Google Experiments'},              description:{en:"Google's creative experiments with AI, web tech, and more.",ru:'Творческие эксперименты Google с ИИ и веб-технологиями.'} },
-  { id:40,  url:'https://www.gsap.com/showcase',                         tags:['webgl','design'],    title:{en:'GSAP Showcase'},                    description:{en:'The best animation work on the web, all powered by GreenSock.',ru:'Лучшие анимационные работы в вебе на GreenSock.'} },
+  // ── AI TOOLS ──────────────────────────────────────────────────
+  { id:51, url:'https://claude.ai',                                tags:['ai'],               title:{en:'Claude'},                                           description:{en:"Anthropic's AI — thoughtful, nuanced, capable of deep reasoning across any domain.",ru:'ИИ Anthropic — вдумчивый, способен к глубоким рассуждениям по любой теме.'} },
+  { id:52, url:'https://perplexity.ai',                            tags:['ai','search'],      title:{en:'Perplexity'},                                       description:{en:'AI search that cites its sources. Answers questions instead of listing links.',ru:'ИИ-поиск, цитирующий источники. Отвечает на вопросы, а не перечисляет ссылки.'} },
+  { id:53, url:'https://krea.ai',                                  tags:['ai','art'],         title:{en:'Krea'},                                             description:{en:'Real-time AI image generation that responds to your brush strokes as you paint.',ru:'Генерация изображений ИИ в реальном времени — реагирует на мазки кисти.'} },
+  { id:54, url:'https://huggingface.co/spaces',                    tags:['ai','ml'],          title:{en:'HuggingFace Spaces'},                               description:{en:'Thousands of live ML demos in your browser — from image models to language models.',ru:'Тысячи живых ML-демо в браузере — от моделей изображений до языковых.'} },
+  { id:55, url:'https://elevenlabs.io',                            tags:['ai','audio'],       title:{en:'ElevenLabs'},                                       description:{en:'AI voice cloning and text-to-speech. Type words, hear any voice.',ru:'Клонирование голоса и синтез речи. Напечатай слова — услышь любой голос.'} },
+  { id:56, url:'https://websim.ai',                                tags:['ai','tech'],        title:{en:'WebSim'},                                           description:{en:"Simulate any website that doesn't exist. AI builds it in real time.",ru:'Симулируй любой сайт, которого нет. ИИ строит его в реальном времени.'} },
+  { id:57, url:'https://www.autodraw.com',                         tags:['ai','art'],         title:{en:'AutoDraw by Google'},                               description:{en:'Scribble anything. AI guesses and replaces with clean professional art.',ru:'Черкай что угодно. ИИ угадывает и заменяет чистым профессиональным рисунком.'} },
+  { id:58, url:'https://www.remove.bg',                            tags:['ai','utility'],     title:{en:'remove.bg'},                                        description:{en:'Remove image backgrounds in seconds with AI. Startlingly accurate.',ru:'Удаляй фон изображений за секунды с ИИ. Поразительно точно.'} },
+  { id:59, url:'https://gamma.app',                                tags:['ai','design'],      title:{en:'Gamma'},                                            description:{en:'AI generates polished presentations and docs from a single sentence.',ru:'ИИ создаёт отшлифованные презентации из одного предложения.'} },
+  { id:60, url:'https://boredhumans.com',                          tags:['ai','creative'],    title:{en:'Bored Humans'},                                     description:{en:'100+ AI demos on one page — face aging, poem generation, mood detection.',ru:'100+ ИИ-демо на одной странице — старение лица, генерация стихов, определение настроения.'} },
 
-  // ── DATA ──────────────────────────────────────────────────
-  { id:41,  url:'https://earth.nullschool.net',                          tags:['data','science'],    title:{en:'Earth Nullschool'},                 description:{en:'Live map of global wind, temperature, and ocean currents.',ru:'Живая карта мировых ветров, температур и океанских течений.'} },
-  { id:42,  url:'https://thetruesize.com',                               tags:['data','maps'],       title:{en:'The True Size Of'},                 description:{en:'Drag countries across the Mercator map to reveal their actual sizes.',ru:'Перетаскивай страны и узнай их настоящие размеры.'} },
-  { id:43,  url:'https://ourworldindata.org',                            tags:['data','science'],    title:{en:'Our World in Data'},                description:{en:"Research and data on humanity's biggest challenges. Every chart is a revelation.",ru:'Данные о главных проблемах человечества. Каждый график — откровение.'} },
-  { id:44,  url:'https://pudding.cool',                                  tags:['data','writing'],    title:{en:'The Pudding'},                      description:{en:'Visual essays on culture using data. The best longform journalism online.',ru:'Визуальные эссе о культуре с данными. Лучший лонгрид-журнализм в интернете.'} },
-  { id:45,  url:'https://observablehq.com/@d3/gallery',                  tags:['data','code'],       title:{en:'D3 Gallery'},                       description:{en:'Every type of chart built with D3.js. Copy and adapt freely.',ru:'Все мыслимые типы графиков на D3.js. Копируй и адаптируй свободно.'} },
-  { id:46,  url:'https://information-is-beautiful.net',                  tags:['data','design'],     title:{en:'Information is Beautiful'},         description:{en:'Data visualisation as high art. Facts turned into stunning graphics.',ru:'Визуализация данных как высокое искусство.'} },
-  { id:47,  url:'https://flowingdata.com',                               tags:['data'],              title:{en:'FlowingData'},                      description:{en:"Nathan Yau's site exploring statistics and visualisation with craft.",ru:'Сайт Натана Яу, исследующий статистику и визуализацию.'} },
-  { id:48,  url:'https://www.gapminder.org/tools',                       tags:['data'],              title:{en:'Gapminder'},                        description:{en:"Animate global statistics over time. Hans Rosling's vision made interactive.",ru:'Анимируй мировую статистику. Интерактивное воплощение Ганса Рослинга.'} },
-  { id:49,  url:'https://www.visualcapitalist.com',                      tags:['data','finance'],    title:{en:'Visual Capitalist'},                description:{en:'Infographics on economics, markets, and technology.',ru:'Инфографика об экономике, рынках и технологиях.'} },
-  { id:50,  url:'https://www.nytimes.com/spotlight/graphics',            tags:['data','writing'],    title:{en:'NYT Graphics'},                     description:{en:'The New York Times graphics desk. The gold standard of data journalism.',ru:'Отдел графики NYT. Золотой стандарт дата-журнализма.'} },
+  // ── DATA & MAPS ───────────────────────────────────────────────
+  { id:61, url:'https://earth.nullschool.net',                     tags:['data','science'],   title:{en:'Earth Nullschool'},                                 description:{en:'Live global wind, temperature, and ocean current map. The planet as living data.',ru:'Живая карта мировых ветров, температур и течений. Планета как живые данные.'} },
+  { id:62, url:'https://thetruesize.com',                          tags:['data','maps'],      title:{en:'The True Size Of'},                                 description:{en:'Drag countries on Mercator to reveal their actual size. Africa is gigantic.',ru:'Перетаскивай страны на карте Меркатора — узнай настоящие размеры. Африка гигантская.'} },
+  { id:63, url:'https://ourworldindata.org',                       tags:['data','science'],   title:{en:'Our World in Data'},                                description:{en:'Every chart about humanity\'s challenges. Mortality, poverty, climate — all in one place.',ru:'Все графики о проблемах человечества. Смертность, бедность, климат — всё в одном месте.'} },
+  { id:64, url:'https://pudding.cool',                             tags:['data','writing'],   title:{en:'The Pudding'},                                      description:{en:'Visual data essays on culture. The web\'s best longform journalism.',ru:'Визуальные эссе о культуре. Лучший лонгрид-журнализм в вебе.'} },
+  { id:65, url:'https://www.gapminder.org/tools',                  tags:['data'],             title:{en:'Gapminder'},                                        description:{en:'Animate global statistics over decades. Hans Rosling\'s vision, fully interactive.',ru:'Анимируй мировую статистику за десятилетия. Видение Ганса Рослинга, полностью интерактивно.'} },
+  { id:66, url:'https://information-is-beautiful.net',             tags:['data','design'],    title:{en:'Information is Beautiful'},                         description:{en:'Data visualisation as high art. McCandless turns numbers into unforgettable graphics.',ru:'Визуализация данных как высокое искусство. МакКэндлесс превращает числа в графику.'} },
+  { id:67, url:'https://www.nytimes.com/spotlight/graphics',       tags:['data','writing'],   title:{en:'NYT Graphics'},                                     description:{en:'The gold standard of data journalism. Interactive charts that make news tangible.',ru:'Золотой стандарт дата-журнализма. Интерактивные графики, делающие новости осязаемыми.'} },
+  { id:68, url:'https://neal.fun/life-stats',                      tags:['data','creative'],  title:{en:'Life Stats'},                                       description:{en:'Enter your birthday. See how many times your heart has beaten. Humbling.',ru:'Введи дату рождения. Узнай сколько раз билось твоё сердце. Это смиряет.'} },
+  { id:69, url:'https://www.worldometers.info',                    tags:['data','science'],   title:{en:'Worldometers'},                                     description:{en:'Real-time world statistics — births, deaths, CO2, food. The planet live.',ru:'Мировая статистика в реальном времени — рождения, смерти, CO2. Планета вживую.'} },
+  { id:70, url:'https://flowingdata.com',                          tags:['data'],             title:{en:'FlowingData'},                                      description:{en:'Nathan Yau\'s craft site. Statistics and visualisation explored with genuine care.',ru:'Сайт ремесла Натана Яу. Статистика и визуализация с настоящим вниманием.'} },
 
-  // ── DESIGN ────────────────────────────────────────────────
-  { id:51,  url:'https://www.awwwards.com',                              tags:['design'],            title:{en:'Awwwards'},                         description:{en:"The internet's most prestigious web design awards. Daily feed of the best UI.",ru:'Самая престижная награда в веб-дизайне. Ежедневная лента лучшего UI.'} },
-  { id:52,  url:'https://www.siteinspire.com',                           tags:['design'],            title:{en:'SiteInspire'},                      description:{en:'Curated gallery of the finest web design, filtered by style and category.',ru:'Отборная галерея лучшего веб-дизайна.'} },
-  { id:53,  url:'https://land-book.com',                                 tags:['design'],            title:{en:'Land-book'},                        description:{en:'The best landing pages ever built, organized for easy browsing.',ru:'Лучшие лендинги, удобно организованные для просмотра.'} },
-  { id:54,  url:'https://typewolf.com',                                  tags:['design','type'],     title:{en:'Typewolf'},                         description:{en:'What fonts are trending in web design right now. Site of the Day.',ru:'Какие шрифты сейчас в тренде веб-дизайна.'} },
-  { id:55,  url:'https://www.codrops.com',                               tags:['design','code'],     title:{en:'Codrops'},                          description:{en:'Creative coding tutorials and UI experiments that consistently blow minds.',ru:'Туториалы по творческому кодингу и UI-эксперименты.'} },
-  { id:56,  url:'https://dribbble.com/shots/popular',                    tags:['design'],            title:{en:'Dribbble Popular'},                 description:{en:'The most liked UI, illustration, and branding work from top designers.',ru:'Самые любимые работы по UI и брендингу от топ-дизайнеров.'} },
-  { id:57,  url:'https://uiverse.io',                                    tags:['design','code'],     title:{en:'UIverse'},                          description:{en:'Open-source UI elements in pure CSS. Buttons, loaders, cards — all copy-paste.',ru:'UI-элементы с открытым кодом на чистом CSS.'} },
-  { id:58,  url:'https://haikei.app',                                    tags:['design','art'],      title:{en:'Haikei'},                           description:{en:'Generate unique SVG shapes, blobs, and gradients for website backgrounds.',ru:'Генерируй уникальные SVG-формы и градиенты для фонов.'} },
-  { id:59,  url:'https://animista.net',                                  tags:['design','utility'],  title:{en:'Animista'},                         description:{en:'On-demand CSS animations. Preview, customize, copy.',ru:'CSS-анимации по требованию. Предварительный просмотр и копирование.'} },
-  { id:60,  url:'https://mobbin.com',                                    tags:['design'],            title:{en:'Mobbin'},                           description:{en:"The world's largest library of hand-picked mobile and web UI patterns.",ru:'Крупнейшая библиотека мобильных и веб UI-паттернов.'} },
+  // ── GAMES ─────────────────────────────────────────────────────
+  { id:71, url:'https://lichess.org',                              tags:['game'],             title:{en:'Lichess'},                                          description:{en:'The world\'s best free chess platform. Open-source, ad-free, forever.',ru:'Лучшая бесплатная шахматная платформа. Открытый код, без рекламы, навсегда.'} },
+  { id:72, url:'https://wordle.game',                              tags:['game'],             title:{en:'Wordle'},                                           description:{en:'Guess the five-letter word in six tries. A global daily ritual.',ru:'Угадай пятибуквенное слово за шесть попыток. Глобальный ежедневный ритуал.'} },
+  { id:73, url:'https://www.nytimes.com/games/connections',        tags:['game'],             title:{en:'Connections'},                                      description:{en:"NYT's daily word grouping puzzle. Four categories, sixteen words.",ru:'Ежедневная головоломка NYT. Четыре категории, шестнадцать слов.'} },
+  { id:74, url:'https://diep.io',                                  tags:['game','interactive'], title:{en:'Diep.io'},                                        description:{en:'Multiplayer tank shooter in your browser. Level up, specialize, dominate.',ru:'Браузерный мультиплеерный танковый шутер. Прокачивайся, специализируйся, доминируй.'} },
+  { id:75, url:'https://www.agar.io',                              tags:['game','interactive'], title:{en:'Agar.io'},                                        description:{en:'The original browser multiplayer. Eat dots, absorb players, become the biggest cell.',ru:'Оригинальная браузерная мультиплеерная. Поглощай клетки, стань самой большой.'} },
+  { id:76, url:'https://krunker.io',                               tags:['game'],             title:{en:'Krunker.io'},                                       description:{en:'Surprisingly good first-person shooter in your browser. No download, full game.',ru:'Удивительно хороший шутер от первого лица в браузере. Без загрузки, полная игра.'} },
+  { id:77, url:'https://minesweeper.online',                       tags:['game'],             title:{en:'Minesweeper Online'},                               description:{en:'The classic, perfected. Online leaderboards, custom sizes, world records.',ru:'Классика, доведённая до совершенства. Онлайн-таблицы рекордов, мировые рекорды.'} },
+  { id:78, url:'https://cssbattle.dev',                            tags:['game','design'],    title:{en:'CSS Battle'},                                       description:{en:'Recreate target images with the fewest CSS characters. Pure CSS golf.',ru:'Воссоздавай изображения минимальным CSS. Чистый CSS-гольф.'} },
+  { id:79, url:'https://flexboxfroggy.com',                        tags:['game','education'], title:{en:'Flexbox Froggy'},                                   description:{en:'Learn CSS Flexbox by guiding frogs to lily pads. 24 levels.',ru:'Учи CSS Flexbox, направляя лягушек. 24 уровня.'} },
+  { id:80, url:'https://cssgridgarden.com',                        tags:['game','education'], title:{en:'CSS Grid Garden'},                                  description:{en:'Learn CSS Grid by watering a garden. 28 levels of grid mastery.',ru:'Учи CSS Grid, поливая огород. 28 уровней освоения grid.'} },
 
-  // ── EDUCATION ─────────────────────────────────────────────
-  { id:61,  url:'https://www.khanacademy.org',                           tags:['education'],         title:{en:'Khan Academy'},                     description:{en:'World-class education from algebra to art history. Entirely free.',ru:'Образование мирового класса — от алгебры до истории искусств. Бесплатно.'} },
-  { id:62,  url:'https://brilliant.org',                                 tags:['education','science'],title:{en:'Brilliant'},                       description:{en:'Learn math, science, and CS through guided problem solving. Visual and deep.',ru:'Изучай математику через решение задач. Наглядно и глубоко.'} },
-  { id:63,  url:'https://waitbutwhy.com',                                tags:['education','writing'],title:{en:'Wait But Why'},                    description:{en:"Tim Urban's deep dives on AI, procrastination, and the Fermi paradox.",ru:'Глубокие погружения в ИИ, прокрастинацию и парадокс Ферми.'} },
-  { id:64,  url:'https://ncase.me',                                      tags:['education','interactive'],title:{en:'Nicky Case'},                  description:{en:'Interactive essays on complex systems — trust, anxiety, evolution.',ru:'Интерактивные эссе о сложных системах — доверие, тревога, эволюция.'} },
-  { id:65,  url:'https://ocw.mit.edu',                                   tags:['education'],         title:{en:'MIT OpenCourseWare'},               description:{en:'Free access to nearly all MIT course materials.',ru:'Бесплатный доступ к материалам почти всех курсов MIT.'} },
-  { id:66,  url:'https://explained.ai',                                  tags:['education','ml'],    title:{en:'Explained.ai'},                     description:{en:'Visual explanations of machine learning. Complex ideas made clear.',ru:'Визуальные объяснения машинного обучения. Сложные идеи — понятно.'} },
-  { id:67,  url:'https://www.3blue1brown.com',                           tags:['education','math'],  title:{en:'3Blue1Brown'},                      description:{en:"Grant Sanderson's visual mathematics. The best math videos ever made.",ru:'Визуальная математика Гранта Сандерсона. Лучшие математические видео.'} },
-  { id:68,  url:'https://joshwcomeau.com',                               tags:['education','design'],title:{en:'Josh W. Comeau'},                   description:{en:'The most beautiful CSS and React tutorials on the internet.',ru:'Самые красивые CSS и React туториалы в интернете.'} },
-  { id:69,  url:'https://maggieappleton.com',                            tags:['education','writing'],title:{en:'Maggie Appleton'},                 description:{en:'Digital garden of illustrated essays on technology and programming.',ru:'Цифровой сад иллюстрированных эссе о технологиях.'} },
-  { id:70,  url:'https://overreacted.io',                                tags:['education','code'],  title:{en:'Overreacted'},                      description:{en:"Dan Abramov's blog. Deep dives on React and programming mental models.",ru:'Блог Дэна Абрамова. Глубокие погружения в React и программирование.'} },
+  // ── EDUCATION & DEEP READS ────────────────────────────────────
+  { id:81, url:'https://www.khanacademy.org',                      tags:['education'],        title:{en:'Khan Academy'},                                     description:{en:'World-class education from algebra to art history. Entirely free. Genuinely good.',ru:'Образование мирового класса от алгебры до истории искусств. Бесплатно.'} },
+  { id:82, url:'https://waitbutwhy.com',                           tags:['education','writing'], title:{en:'Wait But Why'},                                  description:{en:"Tim Urban's epic deep-dives on AI, Elon Musk, procrastination, the Fermi paradox.",ru:'Эпические погружения в ИИ, Маска, прокрастинацию и парадокс Ферми.'} },
+  { id:83, url:'https://ncase.me',                                 tags:['education','interactive'], title:{en:'Nicky Case'},                                description:{en:'Interactive essays on complex systems. Trust, anxiety, evolution — explained through play.',ru:'Интерактивные эссе о сложных системах. Доверие, тревога, эволюция — через игру.'} },
+  { id:84, url:'https://www.3blue1brown.com',                      tags:['education','math'], title:{en:'3Blue1Brown'},                                      description:{en:"Grant Sanderson's visual mathematics. The most beautiful math content ever made.",ru:'Визуальная математика Гранта Сандерсона. Самый красивый математический контент.'} },
+  { id:85, url:'https://explained.ai',                             tags:['education','ml'],   title:{en:'Explained.ai'},                                     description:{en:'Machine learning concepts made genuinely clear with visuals. No hype.',ru:'Концепции машинного обучения сделаны понятными с визуализацией. Без хайпа.'} },
+  { id:86, url:'https://joshwcomeau.com',                          tags:['education','design'], title:{en:'Josh W. Comeau'},                                 description:{en:'The most beautiful CSS and React tutorials on the internet. Interactive by default.',ru:'Самые красивые CSS и React туториалы. По умолчанию интерактивные.'} },
+  { id:87, url:'https://brilliant.org',                            tags:['education','science'], title:{en:'Brilliant'},                                     description:{en:'Learn math, science, CS through guided problem-solving. Actually sticks.',ru:'Изучай математику через решение задач. Действительно запоминается.'} },
+  { id:88, url:'https://ocw.mit.edu',                              tags:['education'],        title:{en:'MIT OpenCourseWare'},                               description:{en:'Free access to virtually all MIT course materials. No login needed.',ru:'Бесплатный доступ к материалам MIT. Без регистрации.'} },
+  { id:89, url:'https://maggieappleton.com',                       tags:['education','art'],  title:{en:'Maggie Appleton'},                                  description:{en:'Illustrated digital garden on technology, anthropology, and programming.',ru:'Иллюстрированный цифровой сад о технологиях, антропологии и программировании.'} },
+  { id:90, url:'https://www.youtube.com/c/Kurzgesagt',             tags:['education','science'], title:{en:'Kurzgesagt'},                                    description:{en:'Animated explainers on science, existential risk, and the universe. Stunning visuals.',ru:'Анимированные объяснения науки, экзистенциальных рисков и вселенной.'} },
 
-  // ── CREATIVE ──────────────────────────────────────────────
-  { id:71,  url:'https://perchance.org',                                 tags:['creative','utility'],title:{en:'Perchance'},                        description:{en:'Build and share random generators for anything — names, stories, RPG loot.',ru:'Создавай генераторы всего подряд — имён, историй, RPG-добычи.'} },
-  { id:72,  url:'https://randomstreetview.com',                          tags:['creative','maps'],   title:{en:'Random Street View'},               description:{en:'Teleport to a random location on Earth via Google Street View.',ru:'Телепортируйся в случайное место на Земле через Google Street View.'} },
-  { id:73,  url:'https://www.donothingfor2minutes.com',                  tags:['creative'],          title:{en:'Do Nothing For 2 Minutes'},         description:{en:'Listen to ocean waves and do nothing for two minutes. Try.',ru:'Слушай шум волн и ничего не делай две минуты. Попробуй.'} },
-  { id:74,  url:'https://www.futureme.org',                              tags:['creative'],          title:{en:'FutureMe'},                         description:{en:'Write an email to your future self. Delivered on any date you choose.',ru:'Напиши письмо себе в будущее. Доставляется в любую дату.'} },
-  { id:75,  url:'https://boredhumans.com',                               tags:['creative','ai'],     title:{en:'Bored Humans'},                     description:{en:'100+ AI demos on one page — face filters, poetry generators, mood detectors.',ru:'100+ AI-демо — фейс-фильтры, генераторы стихов, детекторы настроения.'} },
-  { id:76,  url:'https://www.sporcle.com',                               tags:['creative','game'],   title:{en:'Sporcle'},                          description:{en:"Millions of quizzes on every topic. The internet's best trivia site.",ru:'Миллионы викторин на любую тему. Лучший сайт для тривии.'} },
-  { id:77,  url:'https://www.typeracer.com',                             tags:['creative','game'],   title:{en:'TypeRacer'},                        description:{en:'Race others while typing passages from books, movies, and songs.',ru:'Соревнуйся в наборе текстов из книг и фильмов.'} },
-  { id:78,  url:'https://www.pixilart.com',                              tags:['creative','art'],    title:{en:'Pixilart'},                         description:{en:'Pixel art editor in the browser. Draw, animate, share.',ru:'Пиксельный редактор прямо в браузере. Рисуй, анимируй, делись.'} },
-  { id:79,  url:'https://www.hackertyper.com',                           tags:['creative','game'],   title:{en:'Hacker Typer'},                     description:{en:'Type random keys. Looks like you\'re hacking the mainframe.',ru:'Нажимай случайные клавиши — выглядит как взлом мейнфрейма.'} },
-  { id:80,  url:'https://neal.fun/life-stats',                           tags:['creative','data'],   title:{en:'Life Stats'},                       description:{en:'Enter your birthday and see fascinating statistics about your life.',ru:'Введи дату рождения — увидь захватывающую статистику о своей жизни.'} },
+  // ── MUSIC & SOUND ─────────────────────────────────────────────
+  { id:91, url:'https://radiooooo.com',                            tags:['music'],            title:{en:'Radiooooo'},                                        description:{en:'Time-and-place radio. Pick any country, any decade, hear what was playing.',ru:'Радиомашина времени. Выбери страну и десятилетие — слушай что играло.'} },
+  { id:92, url:'https://asoftmurmur.com',                          tags:['music','utility'],  title:{en:'A Soft Murmur'},                                    description:{en:'Mix rain, thunder, fire, ocean into your perfect ambient soundscape.',ru:'Смешивай дождь, гром, огонь, океан в идеальный звуковой ландшафт.'} },
+  { id:93, url:'https://everynoise.com',                           tags:['music','data'],     title:{en:'Every Noise at Once'},                              description:{en:'Map of 6000+ music genres with sample tracks. Click any to hear it.',ru:'Карта 6000+ жанров с образцами треков. Кликни любой — услышишь его.'} },
+  { id:94, url:'https://poolsuite.net',                            tags:['music','design'],   title:{en:'Poolsuite FM'},                                     description:{en:'Retro-designed player with eternal summer playlists. A vibe you can\'t describe.',ru:'Плеер в ретро-стиле с плейлистами вечного лета. Атмосфера, которую не описать.'} },
+  { id:95, url:'https://www.lofi.cafe',                            tags:['music'],            title:{en:'lofi.cafe'},                                        description:{en:'Lofi hip-hop with a view. Different virtual environments to study and relax in.',ru:'Lofi хип-хоп с видом. Разные виртуальные среды для учёбы и отдыха.'} },
+  { id:96, url:'https://www.soundsnap.com',                        tags:['music','utility'],  title:{en:'Soundsnap'},                                        description:{en:'Massive sound effect library. Every sound you\'ve ever needed.',ru:'Огромная библиотека звуковых эффектов. Каждый звук, который тебе нужен.'} },
+  { id:97, url:'https://www.musicmap.info',                        tags:['music','data'],     title:{en:'Musicmap'},                                         description:{en:'The exhaustive genealogy of popular music genres. Every connection mapped.',ru:'Исчерпывающая генеалогия популярных музыкальных жанров.'} },
+  { id:98, url:'https://freemusicarchive.org',                     tags:['music','archive'],  title:{en:'Free Music Archive'},                               description:{en:'Legal free music for any project. Curated by WFMU.',ru:'Легальная бесплатная музыка для любого проекта. Курируется WFMU.'} },
+  { id:99, url:'https://mynoise.net',                              tags:['music','utility'],  title:{en:'myNoise'},                                          description:{en:'Customizable noise machines for focus, sleep, tinnitus masking. Over 200 environments.',ru:'Настраиваемые генераторы шума для фокуса и сна. Более 200 сред.'} },
+  { id:100, url:'https://www.last.fm',                             tags:['music','data'],     title:{en:'Last.fm'},                                          description:{en:'Scrobble your music and discover what you actually listen to. Data about your taste.',ru:'Скробблируй музыку и узнай что ты реально слушаешь. Данные о вкусе.'} },
 
-  // ── UTILITY ───────────────────────────────────────────────
-  { id:81,  url:'https://squoosh.app',                                   tags:['utility'],           title:{en:'Squoosh'},                          description:{en:"Google's image compression tool. Compare formats live.",ru:'Инструмент сжатия изображений от Google. Сравнивай форматы живьём.'} },
-  { id:82,  url:'https://regex101.com',                                  tags:['utility','code'],    title:{en:'Regex101'},                         description:{en:'Build, test, debug regular expressions with live matching.',ru:'Создавай, тестируй и отлаживай регулярные выражения.'} },
-  { id:83,  url:'https://excalidraw.com',                                tags:['utility','design'],  title:{en:'Excalidraw'},                       description:{en:'Virtual whiteboard that makes everything look hand-drawn.',ru:'Виртуальная доска, делающая всё похожим на рисунок от руки.'} },
-  { id:84,  url:'https://carbon.now.sh',                                 tags:['utility','design'],  title:{en:'Carbon'},                           description:{en:'Create beautiful screenshots of your code.',ru:'Создавай красивые скриншоты кода.'} },
-  { id:85,  url:'https://www.wolframalpha.com',                          tags:['utility','science'], title:{en:'Wolfram Alpha'},                    description:{en:'Ask anything computational. Answered with machine precision.',ru:'Задай любой вычислительный вопрос. Ответ с точностью машины.'} },
-  { id:86,  url:'https://archive.ph',                                    tags:['utility','archive'], title:{en:'Archive.ph'},                       description:{en:'Snapshot any webpage to save it forever.',ru:'Сохраняй снимок любой страницы навсегда.'} },
-  { id:87,  url:'https://www.remove.bg',                                 tags:['utility','ai'],      title:{en:'remove.bg'},                        description:{en:'Remove image backgrounds in seconds with AI.',ru:'Удаляй фон изображений за секунды с помощью ИИ.'} },
-  { id:88,  url:'https://bundlephobia.com',                              tags:['utility','tech'],    title:{en:'Bundle Phobia'},                    description:{en:'Find the cost of adding any npm package to your bundle.',ru:'Узнай стоимость добавления npm-пакета в бандл.'} },
-  { id:89,  url:'https://caniuse.com',                                   tags:['utility','tech'],    title:{en:'Can I Use'},                        description:{en:'Browser support tables for HTML5, CSS3, SVG and more.',ru:'Таблицы поддержки браузерами HTML5, CSS3, SVG и других технологий.'} },
-  { id:90,  url:'https://app.diagrams.net',                              tags:['utility'],           title:{en:'diagrams.net'},                     description:{en:'Free powerful diagramming for flowcharts, network diagrams, and UML.',ru:'Бесплатный инструмент для блок-схем, сетевых диаграмм и UML.'} },
+  // ── DESIGN & CREATIVE TOOLS ───────────────────────────────────
+  { id:101, url:'https://www.awwwards.com',                        tags:['design'],           title:{en:'Awwwards'},                                         description:{en:'The web\'s most prestigious design awards. Daily dose of the world\'s best UI.',ru:'Самая престижная награда в веб-дизайне. Ежедневная порция лучшего UI.'} },
+  { id:102, url:'https://www.siteinspire.com',                     tags:['design'],           title:{en:'SiteInspire'},                                      description:{en:'Curated gallery of fine web design. Filtered by style, type, and subject.',ru:'Отборная галерея тонкого веб-дизайна. Фильтрация по стилю, типу и теме.'} },
+  { id:103, url:'https://mobbin.com',                              tags:['design'],           title:{en:'Mobbin'},                                           description:{en:'The largest library of real mobile app UI screens. Browse by flow and component.',ru:'Крупнейшая библиотека реальных экранов мобильных приложений.'} },
+  { id:104, url:'https://www.codrops.com',                         tags:['design','code'],    title:{en:'Codrops'},                                          description:{en:'Creative coding tutorials and UI experiments that consistently blow minds.',ru:'Туториалы по творческому кодингу и UI-эксперименты.'} },
+  { id:105, url:'https://uiverse.io',                              tags:['design','code'],    title:{en:'UIverse'},                                          description:{en:'Open-source CSS elements. Buttons, loaders, cards — copy and use instantly.',ru:'UI-элементы с открытым кодом на CSS. Копируй и используй мгновенно.'} },
+  { id:106, url:'https://animista.net',                            tags:['design','utility'], title:{en:'Animista'},                                         description:{en:'On-demand CSS animations. Preview, customize, grab the code.',ru:'CSS-анимации по требованию. Предпросмотр, настройка, забери код.'} },
+  { id:107, url:'https://fffuel.co',                               tags:['design','art'],     title:{en:'fffuel'},                                           description:{en:'Free SVG generators for backgrounds, gradients, noise, patterns. All visual.',ru:'Бесплатные SVG-генераторы для фонов, градиентов, шума, паттернов.'} },
+  { id:108, url:'https://typewolf.com',                            tags:['design','type'],    title:{en:'Typewolf'},                                         description:{en:'What fonts are trending in web design. Font pairing guides, site of the day.',ru:'Какие шрифты в тренде в веб-дизайне. Гайды по сочетанию шрифтов.'} },
+  { id:109, url:'https://www.fontsinuse.com',                      tags:['design','type'],    title:{en:'Fonts In Use'},                                     description:{en:'Real-world font usage catalogued. Find typefaces by context and industry.',ru:'Каталог реального использования шрифтов. Найди гарнитуры по контексту.'} },
+  { id:110, url:'https://land-book.com',                           tags:['design'],           title:{en:'Land-book'},                                        description:{en:'The best landing pages ever made. Organized for easy design reference.',ru:'Лучшие лендинги, когда-либо созданные. Удобная навигация для дизайн-референсов.'} },
 
-  // ── MUSIC ─────────────────────────────────────────────────
-  { id:91,  url:'https://radiooooo.com',                                 tags:['music'],             title:{en:'Radiooooo'},                        description:{en:'A time-and-place radio machine. Pick any country, any decade, hear what played.',ru:'Радиомашина времени. Выбери страну и десятилетие — слушай, что там играло.'} },
-  { id:92,  url:'https://asoftmurmur.com',                               tags:['music','utility'],   title:{en:'A Soft Murmur'},                    description:{en:'Mix rain, thunder, fire, ocean into your perfect ambient soundscape.',ru:'Смешивай дождь, гром, огонь, океан в идеальный атмосферный ландшафт.'} },
-  { id:93,  url:'https://everynoise.com',                                tags:['music','data'],      title:{en:'Every Noise at Once'},              description:{en:'A map of 6000+ music genres with sample tracks.',ru:'Карта 6000+ музыкальных жанров с образцами треков.'} },
-  { id:94,  url:'https://www.musicmap.info',                             tags:['music','data'],      title:{en:'Musicmap'},                         description:{en:'An exhaustive genealogy of popular music genres with interactive timelines.',ru:'Исчерпывающая генеалогия популярных музыкальных жанров.'} },
-  { id:95,  url:'https://noisedeck.app',                                 tags:['music','interactive'],title:{en:'Noisedeck'},                       description:{en:'A browser synthesizer with real-time visual feedback.',ru:'Браузерный синтезатор с визуальной обратной связью.'} },
-  { id:96,  url:'https://musiclab.chromeexperiments.com',                tags:['music','interactive'],title:{en:'Chrome Music Lab'},                description:{en:"Google's music learning experiments — shared piano, spectrograms, rhythm.",ru:'Музыкальные эксперименты Google — пианино, спектрограммы, ритм.'} },
-  { id:97,  url:'https://www.lofi.cafe',                                 tags:['music'],             title:{en:'lofi.cafe'},                        description:{en:'Lofi hip-hop in beautiful virtual environments. Study, work, relax.',ru:'Lofi хип-хоп в красивых виртуальных средах.'} },
-  { id:98,  url:'https://poolsuite.net',                                 tags:['music','design'],    title:{en:'Poolsuite FM'},                     description:{en:'A retro-designed media player with eternal summer playlists.',ru:'Медиаплеер в ретро-стиле с плейлистами вечного лета.'} },
-  { id:99,  url:'https://freemusicarchive.org',                          tags:['music','archive'],   title:{en:'Free Music Archive'},               description:{en:'Legal, free music for any project. Curated by WFMU.',ru:'Легальная бесплатная музыка для любого проекта.'} },
-  { id:100, url:'https://www.soundsnap.com',                             tags:['music','utility'],   title:{en:'Soundsnap'},                        description:{en:'A massive library of sound effects for video and audio projects.',ru:'Огромная библиотека звуковых эффектов для видео и аудиопроектов.'} },
+  // ── UTILITIES ─────────────────────────────────────────────────
+  { id:111, url:'https://squoosh.app',                             tags:['utility'],          title:{en:'Squoosh'},                                          description:{en:'Google\'s image compression tool. Compare formats live. No upload limits.',ru:'Инструмент сжатия изображений Google. Сравнивай форматы живьём.'} },
+  { id:112, url:'https://excalidraw.com',                          tags:['utility','design'], title:{en:'Excalidraw'},                                       description:{en:'Virtual whiteboard that looks hand-drawn. Perfect for architecture diagrams.',ru:'Виртуальная доска с рукописным стилем. Идеально для диаграмм архитектуры.'} },
+  { id:113, url:'https://carbon.now.sh',                           tags:['utility','design'], title:{en:'Carbon'},                                           description:{en:'Create beautiful code screenshots instantly. Used everywhere.',ru:'Создавай красивые скриншоты кода мгновенно.'} },
+  { id:114, url:'https://regex101.com',                            tags:['utility','code'],   title:{en:'Regex101'},                                         description:{en:'Build and debug regex with live matching, explanations, and test cases.',ru:'Создавай и отлаживай regex с живым совпадением и объяснениями.'} },
+  { id:115, url:'https://www.wolframalpha.com',                    tags:['utility','science'], title:{en:'Wolfram Alpha'},                                   description:{en:'Computational knowledge engine. Math, science, dates — precise answers.',ru:'Вычислительный движок знаний. Математика, наука, даты — точные ответы.'} },
+  { id:116, url:'https://archive.ph',                              tags:['utility','archive'], title:{en:'Archive.ph'},                                     description:{en:'Snapshot any webpage permanently. Essential for research.',ru:'Сохраняй снимок любой страницы навсегда. Незаменимо для исследований.'} },
+  { id:117, url:'https://app.diagrams.net',                        tags:['utility'],          title:{en:'diagrams.net'},                                     description:{en:'Free, powerful diagramming. Flowcharts, network diagrams, UML, anything.',ru:'Бесплатное мощное построение диаграмм. Блок-схемы, сетевые диаграммы, UML.'} },
+  { id:118, url:'https://bundlephobia.com',                        tags:['utility','tech'],   title:{en:'Bundle Phobia'},                                    description:{en:'Find the real cost of any npm package before adding it.',ru:'Узнай реальную стоимость любого npm-пакета перед добавлением.'} },
+  { id:119, url:'https://caniuse.com',                             tags:['utility','tech'],   title:{en:'Can I Use'},                                        description:{en:'Browser support tables for every web feature. The developer\'s daily reference.',ru:'Таблицы поддержки браузерами для каждой веб-функции. Ежедневный справочник.'} },
+  { id:120, url:'https://www.futureme.org',                        tags:['utility','creative'], title:{en:'FutureMe'},                                      description:{en:'Write an email to your future self. Delivered on any date you set.',ru:'Напиши письмо себе в будущее. Доставляется в любую дату.'} },
 
-  // ── ARCHIVE ───────────────────────────────────────────────
-  { id:101, url:'https://web.archive.org',                               tags:['archive'],           title:{en:'Wayback Machine'},                  description:{en:"The internet's memory. Over 800 billion pages saved since 1996.",ru:'Память интернета. Более 800 миллиардов страниц, сохранённых с 1996 года.'} },
-  { id:102, url:'https://archive.org',                                   tags:['archive'],           title:{en:'Internet Archive'},                 description:{en:'Books, movies, music, software — a digital library of human culture.',ru:'Книги, фильмы, музыка — цифровая библиотека человеческой культуры.'} },
-  { id:103, url:'https://publicdomainreview.org',                        tags:['archive','art'],     title:{en:'Public Domain Review'},             description:{en:"Curated essays on history's most fascinating out-of-copyright works.",ru:'Эссе о самых увлекательных работах, вышедших из-под авторских прав.'} },
-  { id:104, url:'https://www.europeana.eu',                              tags:['archive','art'],     title:{en:'Europeana'},                        description:{en:'50+ million digitised cultural heritage objects from European museums.',ru:'50+ миллионов оцифрованных объектов культурного наследия.'} },
-  { id:105, url:'https://digitalcollections.nypl.org',                   tags:['archive','art'],     title:{en:'NYPL Digital Collections'},         description:{en:"900,000+ high-res images from the New York Public Library's archive.",ru:'900 000+ изображений из архива Нью-Йоркской публичной библиотеки.'} },
-  { id:106, url:'https://monoskop.org',                                  tags:['archive','art'],     title:{en:'Monoskop'},                         description:{en:'A wiki for arts, media, and humanities with free books and resources.',ru:'Вики по искусству и медиа с бесплатными книгами.'} },
-  { id:107, url:'https://www.vintage-computing.net',                     tags:['archive','retro'],   title:{en:'Vintage Computing'},                description:{en:'Scanned vintage computer magazines and ads from the 1970s–90s.',ru:'Отсканированные компьютерные журналы 1970-х–90-х.'} },
-  { id:108, url:'https://archive.org/details/computerchronicles',        tags:['archive','retro'],   title:{en:'Computer Chronicles'},              description:{en:'Every episode of the legendary 1983–2002 tech TV show.',ru:'Все серии легендарного тех-шоу 1983–2002 годов.'} },
-  { id:109, url:'https://open.spotify.com/playlist/37i9dQZF1DX5trt9i14X7j',tags:['archive','music'],title:{en:'All-Time Top Songs'},               description:{en:"Spotify's most-streamed songs ever. Instant hits, instant nostalgia.",ru:'Самые стримируемые песни Spotify за всё время.'} },
-  { id:110, url:'https://www.open-video.org',                            tags:['archive','video'],   title:{en:'Open Video'},                       description:{en:'Freely available video content licensed for reuse and education.',ru:'Свободно доступный видеоконтент для повторного использования и обучения.'} },
+  // ── TECH & CODE ───────────────────────────────────────────────
+  { id:121, url:'https://news.ycombinator.com',                    tags:['tech'],             title:{en:'Hacker News'},                                      description:{en:'The web\'s best tech discussion board. Signal without noise.',ru:'Лучшая техническая доска обсуждений. Сигнал без шума.'} },
+  { id:122, url:'https://www.producthunt.com',                     tags:['tech'],             title:{en:'Product Hunt'},                                     description:{en:'The day\'s best new products, voted on by the tech community.',ru:'Лучшие новые продукты дня, оцениваемые технологическим сообществом.'} },
+  { id:123, url:'https://github.com/trending',                     tags:['tech','code'],      title:{en:'GitHub Trending'},                                  description:{en:'The most starred repos today. What the world is building right now.',ru:'Самые популярные репозитории сегодня. Что строит мир прямо сейчас.'} },
+  { id:124, url:'https://roadmap.sh',                              tags:['tech','education'], title:{en:'roadmap.sh'},                                       description:{en:'Community-built dev roadmaps for frontend, backend, DevOps. Clear paths.',ru:'Дорожные карты разработчика от сообщества. Чёткие пути.'} },
+  { id:125, url:'https://www.val.town',                            tags:['tech','code'],      title:{en:'Val Town'},                                         description:{en:'Write and run JS in the cloud, shareable like a link. Instant deployment.',ru:'Пиши и запускай JS в облаке, делиться как ссылкой. Мгновенный деплой.'} },
+  { id:126, url:'https://www.tldraw.com',                          tags:['tech','utility'],   title:{en:'tldraw'},                                           description:{en:'Infinite virtual whiteboard. Best in class for diagrams and collaboration.',ru:'Бесконечная виртуальная доска. Лучшая в классе для диаграмм и совместной работы.'} },
+  { id:127, url:'https://developer.mozilla.org',                   tags:['tech','education'], title:{en:'MDN Web Docs'},                                     description:{en:'The definitive web reference. HTML, CSS, JS — all documented precisely.',ru:'Окончательный веб-справочник. HTML, CSS, JS — всё задокументировано точно.'} },
+  { id:128, url:'https://css-tricks.com',                          tags:['tech','design'],    title:{en:'CSS-Tricks'},                                       description:{en:'The internet\'s best collection of CSS techniques and property references.',ru:'Лучшая коллекция CSS-техник и справочников в интернете.'} },
+  { id:129, url:'https://www.smashingmagazine.com',                tags:['tech','design'],    title:{en:'Smashing Magazine'},                                description:{en:'In-depth articles on web design and development. Trusted for 18+ years.',ru:'Глубокие статьи о веб-дизайне и разработке. Надёжные 18+ лет.'} },
+  { id:130, url:'https://overreacted.io',                          tags:['tech','education'], title:{en:'Overreacted'},                                      description:{en:"Dan Abramov's blog. Deep dives on React, mental models, software thinking.",ru:'Блог Дэна Абрамова. Глубокие погружения в React и мышление о ПО.'} },
 
-  // ── GAMES ─────────────────────────────────────────────────
-  { id:111, url:'https://lichess.org',                                   tags:['game'],              title:{en:'Lichess'},                          description:{en:"The world's best free open-source chess platform. Ad-free, always.",ru:'Лучшая бесплатная шахматная платформа с открытым кодом. Без рекламы.'} },
-  { id:112, url:'https://diep.io',                                       tags:['game','interactive'],title:{en:'Diep.io'},                          description:{en:'Multiplayer tank shooter in the browser. Level up and dominate.',ru:'Браузерный мультиплеерный танковый шутер. Прокачивайся и доминируй.'} },
-  { id:113, url:'https://skribbl.io',                                    tags:['game','interactive'],title:{en:'skribbl.io'},                       description:{en:'Multiplayer online Pictionary. Draw, guess, laugh, repeat.',ru:'Мультиплеерный Pictionary. Рисуй, угадывай, смейся, повторяй.'} },
-  { id:114, url:'https://wordle.game',                                   tags:['game'],              title:{en:'Wordle'},                           description:{en:'Guess the five-letter word in six tries. A daily ritual for millions.',ru:'Угадай пятибуквенное слово за шесть попыток. Ежедневный ритуал.'} },
-  { id:115, url:'https://www.nytimes.com/games/connections',             tags:['game'],              title:{en:'Connections'},                      description:{en:"NYT's daily word grouping puzzle. Four groups, sixteen words.",ru:'Ежедневная головоломка NYT. Четыре группы, шестнадцать слов.'} },
-  { id:116, url:'https://www.chess.com/play/online',                     tags:['game'],              title:{en:'Chess.com'},                        description:{en:'Play chess with millions worldwide. Lessons, puzzles, tournaments.',ru:'Шахматы с миллионами игроков. Уроки, задачи, турниры.'} },
-  { id:117, url:'https://adventofcode.com',                              tags:['game','code'],       title:{en:'Advent of Code'},                   description:{en:'Annual programming puzzle event, December 1–25.',ru:'Ежегодные программные головоломки, 1–25 декабря.'} },
-  { id:118, url:'https://codewars.com',                                  tags:['game','education'],  title:{en:'Codewars'},                         description:{en:'Solve coding kata and rise through the ranks.',ru:'Решай кодинг-ката и поднимайся в рейтинге.'} },
-  { id:119, url:'https://www.geoguessr.com',                             tags:['game','maps'],       title:{en:'GeoGuessr Classic'},                description:{en:'The classic version. Navigate Street View and pin your guess.',ru:'Классическая версия. Навигация в Street View и угадай место.'} },
-  { id:120, url:'https://cssbattle.dev',                                 tags:['game','design'],     title:{en:'CSS Battle'},                       description:{en:'Write the fewest CSS characters to reproduce a target image.',ru:'Пиши минимум CSS для воспроизведения целевого изображения.'} },
+  // ── ARCHIVES & HISTORY ────────────────────────────────────────
+  { id:131, url:'https://web.archive.org',                         tags:['archive'],          title:{en:'Wayback Machine'},                                  description:{en:'The internet\'s memory. 800+ billion pages saved since 1996. History preserved.',ru:'Память интернета. 800+ миллиардов страниц с 1996 года.'} },
+  { id:132, url:'https://archive.org',                             tags:['archive'],          title:{en:'Internet Archive'},                                 description:{en:'Books, movies, music, software — a digital library of human culture. Forever free.',ru:'Книги, фильмы, музыка, ПО — цифровая библиотека культуры. Навсегда бесплатно.'} },
+  { id:133, url:'https://publicdomainreview.org',                  tags:['archive','art'],    title:{en:'Public Domain Review'},                             description:{en:'Curated essays on history\'s most fascinating out-of-copyright works.',ru:'Эссе о самых увлекательных работах, вышедших из-под авторских прав.'} },
+  { id:134, url:'https://digitalcollections.nypl.org',             tags:['archive','art'],    title:{en:'NYPL Digital Collections'},                         description:{en:'900,000+ high-res historical images from the New York Public Library.',ru:'900 000+ исторических изображений из Нью-Йоркской публичной библиотеки.'} },
+  { id:135, url:'https://www.europeana.eu',                        tags:['archive','art'],    title:{en:'Europeana'},                                        description:{en:'50+ million digitised cultural heritage items from European museums.',ru:'50+ миллионов оцифрованных культурных объектов европейских музеев.'} },
+  { id:136, url:'https://monoskop.org',                            tags:['archive','art'],    title:{en:'Monoskop'},                                         description:{en:'Wiki for arts, media, humanities with links to free books. Deep rabbit hole.',ru:'Вики по искусству, медиа и гуманитарным наукам с бесплатными книгами.'} },
+  { id:137, url:'https://archive.org/details/computerchronicles', tags:['archive','retro'],   title:{en:'Computer Chronicles'},                              description:{en:'Every episode of the legendary 1983–2002 tech TV show.',ru:'Все серии легендарного тех-шоу 1983–2002 годов.'} },
+  { id:138, url:'https://theoldnet.com',                           tags:['archive','retro'],  title:{en:'The Old Net'},                                      description:{en:'Browse the internet as it looked in 1999. Time machine for the early web.',ru:'Просматривай интернет таким, каким он был в 1999. Машина времени для раннего веба.'} },
+  { id:139, url:'https://neal.fun/internet-artifacts',             tags:['archive','retro'],  title:{en:'Internet Artifacts'},                               description:{en:'A museum of the internet\'s most important artifacts. From the first website to the first tweet.',ru:'Музей самых важных артефактов интернета. От первого сайта до первого твита.'} },
+  { id:140, url:'https://www.historypin.org',                      tags:['archive','maps'],   title:{en:'Historypin'},                                       description:{en:'Pin historical photos to their exact locations on a map. See how places changed.',ru:'Прикрепляй исторические фото к точным местам на карте. Смотри как менялись места.'} },
 
-  // ── TECH ──────────────────────────────────────────────────
-  { id:121, url:'https://news.ycombinator.com',                          tags:['tech'],              title:{en:'Hacker News'},                      description:{en:"The internet's best tech discussion board. Signal over noise.",ru:'Лучшая техническая доска обсуждений. Сигнал без шума.'} },
-  { id:122, url:'https://lobste.rs',                                     tags:['tech'],              title:{en:'Lobsters'},                         description:{en:'Hacker News, smaller and more focused. Invite-only keeps quality high.',ru:'Хакер Ньюс, меньше и сфокусированнее. Только по инвайтам.'} },
-  { id:123, url:'https://www.producthunt.com',                           tags:['tech'],              title:{en:'Product Hunt'},                     description:{en:"Every day's best new products, voted on by the tech community.",ru:'Лучшие новые продукты каждого дня, оцененные сообществом.'} },
-  { id:124, url:'https://github.com/trending',                           tags:['tech','code'],       title:{en:'GitHub Trending'},                  description:{en:'The most starred repositories on GitHub today.',ru:'Самые популярные репозитории на GitHub сегодня.'} },
-  { id:125, url:'https://www.tldraw.com',                                tags:['tech','utility'],    title:{en:'tldraw'},                           description:{en:'Infinite virtual whiteboard for drawing and collaboration.',ru:'Бесконечная виртуальная доска для рисования и совместной работы.'} },
-  { id:126, url:'https://www.val.town',                                  tags:['tech','code'],       title:{en:'Val Town'},                         description:{en:'Write and run JavaScript in the cloud, shareable like a tweet.',ru:'Пиши и запускай JavaScript в облаке, делись как твитом.'} },
-  { id:127, url:'https://tldr.tech',                                     tags:['tech'],              title:{en:'TLDR'},                             description:{en:'Daily newsletter with the most interesting tech stories in under 5 minutes.',ru:'Ежедневная рассылка с интересными историями из мира технологий за 5 минут.'} },
-  { id:128, url:'https://roadmap.sh',                                    tags:['tech','education'],  title:{en:'roadmap.sh'},                       description:{en:'Community-built developer roadmaps for frontend, backend, DevOps.',ru:'Дорожные карты разработчика, созданные сообществом.'} },
-  { id:129, url:'https://screenlane.com',                                tags:['tech','design'],     title:{en:'Screenlane'},                       description:{en:'Mobile UI patterns and inspiration from the best iOS and Android apps.',ru:'Мобильные UI-паттерны из лучших приложений iOS и Android.'} },
-  { id:130, url:'https://codepen.io/trending',                           tags:['tech','design'],     title:{en:'Codepen Trending'},                 description:{en:'The most popular creative coding demos on Codepen right now.',ru:'Самые популярные демо творческого кодинга на Codepen.'} },
+  // ── CREATIVE / RANDOM / FUN ───────────────────────────────────
+  { id:141, url:'https://perchance.org',                           tags:['creative','utility'], title:{en:'Perchance'},                                     description:{en:'Build and share random generators for anything. Names, stories, dungeons, loot.',ru:'Создавай генераторы всего подряд. Имена, истории, подземелья, добыча.'} },
+  { id:142, url:'https://neal.fun/password-game',                  tags:['creative','game'],  title:{en:'The Password Game'},                               description:{en:'Create a password that satisfies increasingly absurd rules. Viral for good reason.',ru:'Создай пароль, удовлетворяющий всё более абсурдным правилам. Вирусный не зря.'} },
+  { id:143, url:'https://www.mapcrunch.com',                       tags:['creative','maps'],  title:{en:'Map Crunch'},                                      description:{en:'Teleport to a random Street View location. Explore the world from your chair.',ru:'Телепортируйся в случайный Street View. Исследуй мир с кресла.'} },
+  { id:144, url:'https://www.supercook.com',                       tags:['creative','utility'], title:{en:'Supercook'},                                     description:{en:'Enter what\'s in your fridge. Get recipes using only those ingredients.',ru:'Введи что есть в холодильнике. Получи рецепты только из этих ингредиентов.'} },
+  { id:145, url:'https://www.sporcle.com',                         tags:['creative','game'],  title:{en:'Sporcle'},                                         description:{en:'Millions of trivia quizzes. Every topic from geography to pop culture.',ru:'Миллионы викторин. Любая тема — от географии до поп-культуры.'} },
+  { id:146, url:'https://letter.wiki',                             tags:['creative','writing'], title:{en:'Letter Wiki'},                                   description:{en:'A collection of famous letters throughout history. Read Einstein\'s, Hemingway\'s.',ru:'Коллекция знаменитых писем из истории. Читай письма Эйнштейна, Хемингуэя.'} },
+  { id:147, url:'https://www.typelit.io',                          tags:['creative','game'],  title:{en:'TypeLit'},                                         description:{en:'Practice typing by retyping classic literature. Improve speed, absorb great books.',ru:'Тренируй набор текста, перепечатывая классику. Улучшай скорость, впитывай книги.'} },
+  { id:148, url:'https://linea.app',                               tags:['creative','art'],   title:{en:'Linea'},                                           description:{en:'Minimalist drawing app in the browser. Clean lines, smooth flow, no clutter.',ru:'Минималистичное приложение для рисования в браузере. Чистые линии, плавность.'} },
+  { id:149, url:'https://www.thisismyjam.com',                     tags:['creative','music'], title:{en:'This Is My Jam'},                                   description:{en:'Archive of the one song each user was obsessed with at a moment in time.',ru:'Архив одной песни, которой был одержим каждый пользователь в момент времени.'} },
+  { id:150, url:'https://boredbutton.com',                         tags:['creative'],         title:{en:'Bored Button'},                                    description:{en:'Click when bored. Teleported to a random activity or distraction.',ru:'Нажми когда скучно. Тебя телепортируют к случайному занятию или развлечению.'} },
 
-  // ── MORE ──────────────────────────────────────────────────
-  { id:131, url:'https://www.nngroup.com/articles',                      tags:['design','education'],title:{en:'Nielsen Norman Group'},             description:{en:'Evidence-based UX research. The most rigorous UX publication.',ru:'Доказательные исследования UX. Самое строгое UX-издание.'} },
-  { id:132, url:'https://flexboxfroggy.com',                             tags:['education','game'],  title:{en:'Flexbox Froggy'},                   description:{en:'Learn CSS Flexbox by guiding frogs to lily pads.',ru:'Учи CSS Flexbox, направляя лягушек к листьям кувшинки.'} },
-  { id:133, url:'https://cssgridgarden.com',                             tags:['education','game'],  title:{en:'Grid Garden'},                      description:{en:'Water your garden by writing CSS Grid code. 28 levels.',ru:'Поливай огород, написав CSS Grid код. 28 уровней.'} },
-  { id:134, url:'https://javascript30.com',                              tags:['education','code'],  title:{en:'JavaScript30'},                     description:{en:"Build 30 things in 30 days with vanilla JS. Wes Bos's legendary free course.",ru:'30 вещей за 30 дней на чистом JS. Легендарный бесплатный курс.'} },
-  { id:135, url:'https://www.freecodecamp.org',                          tags:['education','code'],  title:{en:'freeCodeCamp'},                     description:{en:'Learn full-stack development for free. 3000+ hours of curriculum.',ru:'Full-stack разработка бесплатно. 3000+ часов учебного плана.'} },
-  { id:136, url:'https://developer.mozilla.org',                         tags:['education','tech'],  title:{en:'MDN Web Docs'},                     description:{en:'The definitive reference for web technologies.',ru:'Окончательный справочник по веб-технологиям.'} },
-  { id:137, url:'https://css-tricks.com',                                tags:['education','design'],title:{en:'CSS-Tricks'},                       description:{en:"The internet's best collection of CSS techniques and property references.",ru:'Лучшая коллекция CSS-техник и справочников.'} },
-  { id:138, url:'https://paulgraham.com/articles.html',                  tags:['writing','tech'],    title:{en:'Paul Graham Essays'},               description:{en:'YC founder on startups, technology, wealth, and thinking.',ru:'Основатель YC о стартапах, технологиях и мышлении.'} },
-  { id:139, url:'https://stratechery.com',                               tags:['writing','tech'],    title:{en:'Stratechery'},                      description:{en:"Ben Thompson's strategy analysis on tech companies.",ru:'Стратегический анализ технологических компаний от Бена Томпсона.'} },
-  { id:140, url:'https://sidebar.io',                                    tags:['design'],            title:{en:'Sidebar'},                          description:{en:'Five design links every day, curated and worth clicking.',ru:'Пять ссылок о дизайне каждый день, подобранных и достойных клика.'} },
-  { id:141, url:'https://www.densediscovery.com',                        tags:['writing','design'],  title:{en:'Dense Discovery'},                  description:{en:'Weekly newsletter on design, tech, and the world.',ru:'Еженедельная рассылка о дизайне, технологиях и мире.'} },
-  { id:142, url:'https://tympanus.net/codrops/collective',               tags:['design','code'],     title:{en:'Collective by Codrops'},            description:{en:'A weekly roundup of the best web design and development links.',ru:'Еженедельный обзор лучших ссылок по веб-дизайну и разработке.'} },
-  { id:143, url:'https://spline.design',                                 tags:['design','3d'],       title:{en:'Spline'},                           description:{en:'Design and publish 3D content for the web without code.',ru:'Разрабатывай и публикуй 3D-контент для веба без кода.'} },
-  { id:144, url:'https://www.figma.com/community',                       tags:['design','utility'],  title:{en:'Figma Community'},                  description:{en:"Free Figma files, plugins, and templates from the world's designers.",ru:'Бесплатные Figma-файлы, плагины и шаблоны от дизайнеров мира.'} },
-  { id:145, url:'https://pageflows.com',                                 tags:['design'],            title:{en:'Page Flows'},                       description:{en:'Recordings of real user flows from top apps.',ru:'Записи реальных пользовательских потоков из лучших приложений.'} },
-  { id:146, url:'https://www.brandnew.underestimation.com',              tags:['design','art'],      title:{en:'Brand New'},                        description:{en:'Critical commentary on brand identity work. Honest and rigorous.',ru:'Критические комментарии о работе над брендовой айдентикой.'} },
-  { id:147, url:'https://www.ilovetypography.com',                       tags:['design','type'],     title:{en:'I Love Typography'},                description:{en:'Essays, interviews, and history about typography and type design.',ru:'Эссе, интервью и история о типографике.'} },
-  { id:148, url:'https://www.futurefonts.xyz',                           tags:['design','type'],     title:{en:'Future Fonts'},                     description:{en:'Fonts in progress, sold at early-adopter prices.',ru:'Шрифты в разработке по ценам ранних последователей.'} },
-  { id:149, url:'https://klim.co.nz',                                    tags:['design','type'],     title:{en:'Klim Type Foundry'},                description:{en:"Kris Sowersby's type foundry. Among the most respected fonts in use.",ru:'Шрифтовая мастерская Криса Соуэрсби. Одни из самых уважаемых шрифтов.'} },
-  { id:150, url:'https://www.niceverynice.com',                          tags:['design'],            title:{en:'Nice Very Nice'},                   description:{en:'An evolving collection of brands and identities that are genuinely nice.',ru:'Развивающаяся коллекция брендов, которые по-настоящему хороши.'} },
-  { id:151, url:'https://www.awwwards.com/websites/sites-of-the-year',   tags:['design'],            title:{en:'Awwwards SOTY'},                    description:{en:'Sites of the Year — the absolute best web design of each year.',ru:'Сайты года — абсолютно лучший веб-дизайн каждого года.'} },
-  { id:152, url:'https://dribbble.com/shots/popular?timeframe=month',    tags:['design'],            title:{en:'Dribbble Monthly'},                 description:{en:'The most liked design work this month from top designers worldwide.',ru:'Самые любимые дизайн-работы этого месяца.'} },
-  { id:153, url:'https://www.cssdesignawards.com',                       tags:['design'],            title:{en:'CSS Design Awards'},                description:{en:'Celebrating creative excellence in web design and development.',ru:'Отмечает творческое совершенство в веб-дизайне.'} },
-  { id:154, url:'https://www.cargocollective.com',                       tags:['design','art'],      title:{en:'Cargo Collective'},                 description:{en:'Portfolio platform for creative professionals. Beautifully opinionated.',ru:'Платформа портфолио для творческих профессионалов.'} },
-  { id:155, url:'https://fontsinuse.com',                                tags:['design','type'],     title:{en:'Fonts In Use'},                     description:{en:'Public archive of typography. Identify fonts in real-world design.',ru:'Публичный архив типографики. Распознавай шрифты в реальном дизайне.'} },
-  { id:156, url:'https://www.underconsideration.com/brandnew',           tags:['design'],            title:{en:'Brand New'},                        description:{en:'The definitive brand identity commentary publication.',ru:'Главный журнал о брендовой айдентике.'} },
-  { id:157, url:'https://collectui.com',                                 tags:['design'],            title:{en:'Collect UI'},                       description:{en:'Daily UI inspiration from Dribbble, filtered by element type.',ru:'Ежедневное UI-вдохновение из Dribbble по типу элемента.'} },
-  { id:158, url:'https://www.uxarchive.com',                             tags:['design'],            title:{en:'UX Archive'},                       description:{en:'Archive of user flows from popular apps like Airbnb and Stripe.',ru:'Архив пользовательских потоков из популярных приложений.'} },
-  { id:159, url:'https://www.interaction-design.org',                    tags:['design','education'],title:{en:'IxDF'},                             description:{en:"The world's biggest UX design community with courses and articles.",ru:'Крупнейшее в мире UX-сообщество с курсами и статьями.'} },
-  { id:160, url:'https://bootcamp.uxdesign.cc',                          tags:['design','writing'],  title:{en:'UX Collective'},                    description:{en:'Curated stories on user experience and product design.',ru:'Подобранные истории о пользовательском опыте и дизайне продуктов.'} },
-  { id:161, url:'https://www.ffffound.com',                              tags:['art','design'],      title:{en:'FFFFound'},                         description:{en:'The legendary image bookmarking site that defined internet aesthetics.',ru:'Легендарный сайт закладок изображений, определивший интернет-эстетику.'} },
-  { id:162, url:'https://savee.it',                                      tags:['design','art'],      title:{en:'Savee'},                            description:{en:'Visual bookmarking with taste. Curated by designers and artists.',ru:'Визуальные закладки со вкусом. Курируется дизайнерами и художниками.'} },
-  { id:163, url:'https://www.creativebloq.com',                          tags:['design','art'],      title:{en:'Creative Bloq'},                    description:{en:'Design, art, and tech for creative professionals.',ru:'Дизайн, искусство и технологии для творческих профессионалов.'} },
-  { id:164, url:'https://www.logolounge.com',                            tags:['design','art'],      title:{en:'LogoLounge'},                       description:{en:"The world's leading logo design community.",ru:'Ведущее мировое сообщество логотипов.'} },
-  { id:165, url:'https://logobook.com',                                  tags:['design','art'],      title:{en:'Logobook'},                         description:{en:'Search symbols, marks, and logos by shape, industry, and style.',ru:'Ищи символы и логотипы по форме, индустрии и стилю.'} },
-  { id:166, url:'https://www.fontsquirrel.com',                          tags:['design','type'],     title:{en:'Font Squirrel'},                    description:{en:'Free fonts for commercial use. Carefully vetted for quality.',ru:'Бесплатные шрифты для коммерческого использования.'} },
-  { id:167, url:'https://fonts.google.com',                              tags:['design','type'],     title:{en:'Google Fonts'},                     description:{en:'1500+ open-source fonts, free, with pairing suggestions.',ru:'1500+ шрифтов с открытым кодом с рекомендациями по сочетанию.'} },
-  { id:168, url:'https://www.colourlovers.com',                          tags:['design','creative'], title:{en:'Colour Lovers'},                    description:{en:'Community for sharing color palettes and patterns.',ru:'Сообщество для обмена цветовыми палитрами и паттернами.'} },
-  { id:169, url:'https://coolors.co',                                    tags:['design','utility'],  title:{en:'Coolors'},                          description:{en:'Press space, generate beautiful color palettes instantly.',ru:'Нажимай пробел — мгновенно генерируй красивые палитры цветов.'} },
-  { id:170, url:'https://realfavicongenerator.net',                      tags:['utility','design'],  title:{en:'Favicon Generator'},                description:{en:'Generate favicons for every platform in one place.',ru:'Генерируй фавиконы для всех платформ в одном месте.'} },
-  { id:171, url:'https://gtmetrix.com',                                  tags:['utility','tech'],    title:{en:'GTmetrix'},                         description:{en:'Analyze your page speed performance. Detailed reports and suggestions.',ru:'Анализируй скорость страницы. Подробные отчёты и советы.'} },
-  { id:172, url:'https://httpstatus.io',                                 tags:['utility','tech'],    title:{en:'HTTP Status'},                      description:{en:'Check HTTP status codes and redirects for any URL.',ru:'Проверяй HTTP-коды статуса и редиректы для любого URL.'} },
-  { id:173, url:'https://www.webpagetest.org',                           tags:['utility','tech'],    title:{en:'WebPageTest'},                      description:{en:'Advanced web performance testing from multiple locations.',ru:'Продвинутое тестирование производительности с множества локаций.'} },
-  { id:174, url:'https://tinywow.com',                                   tags:['utility'],           title:{en:'TinyWow'},                          description:{en:'Free PDF, video, image tools. No sign-up. No watermarks.',ru:'Бесплатные инструменты для PDF, видео, изображений. Без регистрации.'} },
-  { id:175, url:'https://shots.so',                                      tags:['design','utility'],  title:{en:'Shots'},                            description:{en:'Beautiful mockup generator for screenshots.',ru:'Красивый генератор мокапов для скриншотов.'} },
-  { id:176, url:'https://www.screely.com',                               tags:['design','utility'],  title:{en:'Screely'},                          description:{en:'Turn any screenshot into a beautiful browser mockup.',ru:'Превращай скриншот в красивый браузерный мокап.'} },
-  { id:177, url:'https://dbdiagram.io',                                  tags:['utility','code'],    title:{en:'dbdiagram'},                        description:{en:'Design database schemas visually using a simple DSL.',ru:'Проектируй схемы баз данных визуально с простым DSL.'} },
-  { id:178, url:'https://svgomg.net',                                    tags:['utility','design'],  title:{en:'SVGOMG'},                           description:{en:'SVG optimizer. Paste SVG, get a smaller, cleaner version.',ru:'Оптимизатор SVG. Вставь SVG, получи меньшую и чистую версию.'} },
-  { id:179, url:'https://www.shapedivider.app',                          tags:['design','utility'],  title:{en:'Shape Divider'},                    description:{en:'Customizable section dividers for websites.',ru:'Настраиваемые разделители секций для сайтов.'} },
-  { id:180, url:'https://fffuel.co',                                     tags:['design','utility'],  title:{en:'fffuel'},                           description:{en:'Collection of free SVG generators for backgrounds and gradients.',ru:'Коллекция бесплатных SVG-генераторов для фонов и градиентов.'} },
-  { id:181, url:'https://pattern.monster',                               tags:['design','utility'],  title:{en:'Pattern Monster'},                  description:{en:'500+ customizable SVG patterns. Pick colors, size, and spacing.',ru:'500+ настраиваемых SVG-паттернов.'} },
-  { id:182, url:'https://www.svgbackgrounds.com',                        tags:['design','utility'],  title:{en:'SVG Backgrounds'},                  description:{en:'Customizable SVG background patterns for any website.',ru:'Настраиваемые SVG-фоны для любого сайта.'} },
-  { id:183, url:'https://glassmorphism.com',                             tags:['design'],            title:{en:'Glassmorphism'},                    description:{en:'The glassmorphism CSS generator. Frosted glass UI instantly.',ru:'Генератор CSS-гласморфизма. UI из матового стекла мгновенно.'} },
-  { id:184, url:'https://uicolors.app',                                  tags:['design','utility'],  title:{en:'UI Colors'},                        description:{en:'Generate Tailwind-compatible color scales from any hex.',ru:'Генерируй цветовые шкалы совместимые с Tailwind из любого hex.'} },
-  { id:185, url:'https://www.shadcn.dev',                                tags:['design','code'],     title:{en:'shadcn/ui'},                        description:{en:'Beautifully designed React components you can copy and own.',ru:'Красиво разработанные React-компоненты, которые можно скопировать и владеть.'} },
-  { id:186, url:'https://ui.aceternity.com',                             tags:['design','code'],     title:{en:'Aceternity UI'},                    description:{en:'Trending animated React components for modern websites.',ru:'Трендовые анимированные React-компоненты для современных сайтов.'} },
-  { id:187, url:'https://www.radix-ui.com',                              tags:['tech','design'],     title:{en:'Radix UI'},                         description:{en:'Unstyled, accessible components for building high-quality interfaces.',ru:'Стилизованные, доступные компоненты для создания качественных интерфейсов.'} },
-  { id:188, url:'https://tauri.app',                                     tags:['tech','code'],       title:{en:'Tauri'},                            description:{en:'Build smaller, faster, more secure desktop apps with web tech.',ru:'Создавай меньшие, быстрые и безопасные десктопные приложения.'} },
-  { id:189, url:'https://bun.sh',                                        tags:['tech','code'],       title:{en:'Bun'},                              description:{en:'All-in-one JavaScript runtime & toolkit. Dramatically faster.',ru:'Комплексная среда выполнения JavaScript. Значительно быстрее.'} },
-  { id:190, url:'https://deno.com',                                      tags:['tech','code'],       title:{en:'Deno'},                             description:{en:'The next-generation JavaScript runtime. Secure and modern.',ru:'Следующее поколение среды выполнения JavaScript.'} },
-  { id:191, url:'https://astro.build',                                   tags:['tech','code'],       title:{en:'Astro'},                            description:{en:'The web framework for content-driven sites. Blazing fast.',ru:'Веб-фреймворк для контентных сайтов. Молниеносно быстрый.'} },
-  { id:192, url:'https://svelte.dev',                                    tags:['tech','code'],       title:{en:'Svelte'},                           description:{en:'Compiler-based JS framework. No virtual DOM, maximum speed.',ru:'Фреймворк на основе компилятора. Без виртуального DOM, максимальная скорость.'} },
-  { id:193, url:'https://vitejs.dev',                                    tags:['tech','code'],       title:{en:'Vite'},                             description:{en:'Next generation frontend tooling. Instant dev server.',ru:'Инструментарий нового поколения для фронтенда. Мгновенный сервер разработки.'} },
-  { id:194, url:'https://www.prisma.io',                                 tags:['tech','code'],       title:{en:'Prisma'},                           description:{en:'Next-gen ORM for Node.js and TypeScript.',ru:'ORM нового поколения для Node.js и TypeScript.'} },
-  { id:195, url:'https://drizzle.team',                                  tags:['tech','code'],       title:{en:'Drizzle ORM'},                      description:{en:'TypeScript ORM that feels like SQL. Lightweight and type-safe.',ru:'TypeScript ORM, ощущающийся как SQL. Лёгкий и типобезопасный.'} },
-  { id:196, url:'https://supabase.com',                                  tags:['tech'],              title:{en:'Supabase'},                         description:{en:'Open source Firebase alternative. Postgres, auth, storage, realtime.',ru:'Открытая альтернатива Firebase. Postgres, auth, хранилище, реалтайм.'} },
-  { id:197, url:'https://vercel.com',                                    tags:['tech'],              title:{en:'Vercel'},                           description:{en:'Deploy frontend instantly. The DX benchmark for web platforms.',ru:'Мгновенное развёртывание фронтенда. Эталон DX для веб-платформ.'} },
-  { id:198, url:'https://railway.app',                                   tags:['tech'],              title:{en:'Railway'},                          description:{en:'Deploy anything. Provision databases. Scale seamlessly.',ru:'Деплой чего угодно. Базы данных. Бесшовное масштабирование.'} },
-  { id:199, url:'https://www.cloudflare.com/developer-platform',         tags:['tech'],              title:{en:'Cloudflare Dev Platform'},          description:{en:"Edge computing, serverless, storage — the world's best developer platform.",ru:'Edge-вычисления, serverless, хранилище — лучшая платформа для разработчиков.'} },
-  { id:200, url:'https://fly.io',                                        tags:['tech'],              title:{en:'Fly.io'},                           description:{en:'Run full-stack apps globally. Containers close to your users.',ru:'Запускай полностековые приложения глобально. Контейнеры рядом с пользователями.'} },
+  // ── MORE INTERACTIVE GEMS ─────────────────────────────────────
+  { id:151, url:'https://www.koalastothemax.com',                  tags:['interactive'],      title:{en:'Koalas to the Max'},                               description:{en:'Hover over dots to reveal a hidden image. Satisfying to the core.',ru:'Наводи на точки чтобы открыть скрытое изображение. Невероятно приятно.'} },
+  { id:152, url:'https://themaximumtemperature.com',               tags:['interactive'],      title:{en:'The Maximum Temperature'},                         description:{en:'An oddly satisfying web experiment you have to try.',ru:'Странно удовлетворяющий веб-эксперимент, который нужно попробовать.'} },
+  { id:153, url:'https://www.fallingfalling.com',                  tags:['interactive','art'], title:{en:'Falling Falling'},                                description:{en:'Hypnotic geometric descent. One of the oldest web experiments still running.',ru:'Гипнотическое геометрическое падение. Один из старейших веб-экспериментов.'} },
+  { id:154, url:'https://eelslap.com',                             tags:['interactive'],      title:{en:'Eelslap'},                                         description:{en:'Move your mouse. Someone gets slapped with an eel. That\'s it. It\'s perfect.',ru:'Двигай мышкой. Кто-то получает удар угрём. Это всё. Это идеально.'} },
+  { id:155, url:'https://www.staggeringbeauty.com',                tags:['interactive'],      title:{en:'Staggering Beauty'},                               description:{en:'Shake the worm. Something happens. Epilepsy warning — shake it gently first.',ru:'Потряси червяка. Кое-что произойдёт. Предупреждение — сначала осторожно.'} },
+  { id:156, url:'https://headsortails.xyz',                        tags:['interactive'],      title:{en:'Heads or Tails'},                                  description:{en:'A coin flip with ridiculous production value. The most dramatic decision tool.',ru:'Орёл или решка с безумным уровнем производства. Самый драматичный инструмент.'} },
+  { id:157, url:'https://www.whatismyipaddress.com',               tags:['utility','tech'],   title:{en:'What Is My IP'},                                    description:{en:'Your IP, location, ISP, and connection info. Know what the internet sees.',ru:'Твой IP, местоположение, провайдер. Знай что видит интернет.'} },
+  { id:158, url:'https://neal.fun/deep-sea',                       tags:['interactive','science'], title:{en:'The Deep Sea'},                               description:{en:'Scroll down into the ocean. See what lives at each depth. Mind-expanding.',ru:'Скроллируй вниз в океан. Смотри что живёт на каждой глубине.'} },
+  { id:159, url:'https://neal.fun/space-elevator',                 tags:['interactive','science'], title:{en:'Space Elevator'},                             description:{en:'Scroll up from Earth to space. See the scale of everything above us.',ru:'Скроллируй вверх от Земли в космос. Ощути масштаб всего что над нами.'} },
+  { id:160, url:'https://www.drawastickman.com',                   tags:['interactive','game'], title:{en:'Draw a Stickman'},                               description:{en:'Draw a stick figure. Watch it come to life in an adventure you help create.',ru:'Нарисуй человечка. Наблюдай как он оживает в приключении, которое ты создаёшь.'} },
 ];
 
-/* ================================================================
-   CONSTANTS & STATE
-   ================================================================ */
-const EPOCH      = new Date(2025, 0, 1);
-const BATCH      = 12;
-const ALL_TAGS   = ['all','ai','interactive','art','webgl','data','design',
-                    'education','music','archive','game','tech','creative','utility','type'];
+/* ── CONSTANTS & STATE ────────────────────────────────────────── */
+const EPOCH    = new Date(2025, 0, 1);
+const BATCH    = 12;
+const ALL_TAGS = ['all','interactive','art','webgl','ai','data','game','design',
+                  'education','music','archive','tech','creative','utility','maps','science'];
+const state    = { filter:'all', rendered:0, filtered:[], loading:false };
 
-const state = { filter:'all', rendered:0, filtered:[], loading:false };
-
-/* ================================================================
-   UTILS
-   ================================================================ */
+/* ── UTILS ────────────────────────────────────────────────────── */
 const dayIndex  = d => { const n = Math.floor((d - EPOCH) / 86400000); return ((n % SITES.length) + SITES.length) % SITES.length; };
 const dayNumber = d => Math.max(1, Math.floor((d - EPOCH) / 86400000) + 1);
 const fmtDate   = d => d.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', { day:'numeric', month:'long', year:'numeric' });
-const siteTitle = s => (typeof s.title === 'object' ? (s.title[lang] || s.title.en) : s.title);
-const siteDesc  = s => (typeof s.description === 'object' ? (s.description[lang] || s.description.en) : s.description);
+const siteTitle = s => (s.title && typeof s.title === 'object') ? (s.title[lang] || s.title.en || '') : (s.title || '');
+const siteDesc  = s => (s.description && typeof s.description === 'object') ? (s.description[lang] || s.description.en || '') : (s.description || '');
+const seenKey   = ds => `nq_seen_${ds}`;
+const todayStr  = ()  => new Date().toISOString().slice(0, 10);
+const isSeenDay = ds  => !!localStorage.getItem(seenKey(ds));
+const markSeen  = ds  => localStorage.setItem(seenKey(ds), '1');
 
 function countUp(el, target, dur = 900) {
-  const t0  = performance.now();
+  const t0 = performance.now();
   const pad = v => String(v).padStart(3, '0');
   (function tick(now) {
     const p = Math.min((now - t0) / dur, 1);
@@ -1005,28 +646,22 @@ function countUp(el, target, dur = 900) {
   })(t0);
 }
 
-const seenKey    = dateStr => `nq_seen_${dateStr}`;
-const todayStr   = ()      => new Date().toISOString().slice(0, 10);
-const isSeenDay  = dateStr => !!localStorage.getItem(seenKey(dateStr));
-const markSeen   = dateStr => localStorage.setItem(seenKey(dateStr), '1');
-
-/* ================================================================
-   HERO
-   ================================================================ */
+/* ── HERO ─────────────────────────────────────────────────────── */
 function initHero() {
   const today = new Date();
   const site  = SITES[dayIndex(today)];
   const n     = dayNumber(today);
-  const ds    = todayStr();
 
   setTimeout(() => countUp(document.getElementById('heroNum'), n, 900), 150);
-  document.getElementById('heroDate').textContent  = fmtDate(today).toUpperCase();
-  document.getElementById('statTotal').textContent = SITES.length + '+';
-  document.getElementById('statDays').textContent  = n;
+  document.getElementById('heroDate').textContent   = fmtDate(today).toUpperCase();
+  document.getElementById('statTotal').textContent  = SITES.length + '+';
+  document.getElementById('statDays').textContent   = n;
 
   renderHeroCard(site);
 
+  const ds = todayStr();
   if (isSeenDay(ds)) document.getElementById('chipSeen').classList.add('on');
+
   document.getElementById('heroLink').addEventListener('click', () => {
     markSeen(ds);
     document.getElementById('chipSeen').classList.add('on');
@@ -1036,41 +671,31 @@ function initHero() {
 function renderHeroCard(site) {
   document.getElementById('heroTitle').textContent = siteTitle(site);
   document.getElementById('heroDesc').textContent  = siteDesc(site);
-  document.getElementById('heroLink').href          = site.url;
-
+  document.getElementById('heroLink').href         = site.url;
   const wrap = document.getElementById('heroTags');
   wrap.innerHTML = '';
-  site.tags.forEach(tag => {
+  (site.tags || []).forEach(tag => {
     const s = document.createElement('span');
-    s.className = 'tag';
-    s.textContent = tag;
+    s.className = 'tag'; s.textContent = tag;
     wrap.appendChild(s);
   });
 }
 
-/* ================================================================
-   TICKER
-   ================================================================ */
+/* ── TICKER ───────────────────────────────────────────────────── */
 function initTicker() {
-  const items = SITES.map(s =>
-    `<span class="ticker-item"><b>+</b>${siteTitle(s)}</span>`
-  ).join('');
+  const items = SITES.map(s => `<span class="ticker-item"><b>+</b>${siteTitle(s)}</span>`).join('');
   const el = document.getElementById('ticker');
-  el.innerHTML = items + items; // doubled for seamless loop
+  el.innerHTML = items + items;
 }
 
-/* ================================================================
-   RANDOM
-   ================================================================ */
+/* ── RANDOM ───────────────────────────────────────────────────── */
 function initRandom() {
   document.getElementById('btnRandom').addEventListener('click', () => {
     window.open(SITES[Math.floor(Math.random() * SITES.length)].url, '_blank', 'noopener');
   });
 }
 
-/* ================================================================
-   FILTERS
-   ================================================================ */
+/* ── FILTERS ──────────────────────────────────────────────────── */
 function initFilters() {
   const list = document.getElementById('filterList');
   list.innerHTML = '';
@@ -1083,31 +708,25 @@ function initFilters() {
       state.filter   = tag;
       state.rendered = 0;
       list.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.tag === tag));
-      buildList();
-      clearGrid();
-      renderBatch();
+      buildList(); clearGrid(); renderBatch();
     });
     list.appendChild(btn);
   });
 }
 
-/* ================================================================
-   ARCHIVE — BUILD / CLEAR / RENDER
-   ================================================================ */
+/* ── ARCHIVE ──────────────────────────────────────────────────── */
 function buildList() {
   const today  = new Date();
   const totalN = dayNumber(today);
   const days   = [];
-
   for (let i = 1; i < Math.min(totalN, SITES.length + 1); i++) {
     const d    = new Date(today);
     d.setDate(d.getDate() - i);
     const site = SITES[dayIndex(d)];
-    if (state.filter === 'all' || site.tags.includes(state.filter)) {
+    if (state.filter === 'all' || (site.tags || []).includes(state.filter)) {
       days.push({ site, date: d, dayN: dayNumber(d) });
     }
   }
-
   state.filtered = days;
   document.getElementById('countBadge').textContent =
     days.length + (lang === 'ru' ? ' записей' : ' entries');
@@ -1122,7 +741,6 @@ function clearGrid() {
 
 function renderBatch() {
   if (state.loading) return;
-
   const grid  = document.getElementById('archGrid');
   const start = state.rendered;
   const end   = Math.min(start + BATCH, state.filtered.length);
@@ -1131,6 +749,7 @@ function renderBatch() {
     const foot = document.getElementById('archFoot');
     foot.className = 'arch-foot end';
     foot.dataset.msg = t('arch_end');
+    renderLocked();
     return;
   }
 
@@ -1139,5 +758,109 @@ function renderBatch() {
 
   for (let i = start; i < end; i++) {
     const { site, date, dayN } = state.filtered[i];
-    const ds    = date.toISOString().slice(0, 10);
-    const seen  = isSeenDay(ds
+    const ds   = date.toISOString().slice(0, 10);
+    const seen = isSeenDay(ds);
+
+    const a = document.createElement('a');
+    a.className = 'arch-card' + (seen ? ' seen' : '');
+    a.href = site.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.style.animationDelay = ((i - start) * 0.04) + 's';
+    a.innerHTML = `
+      <div class="arch-n">${String(dayN).padStart(3,'0')}</div>
+      <div class="arch-d">${fmtDate(date).toUpperCase()}</div>
+      <div class="arch-t">${siteTitle(site)}</div>
+      <div class="arch-desc">${siteDesc(site)}</div>
+      <div class="arch-tags">${(site.tags||[]).map(tg=>`<span class="tag">${tg}</span>`).join('')}</div>
+      <span class="arch-seen">${t('arch_seen')}</span>
+      <span class="arch-arrow">↗</span>`;
+    a.addEventListener('click', () => { markSeen(ds); a.classList.add('seen'); });
+    frag.appendChild(a);
+  }
+
+  grid.appendChild(frag);
+  state.rendered = end;
+  state.loading  = false;
+
+  requestAnimationFrame(() => {
+    grid.querySelectorAll('.arch-card:not(.show)').forEach(c => revealIO.observe(c));
+  });
+
+  if (state.rendered >= state.filtered.length) {
+    const foot = document.getElementById('archFoot');
+    foot.className = 'arch-foot end';
+    foot.dataset.msg = t('arch_end');
+    renderLocked();
+  }
+}
+
+function renderLocked() {
+  const grid  = document.getElementById('archGrid');
+  const today = new Date();
+  for (let i = 1; i <= 3; i++) {
+    const d = new Date(today); d.setDate(d.getDate() + i);
+    const n = dayNumber(d);
+    const div = document.createElement('div');
+    div.className = 'arch-card locked show';
+    div.innerHTML = `
+      <div class="arch-n">${String(n).padStart(3,'0')}</div>
+      <div class="arch-d">${fmtDate(d).toUpperCase()}</div>
+      <div class="arch-t">${t('locked_lbl')}</div>`;
+    grid.appendChild(div);
+  }
+}
+
+/* ── OBSERVERS ────────────────────────────────────────────────── */
+const revealIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('show'); revealIO.unobserve(e.target); }
+  });
+}, { threshold: 0.06 });
+
+const sentinelIO = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) renderBatch();
+}, { rootMargin: '200px' });
+
+/* ── LANGUAGE ─────────────────────────────────────────────────── */
+function initLang() {
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      lang = btn.dataset.lang;
+      localStorage.setItem('nq_lang', lang);
+      applyI18n();
+      const today = new Date();
+      renderHeroCard(SITES[dayIndex(today)]);
+      document.getElementById('heroDate').textContent = fmtDate(today).toUpperCase();
+      initTicker(); initFilters(); buildList(); clearGrid(); renderBatch();
+    });
+  });
+  applyI18n();
+}
+
+/* ── CURSOR ───────────────────────────────────────────────────── */
+function initCursor() {
+  const el = document.getElementById('cur');
+  document.addEventListener('mousemove', e => {
+    el.style.left = e.clientX + 'px';
+    el.style.top  = e.clientY + 'px';
+  });
+  document.addEventListener('mouseover', e => { if (e.target.closest('a,button')) el.classList.add('big'); });
+  document.addEventListener('mouseout',  e => { if (e.target.closest('a,button')) el.classList.remove('big'); });
+  document.addEventListener('mouseleave', () => { el.style.opacity = '0'; });
+  document.addEventListener('mouseenter', () => { el.style.opacity = '1'; });
+}
+
+/* ── BOOT ─────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  initLang();
+  initHero();
+  initTicker();
+  initRandom();
+  initFilters();
+  buildList();
+  renderBatch();
+  sentinelIO.observe(document.getElementById('sentinel'));
+  initCursor();
+});
+</script>
+</body>
+</html>
