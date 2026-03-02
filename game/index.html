@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>nasqcasino</title>
+    <style>
+        body {
+            margin: 0;
+            background: #080808;
+            font-family: monospace;
+            color: #b8ff00;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        .slot {
+            display: flex;
+            gap: 20px;
+            font-size: 60px;
+            margin: 20px 0;
+        }
+
+        button {
+            background: #b8ff00;
+            color: #080808;
+            border: none;
+            padding: 10px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .balance {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        input {
+            background: #000;
+            border: 1px solid #b8ff00;
+            color: #b8ff00;
+            padding: 5px;
+            width: 60px;
+            text-align: center;
+        }
+
+        .result {
+            margin-top: 15px;
+            height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>NASQCASINO</h1>
+
+    <div class="balance">Balance: <span id="balance">1000</span> coins</div>
+
+    <label>Bet:
+        <input type="number" id="bet" value="50" min="1">
+    </label>
+
+    <div class="slot">
+        <span id="r1">?</span>
+        <span id="r2">?</span>
+        <span id="r3">?</span>
+    </div>
+
+    <button onclick="spin()">SPIN</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        const symbols = ["🍒", "🍋", "💎", "7️⃣", "🍀"];
+        let balance = localStorage.getItem("nasq_balance")
+            ? parseInt(localStorage.getItem("nasq_balance"))
+            : 1000;
+
+        updateBalance();
+
+        function updateBalance() {
+            document.getElementById("balance").textContent = balance;
+            localStorage.setItem("nasq_balance", balance);
+        }
+
+        function spin() {
+            const bet = parseInt(document.getElementById("bet").value);
+            const resultText = document.getElementById("result");
+
+            if (bet > balance || bet <= 0) {
+                resultText.textContent = "Invalid bet";
+                return;
+            }
+
+            balance -= bet;
+
+            const r1 = randomSymbol();
+            const r2 = randomSymbol();
+            const r3 = randomSymbol();
+
+            document.getElementById("r1").textContent = r1;
+            document.getElementById("r2").textContent = r2;
+            document.getElementById("r3").textContent = r3;
+
+            if (r1 === r2 && r2 === r3) {
+                const win = bet * 5;
+                balance += win;
+                resultText.textContent = "JACKPOT! +" + win;
+            } else if (r1 === r2 || r2 === r3 || r1 === r3) {
+                const win = bet * 2;
+                balance += win;
+                resultText.textContent = "Win! +" + win;
+            } else {
+                resultText.textContent = "You lost";
+            }
+
+            updateBalance();
+        }
+
+        function randomSymbol() {
+            return symbols[Math.floor(Math.random() * symbols.length)];
+        }
+    </script>
+
+</body>
+
+</html>
