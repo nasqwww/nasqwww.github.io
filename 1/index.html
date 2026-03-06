@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <title>nasqwww — internet.planet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #080808
+        }
+
+        canvas {
+            display: block;
+            position: fixed;
+            inset: 0;
+            width: 100% !important;
+            height: 100% !important
+        }
+
+        * {
+            cursor: none !important
+        }
+
+        /* ── Cursor ─────────────────────────────────── */
+        #dot {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #b8ff00;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 8px #b8ff00, 0 0 22px rgba(184, 255, 0, .55);
+            transition: width .14s, height .14s;
+            mix-blend-mode: exclusion;
+        }
+
+        #dot.big {
+            width: 38px;
+            height: 38px
+        }
+
+        #ring {
+            position: fixed;
+            z-index: 9998;
+            pointer-events: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid rgba(184, 255, 0, .25);
+            transform: translate(-50%, -50%);
+            /* ring lags behind dot via JS lerp */
+        }
+
+        /* ── HUD ─────────────────────────────────────── */
+        #hud {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* corner brackets */
+        .cb {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            opacity: .35
+        }
+
+        .cb.tl {
+            top: 22px;
+            left: 22px;
+            border-top: 1px solid #b8ff00;
+            border-left: 1px solid #b8ff00
+        }
+
+        .cb.tr {
+            top: 22px;
+            right: 22px;
+            border-top: 1px solid #b8ff00;
+            border-right: 1px solid #b8ff00
+        }
+
+        .cb.bl {
+            bottom: 22px;
+            left: 22px;
+            border-bottom: 1px solid #b8ff00;
+            border-left: 1px solid #b8ff00
+        }
+
+        .cb.br {
+            bottom: 22px;
+            right: 22px;
+            border-bottom: 1px solid #b8ff00;
+            border-right: 1px solid #b8ff00
+        }
+
+        /* thin dividers */
+        .div-h {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(184, 255, 0, .07) 25%, rgba(184, 255, 0, .07) 75%, transparent);
+        }
+
+        .div-h.t {
+            top: 50px
+        }
+
+        .div-h.b {
+            bottom: 50px
+        }
+
+        #logo {
+            position: absolute;
+            top: 26px;
+            left: 36px;
+            font-size: .58rem;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: rgba(184, 255, 0, .5);
+            line-height: 2;
+        }
+
+        #logo strong {
+            display: block;
+            font-size: .85rem;
+            letter-spacing: .1em;
+            color: rgba(184, 255, 0, .92);
+            font-weight: 700;
+            margin-bottom: 1px;
+        }
+
+        #logo small {
+            font-size: .42rem;
+            color: rgba(184, 255, 0, .18);
+            letter-spacing: .2em
+        }
+
+        #meta {
+            position: absolute;
+            top: 26px;
+            right: 36px;
+            font-size: .52rem;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: rgba(184, 255, 0, .22);
+            text-align: right;
+            line-height: 2.2;
+        }
+
+        #meta .v {
+            color: rgba(184, 255, 0, .48)
+        }
+
+        #coords {
+            position: absolute;
+            bottom: 26px;
+            left: 36px;
+            font-size: .46rem;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: rgba(184, 255, 0, .18);
+            line-height: 2;
+        }
+
+        #hint {
+            position: absolute;
+            bottom: 26px;
+            right: 36px;
+            font-size: .5rem;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: rgba(184, 255, 0, .32);
+            text-align: right;
+            transition: opacity .9s ease;
+        }
+
+        #hint.gone {
+            opacity: 0
+        }
+
+        /* centre status — appears below planet */
+        #status {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 88px);
+            font-size: .48rem;
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            color: rgba(184, 255, 0, .0);
+            text-align: center;
+            transition: color .5s;
+            white-space: nowrap;
+        }
+
+        #status.lit {
+            color: rgba(184, 255, 0, .38)
+        }
+
+        /* scanline + vignette overlay */
+        #overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        #overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px,
+                    rgba(0, 0, 0, .055) 2px, rgba(0, 0, 0, .055) 4px);
+        }
+
+        #overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 48%,
+                    transparent 30%, rgba(8, 8, 8, .78) 100%);
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="c"></canvas>
+
+    <div id="overlay"></div>
+
+    <div id="hud">
+        <div class="cb tl"></div>
+        <div class="cb tr"></div>
+        <div class="cb bl"></div>
+        <div class="cb br"></div>
+        <div class="div-h t"></div>
+        <div class="div-h b"></div>
+
+        <div id="logo">
+            <strong>nasqwww</strong>
+            internet.planet<br>
+            <small>NODE 0x4F2A — ONLINE</small>
+        </div>
+
+        <div id="meta">
+            <span class="v" id="fps">60</span> fps<br>
+            <span class="v" id="ptc">4096</span> particles<br>
+            <span style="font-size:.4rem;color:rgba(184,255,0,.11)">WEBGL / THREE.JS r128</span>
+        </div>
+
+        <div id="coords">
+            x <span id="cx">+0.000</span><br>
+            y <span id="cy">+0.000</span><br>
+            r <span id="cr">0.000</span>
+        </div>
+
+        <div id="hint">CLICK TO REVEAL ·</div>
+        <div id="status">[ FORMING ]</div>
+    </div>
+
+    <div id="dot"></div>
+    <div id="ring"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        /* =====================================================================
+           nasqwww — internet.planet   |   WebGL particle galaxy + 3D planet
+           ===================================================================== */
+        'use strict';
+
+        /* ─── Config ──────────────────────────────────────────────────────── */
+        const N = 4096;          // particle count
+        const GAL_RMIN = 1.9;
+        const GAL_RMAX = 4.5;
+        const PLANET_R = 1.05;
+        const TEXT_HOLD = 4200;          // ms text is displayed
+        const FORM_MS = 1700;          // ms to form text
+        const DISP_MS = 2200;          // ms to disperse
+        const ACID = 0xb8ff00;
+        const BG = 0x080808;
+        const TEXT_WORD = 'nasqwww';
+
+        /* ─── Renderer ────────────────────────────────────────────────────── */
+        const canvas = document.getElementById('c');
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(innerWidth, innerHeight);
+        renderer.setClearColor(BG, 1);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(56, innerWidth / innerHeight, 0.1, 200);
+        camera.position.set(0, 0, 7.5);
+
+        /* ─── Fog ─────────────────────────────────────────────────────────── */
+        scene.fog = new THREE.FogExp2(BG, 0.008);
+
+        /* ─── Planet ──────────────────────────────────────────────────────── */
+        const pg = new THREE.Group();
+
+        // Opaque dark core
+        const core = new THREE.Mesh(
+            new THREE.SphereGeometry(PLANET_R, 64, 64),
+            new THREE.MeshBasicMaterial({ color: 0x040900 })
+        );
+        pg.add(core);
+
+        // Icosahedron wireframe shell
+        const wfGeo = new THREE.IcosahedronGeometry(PLANET_R, 5);
+        const wfMat = new THREE.MeshBasicMaterial({
+            color: ACID, wireframe: true, transparent: true, opacity: 0.13
+        });
+        const wf = new THREE.Mesh(wfGeo, wfMat);
+        pg.add(wf);
+
+        // Inner glow sphere (back-face)
+        const ig = new THREE.Mesh(
+            new THREE.SphereGeometry(PLANET_R * 1.26, 32, 32),
+            new THREE.MeshBasicMaterial({ color: ACID, transparent: true, opacity: 0.036, side: THREE.BackSide })
+        );
+        pg.add(ig);
+
+        // Outer halo
+        const og = new THREE.Mesh(
+            new THREE.SphereGeometry(PLANET_R * 1.62, 32, 32),
+            new THREE.MeshBasicMaterial({ color: 0x4a8800, transparent: true, opacity: 0.016, side: THREE.BackSide })
+        );
+        pg.add(og);
+
+        // Latitude / longitude lines
+        (function () {
+            function lineMat(op) {
+                return new THREE.LineBasicMaterial({ color: ACID, transparent: true, opacity: op });
+            }
+            // latitudes
+            [-70, -45, -20, 0, 20, 45, 70].forEach(deg => {
+                const phi = THREE.MathUtils.degToRad(deg);
+                const pts = [], segs = 128;
+                const r = PLANET_R * Math.cos(phi), y = PLANET_R * Math.sin(phi);
+                for (let i = 0; i <= segs; i++) {
+                    const a = (i / segs) * Math.PI * 2;
+                    pts.push(new THREE.Vector3(r * Math.cos(a), y, r * Math.sin(a)));
+                }
+                pg.add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts), lineMat(0.13)));
+            });
+            // longitudes
+            for (let lon = 0; lon < 360; lon += 24) {
+                const a0 = THREE.MathUtils.degToRad(lon), pts = [];
+                for (let i = 0; i <= 64; i++) {
+                    const phi = ((i / 64) - 0.5) * Math.PI;
+                    pts.push(new THREE.Vector3(
+                        PLANET_R * Math.cos(phi) * Math.cos(a0),
+                        PLANET_R * Math.sin(phi),
+                        PLANET_R * Math.cos(phi) * Math.sin(a0)
+                    ));
+                }
+                pg.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lineMat(0.08)));
+            }
+        })();
+
+        scene.add(pg);
+
+        /* ─── Orbit rings ─────────────────────────────────────────────────── */
+        const rg = new THREE.Group();
+        [
+            [1.85, 0.52, 0.07],
+            [2.40, 1.08, 0.044],
+            [3.00, 0.26, 0.030],
+            [3.65, 1.45, 0.020],
+        ].forEach(([r, tilt, op]) => {
+            const pts = [];
+            for (let i = 0; i <= 256; i++) {
+                const a = (i / 256) * Math.PI * 2;
+                pts.push(new THREE.Vector3(Math.cos(a) * r, 0, Math.sin(a) * r));
+            }
+            const ring = new THREE.LineLoop(
+                new THREE.BufferGeometry().setFromPoints(pts),
+                new THREE.LineBasicMaterial({ color: ACID, transparent: true, opacity: op })
+            );
+            ring.rotation.x = tilt;
+            rg.add(ring);
+        });
+        scene.add(rg);
+
+        /* ─── Particles ───────────────────────────────────────────────────── */
+        const orbit = new Float32Array(N * 5); // angle, radius, speed, yOff, noiseOff
+        const galPos = new Float32Array(N * 3); // current galaxy home
+        const txtPos = new Float32Array(N * 3); // text formation target
+
+        const pPos = new Float32Array(N * 3);
+        const pSize = new Float32Array(N);
+        const pAlpha = new Float32Array(N);
+        const pCol = new Float32Array(N * 3);
+
+        // Spiral galaxy: 3 arms with proper 3D disk + halo
+        for (let i = 0; i < N; i++) {
+            const isHalo = Math.random() < 0.18; // 18% halo particles — scattered far out in 3D
+            const arm = i % 3;
+            const t = (Math.floor(i / 3)) / (N / 3);
+
+            let theta, rad, yOff;
+
+            if (isHalo) {
+                // Spherical halo — scattered all directions, faint
+                theta = Math.random() * Math.PI * 2;
+                rad = GAL_RMIN * 1.5 + Math.random() * (GAL_RMAX - GAL_RMIN * 0.5);
+                yOff = (Math.random() - 0.5) * rad * 0.9; // wide vertical scatter
+            } else {
+                // Tight spiral disk — very flat
+                theta = (arm / 3) * Math.PI * 2 + t * Math.PI * 4.2 + (Math.random() - 0.5) * 0.28;
+                rad = GAL_RMIN + t * (GAL_RMAX - GAL_RMIN) + (Math.random() - 0.5) * 0.35;
+                // Disk: very thin in Y, slightly thicker toward center
+                const diskThick = 0.08 + (1 - t) * 0.14;
+                yOff = (Math.random() - 0.5) * diskThick;
+            }
+
+            const spd = (0.04 + Math.random() * 0.07) * (i & 1 ? 1 : -1) * 0.001;
+            const nOff = Math.random() * 300;
+
+            orbit[i * 5] = theta;
+            orbit[i * 5 + 1] = rad;
+            orbit[i * 5 + 2] = spd;
+            orbit[i * 5 + 3] = yOff;
+            orbit[i * 5 + 4] = nOff;
+
+            galPos[i * 3] = pPos[i * 3] = Math.cos(theta) * rad;
+            galPos[i * 3 + 1] = pPos[i * 3 + 1] = yOff;
+            galPos[i * 3 + 2] = pPos[i * 3 + 2] = Math.sin(theta) * rad;
+
+            // Halo particles: tiny & very dim. Disk: small & varied brightness
+            pSize[i] = isHalo
+                ? 0.15 + Math.random() * 0.35
+                : 0.18 + Math.random() * 0.65;
+
+            pAlpha[i] = isHalo
+                ? 0.06 + Math.random() * 0.18
+                : 0.12 + Math.random() * 0.45;
+
+            // Color: inner bright acid → outer dimmer green → halo near-white
+            const dist01 = (rad - GAL_RMIN) / (GAL_RMAX - GAL_RMIN);
+            const bright = isHalo ? 0.08 + Math.random() * 0.14
+                : 0.18 + (1 - dist01) * 0.55 + Math.random() * 0.28;
+            // Slightly desaturate outer particles toward white-ish
+            const desat = isHalo ? 0.7 : dist01 * 0.3;
+            pCol[i * 3] = (0.72 + desat * 0.28) * bright;
+            pCol[i * 3 + 1] = (1.00) * bright;
+            pCol[i * 3 + 2] = (0.00 + desat * 0.15) * bright;
+        }
+
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+        geo.setAttribute('aSize', new THREE.BufferAttribute(pSize, 1));
+        geo.setAttribute('aAlpha', new THREE.BufferAttribute(pAlpha, 1));
+        geo.setAttribute('aColor', new THREE.BufferAttribute(pCol, 3));
+
+        const mat = new THREE.ShaderMaterial({
+            uniforms: { uDPR: { value: renderer.getPixelRatio() } },
+            vertexShader: `
+    attribute float aSize;
+    attribute float aAlpha;
+    attribute vec3  aColor;
+    varying   float vA;
+    varying   vec3  vC;
+    uniform   float uDPR;
+    void main(){
+      vA = aAlpha; vC = aColor;
+      vec4 mv = modelViewMatrix * vec4(position, 1.0);
+      gl_PointSize = aSize * uDPR * (160.0 / -mv.z);
+      gl_Position  = projectionMatrix * mv;
+    }
+  `,
+            fragmentShader: `
+    varying float vA;
+    varying vec3  vC;
+    void main(){
+      vec2  uv = gl_PointCoord - 0.5;
+      float d  = length(uv);
+      if(d > 0.5) discard;
+      // Tight bright core + fast falloff = crisp star look
+      float core = pow(clamp(1.0 - d * 5.0, 0.0, 1.0), 1.2);
+      float glow = pow(clamp(1.0 - d * 2.0, 0.0, 1.0), 3.5) * 0.35;
+      float a = clamp(core + glow, 0.0, 1.0);
+      gl_FragColor = vec4(vC, a * vA);
+    }
+  `,
+            transparent: true, depthWrite: false,
+            blending: THREE.AdditiveBlending,
+        });
+
+        const pCloud = new THREE.Points(geo, mat);
+        scene.add(pCloud);
+
+        /* ─── Text target sampling ────────────────────────────────────────── */
+        (function buildTextTargets() {
+            const W = 1024, H = 200;
+            const cv = document.createElement('canvas');
+            cv.width = W; cv.height = H;
+            const ctx = cv.getContext('2d');
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 130px monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(TEXT_WORD, W / 2, H / 2);
+
+            const data = ctx.getImageData(0, 0, W, H).data;
+            const pts = [];
+            const step = 5;
+            for (let y = 0; y < H; y += step)
+                for (let x = 0; x < W; x += step)
+                    if (data[(y * W + x) * 4 + 3] > 128)
+                        // ТУТ ИСПРАВЛЕНИЕ: Выдвигаем по Z на 2.5 вместо 0, чтобы текст был спереди планеты
+                        pts.push(((x / W) - 0.5) * 7.0, -((y / H) - 0.5) * 2.6, 2.5);
+
+            const m = pts.length / 3;
+            for (let i = 0; i < N; i++) {
+                const s = (i % m) * 3;
+                txtPos[i * 3] = pts[s] + (Math.random() - 0.5) * 0.10;
+                txtPos[i * 3 + 1] = pts[s + 1] + (Math.random() - 0.5) * 0.10;
+                txtPos[i * 3 + 2] = pts[s + 2] + (Math.random() - 0.5) * 0.40;
+            }
+        })();
+
+        /* ─── Variables for input / interactions ──────────────────────────── */
+        const mouse = { nx: 0, ny: 0, wx: 0, wy: 0, cx: 0, cy: 0 };
+        const drag = { on: false, sx: 0, sy: 0, rx0: 0, ry0: 0 };
+
+        // Cursor DOM elements
+        const dotEl = document.getElementById('dot');
+        const ringEl = document.getElementById('ring');
+        let ringX = innerWidth * 0.5, ringY = innerHeight * 0.5;
+
+        document.addEventListener('mousemove', e => {
+            mouse.cx = e.clientX; mouse.cy = e.clientY;
+            mouse.nx = (e.clientX / innerWidth) * 2 - 1;
+            mouse.ny = (e.clientY / innerHeight) * -2 + 1;
+            dotEl.style.left = e.clientX + 'px';
+            dotEl.style.top = e.clientY + 'px';
+            if (drag.on) {
+                pg.rotation.y = drag.rx0 + (e.clientX - drag.sx) * 0.007;
+                pg.rotation.x = drag.ry0 + (e.clientY - drag.sy) * 0.007;
+            }
+        });
+        document.addEventListener('mousedown', e => {
+            drag.on = true; drag.sx = e.clientX; drag.sy = e.clientY;
+            drag.rx0 = pg.rotation.y; drag.ry0 = pg.rotation.x;
+            dotEl.classList.add('big');
+        });
+        document.addEventListener('mouseup', e => {
+            const d = Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy);
+            drag.on = false; dotEl.classList.remove('big');
+            if (d < 6) tap();
+        });
+
+        // Touch
+        let ts = null;
+        document.addEventListener('touchstart', e => {
+            const t = e.touches[0];
+            ts = { x: t.clientX, y: t.clientY };
+            drag.on = true; drag.sx = t.clientX; drag.sy = t.clientY;
+            drag.rx0 = pg.rotation.y; drag.ry0 = pg.rotation.x;
+            mouse.nx = (t.clientX / innerWidth) * 2 - 1;
+            mouse.ny = (t.clientY / innerHeight) * -2 + 1;
+        }, { passive: true });
+        document.addEventListener('touchmove', e => {
+            const t = e.touches[0];
+            mouse.nx = (t.clientX / innerWidth) * 2 - 1;
+            mouse.ny = (t.clientY / innerHeight) * -2 + 1;
+            if (drag.on) {
+                pg.rotation.y = drag.rx0 + (t.clientX - drag.sx) * 0.007;
+                pg.rotation.x = drag.ry0 + (t.clientY - drag.sy) * 0.007;
+            }
+        }, { passive: true });
+        document.addEventListener('touchend', e => {
+            drag.on = false;
+            if (!ts) return;
+            const t = e.changedTouches[0];
+            if (Math.hypot(t.clientX - ts.x, t.clientY - ts.y) < 10) tap();
+        }, { passive: true });
+
+        /* ─── State machine ───────────────────────────────────────────────── */
+        // GALAXY=0  FORMING=1  TEXT=2  DISPERSING=3
+        let STATE = 0, stateAge = 0;
+
+        const hintEl = document.getElementById('hint');
+        const statusEl = document.getElementById('status');
+
+        function tap() {
+            if (STATE === 0) {
+                STATE = 1; stateAge = 0;
+                hintEl.classList.add('gone');
+                statusEl.textContent = '[ FORMING ]';
+                statusEl.classList.add('lit');
+            } else if (STATE === 2) {
+                disperse();
+            }
+        }
+        function disperse() {
+            STATE = 3; stateAge = 0;
+            statusEl.textContent = '[ DISSOLVING ]';
+        }
+
+        /* ─── Raycaster plane (z=0) ───────────────────────────────────────── */
+        const rc = new THREE.Raycaster();
+        const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+        const mw = new THREE.Vector3();
+        function raycast() {
+            rc.setFromCamera({ x: mouse.nx, y: mouse.ny }, camera);
+            rc.ray.intersectPlane(plane, mw);
+        }
+
+        /* ─── Helpers ─────────────────────────────────────────────────────── */
+        const ease = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        const lerp = (a, b, t) => a + (b - a) * t;
+        const clamp = (v, lo, hi) => v < lo ? lo : v > hi ? hi : v;
+
+        /* ─── FPS ─────────────────────────────────────────────────────────── */
+        let lastNow = 0, fpsAcc = 0, fpsF = 0;
+
+        /* ─── Animation loop ──────────────────────────────────────────────── */
+        function frame(now) {
+            requestAnimationFrame(frame);
+
+            const dt = clamp((now - lastNow) * 0.001, 0, 0.05);
+            lastNow = now; stateAge += dt;
+
+            // FPS counter
+            fpsAcc += dt; fpsF++;
+            if (fpsAcc > 0.65) {
+                document.getElementById('fps').textContent = Math.round(fpsF / fpsAcc);
+                fpsAcc = fpsF = 0;
+            }
+
+            // Cursor ring lerp
+            ringX = lerp(ringX, mouse.cx, 0.09);
+            ringY = lerp(ringY, mouse.cy, 0.09);
+            ringEl.style.left = ringX + 'px';
+            ringEl.style.top = ringY + 'px';
+
+            // Mouse → world
+            raycast();
+            document.getElementById('cx').textContent = (mw.x >= 0 ? '+' : '') + mw.x.toFixed(3);
+            document.getElementById('cy').textContent = (mw.y >= 0 ? '+' : '') + mw.y.toFixed(3);
+            document.getElementById('cr').textContent = mw.length().toFixed(3);
+
+            // ── State transitions ─────────────────────────────────────────
+            if (STATE === 1 && stateAge > FORM_MS * 0.001) {
+                STATE = 2; stateAge = 0;
+                statusEl.textContent = '[ ' + TEXT_WORD.toUpperCase() + ' ]';
+            }
+            if (STATE === 2 && stateAge > TEXT_HOLD * 0.001) {
+                disperse();
+            }
+            if (STATE === 3 && stateAge > DISP_MS * 0.001) {
+                STATE = 0; stateAge = 0;
+                statusEl.classList.remove('lit');
+                hintEl.classList.remove('gone');
+            }
+
+            // ── Update galaxy home positions ──────────────────────────────
+            for (let i = 0; i < N; i++) {
+                orbit[i * 5] += orbit[i * 5 + 2];
+                const a = orbit[i * 5];
+                const r = orbit[i * 5 + 1];
+                const y0 = orbit[i * 5 + 3];
+                // Disk particles: tiny oscillation. Halo: slow 3D drift
+                const isHalo = Math.abs(y0) > 0.2;
+                const yo = isHalo
+                    ? y0 + Math.sin(now * 0.00018 + orbit[i * 5 + 4]) * 0.06
+                    : y0 + Math.sin(now * 0.00028 + orbit[i * 5 + 4]) * 0.025;
+                galPos[i * 3] = Math.cos(a) * r;
+                galPos[i * 3 + 1] = yo;
+                galPos[i * 3 + 2] = Math.sin(a) * r;
+            }
+
+            // ── Particle physics ──────────────────────────────────────────
+            const pos = geo.attributes.position.array;
+            const alp = geo.attributes.aAlpha.array;
+            const col = geo.attributes.aColor.array;
+
+            const REP_R = 0.75, REP_F = 0.32;
+
+            for (let i = 0; i < N; i++) {
+                const i3 = i * 3;
+                let px = pos[i3], py = pos[i3 + 1], pz = pos[i3 + 2];
+
+                // Mouse repulsion (shared across all states)
+                const dx = px - mw.x, dy = py - mw.y;
+                const dd = dx * dx + dy * dy;
+                let rx = 0, ry = 0;
+                if (dd < REP_R * REP_R && dd > 1e-5) {
+                    const d = Math.sqrt(dd);
+                    const f = (1 - d / REP_R) * REP_F;
+                    rx = (dx / d) * f; ry = (dy / d) * f;
+                }
+
+                if (STATE === 0) {
+                    // ── Galaxy orbit ──────────────────────────────────────────
+                    const tx = galPos[i3] + rx, ty = galPos[i3 + 1] + ry, tz = galPos[i3 + 2];
+                    pos[i3] = lerp(px, tx, 0.07);
+                    pos[i3 + 1] = lerp(py, ty, 0.07);
+                    pos[i3 + 2] = lerp(pz, tz, 0.07);
+                    alp[i] = lerp(alp[i], 0.22 + Math.random() * 0.05, 0.012);
+                    col[i3] = lerp(col[i3], 0.72, 0.012);
+                    col[i3 + 1] = lerp(col[i3 + 1], 1.00, 0.012);
+                    col[i3 + 2] = lerp(col[i3 + 2], 0.00, 0.012);
+
+                } else if (STATE === 1) {
+                    // ── Forming ───────────────────────────────────────────────
+                    const ep = ease(clamp(stateAge / (FORM_MS * 0.001), 0, 1));
+                    const tx = lerp(galPos[i3], txtPos[i3], ep) + rx * 0.12;
+                    const ty = lerp(galPos[i3 + 1], txtPos[i3 + 1], ep) + ry * 0.12;
+                    const tz = lerp(galPos[i3 + 2], txtPos[i3 + 2], ep);
+                    pos[i3] = lerp(px, tx, 0.10);
+                    pos[i3 + 1] = lerp(py, ty, 0.10);
+                    pos[i3 + 2] = lerp(pz, tz, 0.10);
+                    alp[i] = lerp(alp[i], 0.72 + ep * 0.24, 0.04);
+                    col[i3] = lerp(col[i3], 0.72, 0.03);
+                    col[i3 + 1] = lerp(col[i3 + 1], 1.00, 0.03);
+                    col[i3 + 2] = lerp(col[i3 + 2], 0.00, 0.02);
+
+                } else if (STATE === 2) {
+                    // ── Hold text ─────────────────────────────────────────────
+                    const drift = Math.sin(now * 0.0007 + i * 0.07) * 0.003;
+                    pos[i3] = lerp(px, txtPos[i3] + rx * 0.1 + drift, 0.07);
+                    pos[i3 + 1] = lerp(py, txtPos[i3 + 1] + ry * 0.1 + drift, 0.07);
+                    pos[i3 + 2] = lerp(pz, txtPos[i3 + 2], 0.05);
+                    const pulse = 0.82 + Math.sin(now * 0.0019 + i) * 0.08;
+                    alp[i] = lerp(alp[i], pulse, 0.03);
+                    col[i3] = lerp(col[i3], 0.72, 0.02);
+                    col[i3 + 1] = lerp(col[i3 + 1], 1.00, 0.02);
+                    col[i3 + 2] = lerp(col[i3 + 2], 0.00, 0.02);
+
+                } else if (STATE === 3) {
+                    // ── Disperse ──────────────────────────────────────────────
+                    const ep = ease(clamp(stateAge / (DISP_MS * 0.001), 0, 1));
+                    const tx = lerp(txtPos[i3], galPos[i3], ep);
+                    const ty = lerp(txtPos[i3 + 1], galPos[i3 + 1], ep);
+                    const tz = lerp(txtPos[i3 + 2], galPos[i3 + 2], ep);
+                    pos[i3] = lerp(px, tx, 0.07);
+                    pos[i3 + 1] = lerp(py, ty, 0.07);
+                    pos[i3 + 2] = lerp(pz, tz, 0.07);
+                    alp[i] = lerp(alp[i], 0.22 + Math.random() * 0.05, 0.014);
+                }
+            }
+
+            geo.attributes.position.needsUpdate = true;
+            geo.attributes.aAlpha.needsUpdate = true;
+            geo.attributes.aColor.needsUpdate = true;
+
+            // ── Planet & rings ────────────────────────────────────────────
+            if (!drag.on) {
+                pg.rotation.y += 0.0011;
+                pg.rotation.x += 0.00015;
+            }
+            wf.rotation.y += 0.0009;
+            rg.rotation.y += 0.00022;
+
+            // ТУТ ИСПРАВЛЕНИЕ: Жесткая синхронизация вращения планеты и туманности
+            pg.rotation.x = clamp(pg.rotation.x, -0.55, 0.55); // Не даем планете переворачиваться по X
+
+            pCloud.rotation.y = pg.rotation.y;
+            pCloud.rotation.x = pg.rotation.x;
+
+            // Breathing glow
+            ig.material.opacity = 0.028 + Math.sin(now * 0.00095) * 0.014;
+            wfMat.opacity = 0.11 + Math.sin(now * 0.00082 + 1.1) * 0.04;
+
+            renderer.render(scene, camera);
+        }
+
+        /* ─── Resize ──────────────────────────────────────────────────────── */
+        window.addEventListener('resize', () => {
+            camera.aspect = innerWidth / innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(innerWidth, innerHeight);
+            mat.uniforms.uDPR.value = renderer.getPixelRatio();
+        });
+
+        /* ─── Boot ────────────────────────────────────────────────────────── */
+        document.getElementById('ptc').textContent = N;
+        requestAnimationFrame(frame);
+    </script>
+</body>
+
+</html>
