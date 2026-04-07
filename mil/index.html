@@ -3,403 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEURAL_LINK // P2P_V2</title>
+    <title>TERMINAL_SYNC_V3</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent: #00f3ff;
-            --accent-glow: rgba(0, 243, 255, 0.5);
-            --bg: #050508;
-            --glass: rgba(15, 15, 25, 0.8);
-            --border: rgba(0, 243, 255, 0.2);
-            --text: #e0e0e0;
+            --neon: #00ff41;
+            --bg: #0a0a0a;
+            --surface: #1a1a1a;
+            --error: #ff3e3e;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background: var(--bg);
-            color: var(--text);
-            font-family: 'Fira Code', monospace;
+            color: var(--neon);
+            font-family: 'JetBrains Mono', monospace;
             height: 100vh;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
-            background-image: radial-gradient(circle at 50% 50%, #101018 0%, #050508 100%);
+            overflow: hidden;
         }
 
-        /* --- ГРИД И НЕОН --- */
-        body::before {
-            content: ""; position: fixed; inset: 0;
-            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 40px 40px; z-index: -1; opacity: 0.2;
-        }
-
+        /* --- UI DESIGN --- */
         header {
-            padding: 15px 25px;
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--accent);
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+            padding: 15px;
+            border-bottom: 2px solid var(--neon);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 255, 65, 0.05);
         }
 
-        .logo { font-family: 'Orbitron', sans-serif; color: var(--accent); letter-spacing: 2px; text-shadow: 0 0 10px var(--accent-glow); }
+        .status-box { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+        .indicator { width: 10px; height: 10px; border-radius: 50%; background: var(--error); box-shadow: 0 0 10px var(--error); }
+        .indicator.on { background: var(--neon); box-shadow: 0 0 10px var(--neon); }
 
-        .status-panel { display: flex; align-items: center; gap: 15px; font-size: 12px; }
-        .node-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; transition: 0.3s; }
-        .node-dot.active { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
-
-        #chat-area {
-            flex: 1; overflow-y: auto; padding: 20px;
-            display: flex; flex-direction: column; gap: 12px;
-            scrollbar-width: thin; scrollbar-color: var(--accent) transparent;
+        #log {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        /* --- СООБЩЕНИЯ --- */
-        .msg {
-            max-width: 80%; padding: 12px 16px; border-radius: 4px;
-            background: var(--glass); border: 1px solid var(--border);
-            position: relative; animation: msgIn 0.3s ease-out;
+        .entry {
+            padding: 10px;
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+            max-width: 85%;
+            animation: blink 0.1s ease;
         }
-        .msg.mine { align-self: flex-end; border-right: 3px solid var(--accent); }
-        .msg.peer { align-self: flex-start; border-left: 3px solid #ff0055; }
-        
-        .msg-meta { font-size: 10px; opacity: 0.5; margin-bottom: 5px; display: flex; justify-content: space-between; }
-        .delivery-status { font-size: 9px; color: var(--accent); margin-top: 4px; text-align: right; }
+        .entry.self { align-self: flex-end; border-color: var(--neon); background: rgba(0, 255, 65, 0.1); }
+        .entry.sys { align-self: center; border: none; color: #888; font-size: 10px; }
 
-        /* --- ФАЙЛЫ --- */
-        .file-box {
-            display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.3);
-            padding: 10px; border-radius: 4px; margin-top: 8px;
+        .input-area {
+            padding: 20px;
+            border-top: 2px solid var(--neon);
+            display: flex;
+            gap: 10px;
         }
-        .progress-cont { height: 2px; background: #222; width: 100%; margin-top: 8px; overflow: hidden; }
-        .progress-bar { height: 100%; background: var(--accent); width: 0%; transition: 0.1s; }
 
-        /* --- ИНПУТ --- */
-        .input-bar {
-            padding: 20px; background: var(--glass); backdrop-filter: blur(10px);
-            border-top: 1px solid var(--border); display: flex; gap: 15px;
-        }
         input[type="text"] {
-            flex: 1; background: rgba(0,0,0,0.5); border: 1px solid var(--border);
-            color: white; padding: 12px; outline: none; font-family: inherit;
+            flex: 1;
+            background: #000;
+            border: 1px solid var(--neon);
+            color: var(--neon);
+            padding: 12px;
+            outline: none;
+            font-family: inherit;
         }
+
         button {
-            background: transparent; border: 1px solid var(--accent); color: var(--accent);
-            padding: 10px 20px; cursor: pointer; font-family: 'Orbitron'; font-size: 12px;
-            transition: 0.3s;
+            background: var(--neon);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: inherit;
         }
-        button:hover { background: var(--accent); color: black; box-shadow: 0 0 15px var(--accent); }
 
-        .overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1000;
+        button:hover { opacity: 0.8; }
+
+        /* QR Modal */
+        .modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100;
         }
-        #qrcode { background: white; padding: 15px; border-radius: 8px; }
+        #qrcode { background: white; padding: 20px; }
 
-        @keyframes msgIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes blink { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">NEURAL_LINK v2.0</div>
-    <div class="status-panel">
-        <div id="status-dot" class="node-dot"></div>
-        <span id="status-label">INITIALIZING...</span>
-        <button onclick="App.copyLink()">LINK</button>
-        <button onclick="App.showQR()">QR</button>
+    <div class="status-box">
+        <div id="dot" class="indicator"></div>
+        <span id="st-text">SYSTEM OFFLINE</span>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <button onclick="Core.copyLink()">LINK</button>
+        <button onclick="Core.showQR()">QR</button>
     </div>
 </header>
 
-<div id="chat-area"></div>
+<div id="log"></div>
 
-<div class="input-bar">
-    <button onclick="document.getElementById('file-input').click()">+</button>
-    <input type="file" id="file-input" hidden multiple>
-    <input type="text" id="main-input" placeholder="Введите сообщение..." autocomplete="off">
-    <button onclick="App.sendMessage()">SEND</button>
+<div class="input-area">
+    <button onclick="document.getElementById('f').click()">+</button>
+    <input type="file" id="f" hidden onchange="Core.handleFile(this)">
+    <input type="text" id="m" placeholder="TYPE MESSAGE..." autocomplete="off">
+    <button onclick="Core.sendText()">SEND</button>
 </div>
 
-<div id="qr-modal" class="overlay" onclick="this.style.display='none'">
+<div id="qrm" class="modal" onclick="this.style.display='none'">
     <div id="qrcode"></div>
-    <p style="margin-top: 20px; color: var(--accent)">СКАНЕР ДЛЯ ПОДКЛЮЧЕНИЯ</p>
+    <p style="margin-top: 20px;">SCAN TO CONNECT</p>
 </div>
 
 <script>
 /**
- * SENIOR P2P CORE
- * Особенности: Binary E2EE, Backpressure, Heartbeat, Auto-election
+ * CORE ENGINE V3 - STABLE P2P
  */
 
-const NetConfig = {
-    CHUNK_SIZE: 32768, // 32KB
-    MAX_BUFFER: 1 * 1024 * 1024, // 1MB Backpressure limit
-    PEER_JS: {
-        host: '0.peerjs.com',
-        port: 443,
-        secure: true,
-        config: {
-            iceServers: [
-                { urls: 'stun:stun.l.google.com:19302' },
-                { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' }
-            ]
-        }
-    }
-};
-
-const CryptoEngine = {
-    key: null,
-    salt: new TextEncoder().encode('p2p-neural-v2-static-salt'), 
-
-    async init(password) {
-        const enc = new TextEncoder();
-        const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
-        this.key = await crypto.subtle.deriveKey(
-            { name: "PBKDF2", salt: this.salt, iterations: 100000, hash: "SHA-256" },
-            keyMaterial, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]
-        );
-    },
-
-    async encryptBinary(buffer) {
-        const iv = crypto.getRandomValues(new Uint8Array(12));
-        const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, this.key, buffer);
-        return { iv, data: ct };
-    },
-
-    async decryptBinary(iv, data) {
-        return await crypto.subtle.decrypt({ name: "AES-GCM", iv }, this.key, data);
-    }
-};
-
-const App = {
+const Core = {
     peer: null,
-    conns: new Map(),
+    conn: null,
+    room: '',
     isHost: false,
-    roomID: '',
-    myID: '',
-    fileChunks: new Map(),
 
-    async init() {
-        const pass = window.location.hash.substring(1) || Math.random().toString(36).substr(2, 8);
-        window.location.hash = pass;
-        this.roomID = pass;
+    init() {
+        const h = window.location.hash.substring(1) || Math.random().toString(36).substr(2, 6);
+        window.location.hash = h;
+        this.room = 'V3-ROOM-' + h;
         
-        await CryptoEngine.init(pass);
-        this.connect();
-
-        // Heartbeat
-        setInterval(() => this.broadcast({ type: 'ping' }), 5000);
-    },
-
-    connect() {
-        this.myID = 'PEER-' + Math.random().toString(36).substr(2, 4).toUpperCase();
-        this.peer = new Peer(NetConfig.PEER_JS);
+        this.log('INITIALIZING NETWORK...', 'sys');
+        
+        // Пытаемся стать Хостом
+        this.peer = new Peer(this.room, {
+            debug: 2,
+            config: {
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' }
+                ]
+            }
+        });
 
         this.peer.on('open', (id) => {
-            const hostID = 'ROOM-' + this.roomID;
-            const conn = this.peer.connect(hostID, { reliable: true });
-            this.handleConn(conn);
-            
-            // Если через 3 сек нет связи — становимся хостом
-            setTimeout(() => { if (this.conns.size === 0) this.becomeHost(); }, 3000);
+            this.isHost = true;
+            this.updateStatus('WAITING FOR PEER...', true);
+            this.log('CREATED ROOM: ' + id, 'sys');
+        });
+
+        this.peer.on('connection', (c) => {
+            if (this.conn) this.conn.close(); // Только 1 активное соединение
+            this.conn = c;
+            this.setupEvents();
         });
 
         this.peer.on('error', (err) => {
-            if (err.type === 'unavailable-id') this.becomeHost();
+            // Если ID занят — значит хост уже есть, подключаемся как клиент
+            if (err.type === 'unavailable-id') {
+                this.connectAsClient();
+            } else {
+                this.log('ERROR: ' + err.type, 'sys');
+            }
         });
     },
 
-    becomeHost() {
-        if (this.isHost) return;
+    connectAsClient() {
+        this.isHost = false;
         if (this.peer) this.peer.destroy();
-
-        this.isHost = true;
-        this.peer = new Peer('ROOM-' + this.roomID, NetConfig.PEER_JS);
         
-        this.peer.on('open', () => {
-            this.updateStatus('HOST ACTIVE', true);
-            this.sysMsg("Создан защищенный канал.");
+        this.peer = new Peer(); // Рандомный ID для клиента
+        this.peer.on('open', (id) => {
+            this.log('CLIENT ID: ' + id, 'sys');
+            const c = this.peer.connect(this.room, { reliable: true });
+            this.conn = c;
+            this.setupEvents();
         });
-
-        this.peer.on('connection', (conn) => this.handleConn(conn));
     },
 
-    handleConn(conn) {
-        conn.on('open', () => {
-            this.conns.set(conn.peer, conn);
-            this.updateStatus('CONNECTED', true);
-            this.updatePeerCount();
-        });
-
-        conn.on('data', async (raw) => {
-            if (raw.type === 'ping') return;
+    setupEvents() {
+        this.conn.on('open', () => {
+            this.updateStatus('LINK ESTABLISHED', true);
+            this.log('SECURE CONNECTION READY', 'sys');
             
-            // Если мы хост — ретранслируем другим
-            if (this.isHost) this.broadcast(raw, conn.peer);
-
-            const data = await CryptoEngine.decryptBinary(raw.iv, raw.data);
-            this.processInbound(JSON.parse(new TextDecoder().decode(data)));
+            // Heartbeat чтобы соединение не простаивало
+            setInterval(() => { if(this.conn.open) this.conn.send({t:'ping'}); }, 3000);
         });
 
-        conn.on('close', () => {
-            this.conns.delete(conn.peer);
-            this.updatePeerCount();
-            if (!this.isHost && this.conns.size === 0) {
-                this.updateStatus('RECONNECTING...', false);
-                setTimeout(() => this.becomeHost(), 1000);
-            }
+        this.conn.on('data', (data) => {
+            if (data.t === 'ping') return;
+            if (data.t === 'text') this.log(data.m, 'peer');
+            if (data.t === 'file') this.download(data);
+        });
+
+        this.conn.on('close', () => {
+            this.updateStatus('DISCONNECTED', false);
+            this.log('CONNECTION LOST', 'sys');
+            setTimeout(() => location.reload(), 2000);
         });
     },
 
-    async broadcast(payload, exclude = null) {
-        let finalData = payload;
-        
-        // Шифруем только если это не системный пинг
-        if (payload.type !== 'ping') {
-            const enc = await CryptoEngine.encryptBinary(new TextEncoder().encode(JSON.stringify(payload)));
-            finalData = { iv: enc.iv, data: enc.data };
-        }
+    sendText() {
+        const input = document.getElementById('m');
+        const val = input.value.trim();
+        if (!val || !this.conn || !this.conn.open) return;
 
-        for (let [id, conn] of this.conns) {
-            if (id !== exclude && conn.open) {
-                // Backpressure check
-                if (conn.bufferedAmount > NetConfig.MAX_BUFFER) {
-                    await new Promise(r => setTimeout(r, 50));
-                }
-                conn.send(finalData);
-            }
-        }
-    },
-
-    processInbound(data) {
-        if (data.type === 'text') this.renderMsg(data, false);
-        if (data.type === 'file-start') this.initFile(data);
-        if (data.type === 'file-chunk') this.saveChunk(data);
-    },
-
-    async sendMessage() {
-        const input = document.getElementById('main-input');
-        if (!input.value) return;
-
-        const msg = { type: 'text', content: input.value, sender: this.myID, time: new Date().toLocaleTimeString() };
-        await this.broadcast(msg);
-        this.renderMsg(msg, true);
+        this.conn.send({ t: 'text', m: val });
+        this.log(val, 'self');
         input.value = '';
     },
 
-    async sendFile(file) {
-        const fileID = Math.random().toString(36).substr(2, 6);
-        const total = Math.ceil(file.size / NetConfig.CHUNK_SIZE);
+    handleFile(el) {
+        const file = el.files[0];
+        if (!file || !this.conn) return;
+
+        this.log('SENDING: ' + file.name, 'sys');
         
-        this.sysMsg(`Отправка: ${file.name}`);
-        const uiID = this.renderFileProgress(file.name, true);
-
-        for (let i = 0; i < total; i++) {
-            const start = i * NetConfig.CHUNK_SIZE;
-            const blob = file.slice(start, start + NetConfig.CHUNK_SIZE);
-            const buf = await blob.arrayBuffer();
-
-            await this.broadcast({
-                type: 'file-chunk',
-                fileID,
-                index: i,
-                total,
-                data: Array.from(new Uint8Array(buf)) // В V2 передаем как массив внутри зашифрованного пакета
-            });
-
-            const p = Math.round(((i + 1) / total) * 100);
-            document.getElementById(`pb-${uiID}`).style.width = p + '%';
-        }
+        // Отправляем файл как Blob (PeerJS сам нарежет его)
+        this.conn.send({
+            t: 'file',
+            file: file,
+            name: file.name,
+            type: file.type
+        });
     },
 
-    initFile(data) {
-        this.fileChunks.set(data.fileID, { received: 0, chunks: new Array(data.total), name: data.name });
+    download(data) {
+        const blob = new Blob([data.file], { type: data.type });
+        const url = URL.createObjectURL(blob);
+        this.log(`RECEIVED FILE: <a href="${url}" download="${data.name}" style="color:var(--neon)">[ DOWNLOAD ]</a>`, 'peer');
     },
 
-    saveChunk(data) {
-        if (!this.fileChunks.has(data.fileID)) {
-            this.fileChunks.set(data.fileID, { received: 0, chunks: new Array(data.total) });
-        }
-        const session = this.fileChunks.get(data.fileID);
-        session.chunks[data.index] = new Uint8Array(data.data);
-        session.received++;
-
-        if (session.received === data.total) {
-            const blob = new Blob(session.chunks);
-            const url = URL.createObjectURL(blob);
-            this.sysMsg(`Получен файл: <a href="${url}" download="received_file" style="color:var(--accent)">СКАЧАТЬ</a>`);
-        }
-    },
-
-    // --- UI HELPERS ---
-    renderMsg(data, isMine) {
-        const area = document.getElementById('chat-area');
+    log(msg, type) {
         const div = document.createElement('div');
-        div.className = `msg ${isMine ? 'mine' : 'peer'}`;
-        div.innerHTML = `
-            <div class="msg-meta"><span>${data.sender}</span> <span>${data.time}</span></div>
-            <div>${data.content}</div>
-        `;
-        area.appendChild(div);
-        area.scrollTop = area.scrollHeight;
+        div.className = 'entry ' + type;
+        div.innerHTML = msg;
+        const container = document.getElementById('log');
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
     },
 
-    renderFileProgress(name, isMine) {
-        const id = Math.random().toString(36).substr(2, 4);
-        const area = document.getElementById('chat-area');
-        const div = document.createElement('div');
-        div.className = `msg ${isMine ? 'mine' : 'peer'}`;
-        div.innerHTML = `
-            <div class="file-box">
-                <div style="flex:1">
-                    <div style="font-size:11px">${name}</div>
-                    <div class="progress-cont"><div id="pb-${id}" class="progress-bar"></div></div>
-                </div>
-            </div>
-        `;
-        area.appendChild(div);
-        return id;
-    },
-
-    updateStatus(txt, active) {
-        document.getElementById('status-label').innerText = txt;
-        document.getElementById('status-dot').className = `node-dot ${active ? 'active' : ''}`;
-    },
-
-    updatePeerCount() {
-        const count = this.conns.size;
-        this.updateStatus(this.isHost ? `HOST (${count} PEERS)` : 'CONNECTED', true);
-    },
-
-    sysMsg(t) {
-        const area = document.getElementById('chat-area');
-        const d = document.createElement('div');
-        d.style = "text-align:center; font-size:10px; opacity:0.4; margin: 10px 0; color:var(--accent)";
-        d.innerHTML = `>> ${t}`;
-        area.appendChild(d);
+    updateStatus(txt, on) {
+        document.getElementById('st-text').innerText = txt;
+        document.getElementById('dot').className = 'indicator ' + (on ? 'on' : '');
     },
 
     copyLink() {
         navigator.clipboard.writeText(window.location.href);
-        this.sysMsg("Ссылка скопирована.");
+        this.log('LINK COPIED', 'sys');
     },
 
     showQR() {
-        document.getElementById('qr-modal').style.display = 'flex';
+        document.getElementById('qrm').style.display = 'flex';
         document.getElementById('qrcode').innerHTML = '';
         new QRCode(document.getElementById("qrcode"), window.location.href);
     }
 };
 
-document.getElementById('main-input').onkeypress = (e) => { if(e.key==='Enter') App.sendMessage(); };
-document.getElementById('file-input').onchange = (e) => {
-    for(let f of e.target.files) App.sendFile(f);
-};
+// Enter key binding
+document.getElementById('m').onkeypress = (e) => { if(e.key==='Enter') Core.sendText(); };
 
-App.init();
+// Start
+Core.init();
 </script>
 </body>
 </html>
