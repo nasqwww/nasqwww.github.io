@@ -1,57 +1,406 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>MIL DROP</title>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-
-<style>
-body{background:#0a0a0b;color:#fff;font-family:monospace;margin:0}
-#msgs{height:85vh;overflow:auto;padding:10px}
-.bar{display:flex}
-input{flex:1;padding:10px;background:#111;border:none;color:#fff}
-button{padding:10px;background:#0f0;color:#000;border:none}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant Transfer • Real-time Text &amp; Files</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;display=swap');
+        
+        :root {
+            --tw-color-primary: #00d4ff;
+        }
+        
+        * {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        body {
+            background: #0a0a0a;
+        }
+        
+        .chat-container {
+            scrollbar-width: thin;
+            scrollbar-color: #00d4ff #1f1f1f;
+        }
+        
+        .chat-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .message-bubble {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .message-bubble:hover {
+            transform: scale(1.02);
+        }
+        
+        .header-gradient {
+            background: linear-gradient(90deg, #0a0a0a, #1a1a1a);
+        }
+        
+        .input-focus {
+            transition: all 0.3s ease;
+        }
+        
+        .input-focus:focus {
+            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.2);
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col text-white">
+    <!-- HEADER -->
+    <div class="header-gradient border-b border-white/10 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-x-3">
+                <div class="w-9 h-9 bg-[#00d4ff] rounded-2xl flex items-center justify-center text-black font-bold text-2xl shadow-inner">📤</div>
+                <div>
+                    <h1 class="text-2xl font-semibold tracking-tight">Instant Transfer</h1>
+                    <p class="text-xs text-[#00d4ff] font-medium">text • photos • videos • files</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-x-2 bg-white/10 px-4 h-10 rounded-3xl text-sm font-medium">
+                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                LIVE
+                <span id="room-display" class="font-mono text-[#00d4ff] ml-1"></span>
+            </div>
+            
+            <a onclick="copyRoomLink()" 
+               class="flex items-center gap-x-2 bg-white/10 hover:bg-white/20 transition-colors px-5 h-10 rounded-3xl text-sm font-medium cursor-pointer">
+                <span class="text-lg">🔗</span>
+                Share room
+            </a>
+        </div>
+    </div>
 
-<div id="msgs"></div>
+    <!-- MESSAGES AREA -->
+    <div id="messages" 
+         class="chat-container flex-1 max-w-4xl mx-auto w-full px-4 py-6 overflow-y-auto flex flex-col gap-6 bg-[#0a0a0a]">
+        <!-- Messages populated by JS -->
+    </div>
 
-<div class="bar">
-  <input id="msg" placeholder="type...">
-  <button onclick="send()">SEND</button>
-</div>
+    <!-- INPUT BAR -->
+    <div class="border-t border-white/10 bg-[#111111] sticky bottom-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <div class="flex items-end gap-x-3 bg-white/5 rounded-3xl px-6 py-2 input-focus">
+                
+                <!-- Text input -->
+                <input 
+                    id="text-input"
+                    type="text"
+                    placeholder="Type message or drop files..."
+                    onkeydown="if(event.key === 'Enter') sendTextMessage()"
+                    class="flex-1 bg-transparent outline-none text-lg placeholder:text-white/40">
+                
+                <!-- File attach -->
+                <label onclick="document.getElementById('file-input').click()" 
+                       class="cursor-pointer flex items-center justify-center w-11 h-11 hover:bg-white/10 rounded-2xl transition-colors">
+                    <span class="text-3xl">📎</span>
+                </label>
+                <input id="file-input" type="file" class="hidden" onchange="handleFileSelect(event)">
+                
+                <!-- Send button -->
+                <button onclick="sendTextMessage()" 
+                        class="w-11 h-11 bg-[#00d4ff] hover:bg-[#00b8e0] text-black rounded-2xl flex items-center justify-center text-3xl transition-all active:scale-95">
+                    →
+                </button>
+            </div>
+            
+            <p class="text-center text-[10px] text-white/30 mt-3 font-mono">
+                Room synced in real-time • Works on any device • GitHub Pages ready
+            </p>
+        </div>
+    </div>
 
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyD-EXAMPLE",
-  authDomain: "mil-drop.firebaseapp.com",
-  databaseURL: "https://mil-drop-default-rtdb.firebaseio.com",
-  projectId: "mil-drop",
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-const room = location.hash.slice(1) || "main";
-const ref = db.ref("rooms/" + room);
-
-ref.on("child_added", snap=>{
-  const d = snap.val();
-  const el = document.createElement("div");
-  el.textContent = d;
-  document.getElementById("msgs").appendChild(el);
-});
-
-function send(){
-  const v = document.getElementById("msg").value;
-  if(!v) return;
-  ref.push(v);
-  document.getElementById("msg").value = "";
-}
-</script>
-
+    <script>
+        // =============================================
+        // FIREBASE CONFIG — REPLACE WITH YOUR OWN
+        // =============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDUMMY_REPLACE_ME",
+            authDomain: "your-project-id.firebaseapp.com",
+            databaseURL: "https://your-project-id-default-rtdb.firebaseio.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project-id.appspot.com",
+            messagingSenderId: "1234567890",
+            appId: "1:1234567890:web:abcdef1234567890"
+        };
+        
+        // =============================================
+        // GLOBAL VARIABLES
+        // =============================================
+        let app, db, storage;
+        let messagesRef = null;
+        let currentRoom = '';
+        let myDeviceId = '';
+        let tailwindInitialized = false;
+        
+        // =============================================
+        // UTILITIES
+        // =============================================
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        
+        function autoScroll() {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        function copyRoomLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const orig = document.getElementById('room-display').innerHTML;
+                document.getElementById('room-display').innerHTML = '✅ COPIED!';
+                setTimeout(() => {
+                    document.getElementById('room-display').innerHTML = orig;
+                }, 1500);
+            });
+        }
+        
+        // =============================================
+        // FIREBASE INITIALIZATION
+        // =============================================
+        function initializeFirebase() {
+            if (app) return;
+            
+            app = firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            storage = firebase.storage();
+            
+            console.log('%c✅ Firebase connected — real-time sync active', 'color:#00d4ff; font-size:11px');
+        }
+        
+        // =============================================
+        // ROOM MANAGEMENT
+        // =============================================
+        function getRoomFromURL() {
+            let room = window.location.hash.replace('#', '').trim();
+            if (!room) {
+                room = 'default-' + Math.floor(Math.random() * 999999);
+                window.location.hash = '#' + room;
+            }
+            return room;
+        }
+        
+        function switchRoom(newRoom) {
+            if (messagesRef) {
+                messagesRef.off();
+            }
+            
+            // Clear current messages
+            document.getElementById('messages').innerHTML = '';
+            
+            currentRoom = newRoom;
+            document.getElementById('room-display').textContent = '#' + currentRoom;
+            
+            // Update URL without reload
+            window.history.replaceState(null, null, '#' + currentRoom);
+            
+            // Re-subscribe
+            messagesRef = db.ref('rooms/' + currentRoom + '/messages');
+            messagesRef.on('child_added', (snapshot) => {
+                const msg = snapshot.val();
+                if (msg) renderMessage(msg);
+            });
+        }
+        
+        // =============================================
+        // MESSAGE RENDERING
+        // =============================================
+        function renderMessage(msg) {
+            const container = document.getElementById('messages');
+            const isMine = msg.deviceId === myDeviceId;
+            
+            const messageHTML = `
+                <div class="flex ${isMine ? 'justify-end' : 'justify-start'} group">
+                    <div onclick="copyMessage(this, '${escapeHtml(msg.type === 'text' ? msg.content : msg.url || msg.filename)}')" 
+                         class="message-bubble max-w-[80%] ${isMine 
+                            ? 'bg-[#00d4ff] text-black rounded-3xl rounded-br-none' 
+                            : 'bg-white/10 text-white rounded-3xl rounded-bl-none'} px-5 py-4 cursor-pointer">
+                        
+                        ${msg.type === 'text' 
+                            ? `<p class="text-[17px] leading-relaxed">${escapeHtml(msg.content)}</p>`
+                            : msg.contentType && msg.contentType.startsWith('image/')
+                                ? `<img src="${msg.url}" class="rounded-2xl max-w-[260px] shadow-inner" alt="Shared image">`
+                                : msg.contentType && msg.contentType.startsWith('video/')
+                                    ? `<video src="${msg.url}" controls class="rounded-2xl max-w-[260px] shadow-inner"></video>`
+                                    : `<a href="${msg.url}" target="_blank" class="flex items-center gap-3 hover:underline">
+                                            <span class="text-4xl">📦</span>
+                                            <div>
+                                                <div class="font-medium">${msg.filename}</div>
+                                                <div class="text-xs opacity-70">${(msg.size / 1024 / 1024).toFixed(2)} MB</div>
+                                            </div>
+                                        </a>`
+                        }
+                        
+                        <div class="flex items-center justify-between mt-3 text-xs opacity-70">
+                            <span>${formatTime(msg.timestamp)}</span>
+                            ${isMine ? '<span class="text-[10px] font-medium tracking-widest">YOU</span>' : ''}
+                        </div>
+                    </div>
+                </div>`;
+            
+            container.innerHTML += messageHTML;
+            autoScroll();
+        }
+        
+        function copyMessage(el, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const original = el.style.backgroundColor;
+                el.style.transitionDuration = '150ms';
+                el.style.backgroundColor = '#22c55e';
+                setTimeout(() => {
+                    el.style.backgroundColor = original;
+                }, 600);
+            });
+        }
+        
+        // =============================================
+        // SEND TEXT
+        // =============================================
+        function sendTextMessage() {
+            const input = document.getElementById('text-input');
+            const text = input.value.trim();
+            
+            if (!text || !messagesRef) return;
+            
+            const payload = {
+                deviceId: myDeviceId,
+                type: 'text',
+                content: text,
+                timestamp: Date.now()
+            };
+            
+            messagesRef.push(payload);
+            input.value = '';
+        }
+        
+        // =============================================
+        // HANDLE FILE UPLOAD
+        // =============================================
+        async function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file || !storage || !messagesRef) return;
+            
+            // Visual feedback
+            const inputBar = document.querySelector('.bg-white\\/5');
+            const originalPlaceholder = document.getElementById('text-input').placeholder;
+            document.getElementById('text-input').placeholder = 'Uploading file...';
+            
+            try {
+                const filePath = `rooms/${currentRoom}/${Date.now()}-${file.name}`;
+                const fileRef = storage.ref(filePath);
+                
+                const uploadTask = fileRef.put(file);
+                
+                // Show progress in console only (no UI clutter)
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log(`%c📤 Upload progress: ${progress.toFixed(0)}%`, 'color:#00d4ff');
+                    },
+                    (error) => {
+                        console.error('Upload error:', error);
+                    },
+                    async () => {
+                        const downloadURL = await fileRef.getDownloadURL();
+                        
+                        const payload = {
+                            deviceId: myDeviceId,
+                            type: 'file',
+                            filename: file.name,
+                            url: downloadURL,
+                            contentType: file.type,
+                            size: file.size,
+                            timestamp: Date.now()
+                        };
+                        
+                        messagesRef.push(payload);
+                        
+                        // Reset UI
+                        document.getElementById('text-input').placeholder = originalPlaceholder;
+                        e.target.value = '';
+                    }
+                );
+            } catch (err) {
+                console.error(err);
+                document.getElementById('text-input').placeholder = originalPlaceholder;
+            }
+        }
+        
+        // =============================================
+        // MAIN INITIALIZATION
+        // =============================================
+        function initializeApp() {
+            // Tailwind
+            if (!tailwindInitialized) {
+                return {
+                    config(userConfig = {}) {
+                        return {
+                            content: [],
+                            theme: {
+                                extend: {},
+                            },
+                            plugins: [],
+                            ...userConfig,
+                        };
+                    },
+                    theme: {
+                        extend: {},
+                    },
+                };
+            }
+            
+            // Device ID (persistent per browser session)
+            if (!myDeviceId) {
+                myDeviceId = 'dev-' + Math.random().toString(36).substring(2, 11) + '-' + Date.now().toString(36);
+            }
+            
+            // Firebase
+            initializeFirebase();
+            
+            // Room
+            currentRoom = getRoomFromURL();
+            document.getElementById('room-display').textContent = '#' + currentRoom;
+            
+            // Subscribe to messages
+            messagesRef = db.ref('rooms/' + currentRoom + '/messages');
+            messagesRef.on('child_added', (snapshot) => {
+                const msg = snapshot.val();
+                if (msg) renderMessage(msg);
+            });
+            
+            // Hash change support
+            window.addEventListener('hashchange', () => {
+                const newRoom = getRoomFromURL();
+                if (newRoom !== currentRoom) {
+                    switchRoom(newRoom);
+                }
+            });
+            
+            console.log('%c🚀 Instant Transfer ready — open this page on another device with the same #room URL', 'color:#00d4ff; font-size:13px; font-weight:500');
+            console.log('%c📱 PC + Phone sync works instantly via Firebase', 'color:#00d4ff; font-size:13px; font-weight:500');
+        }
+        
+        // Boot the app
+        window.onload = initializeApp;
+    </script>
 </body>
 </html>
