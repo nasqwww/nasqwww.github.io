@@ -1,406 +1,400 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instant Transfer • Real-time Text &amp; Files</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <title>Instant Transfer • Реал-тайм</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gun/sea.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;display=swap');
-        
-        :root {
-            --tw-color-primary: #00d4ff;
-        }
-        
-        * {
-            font-family: 'Inter', system_ui, sans-serif;
-        }
-        
-        body {
-            background: #0a0a0a;
-        }
-        
-        .chat-container {
-            scrollbar-width: thin;
-            scrollbar-color: #00d4ff #1f1f1f;
-        }
-        
-        .chat-container::-webkit-scrollbar {
-            height: 6px;
-        }
-        
-        .message-bubble {
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        :root { --accent: #00f0ff; }
+        * { font-family: 'Inter', system_ui, sans-serif; }
+        body { background: #0a0a0a; color: #fff; }
+        .chat { scrollbar-width: thin; scrollbar-color: #00f0ff #1f1f1f; }
+        .chat::-webkit-scrollbar { height: 6px; }
+        .bubble {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        .message-bubble:hover {
-            transform: scale(1.02);
-        }
-        
-        .header-gradient {
-            background: linear-gradient(90deg, #0a0a0a, #1a1a1a);
-        }
-        
-        .input-focus {
-            transition: all 0.3s ease;
-        }
-        
-        .input-focus:focus {
-            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.2);
-        }
+        .bubble:hover { transform: scale(1.03); }
+        .message-own { background: #00f0ff; color: #000; border-bottom-right-radius: 4px !important; }
+        .message-other { background: #1f1f1f; border-bottom-left-radius: 4px !important; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col text-white">
+<body class="min-h-screen flex flex-col">
+
     <!-- HEADER -->
-    <div class="header-gradient border-b border-white/10 sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-x-3">
-                <div class="w-9 h-9 bg-[#00d4ff] rounded-2xl flex items-center justify-center text-black font-bold text-2xl shadow-inner">📤</div>
+    <div class="bg-[#111] border-b border-white/10 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-[#00f0ff] text-black rounded-3xl flex items-center justify-center text-3xl shadow-[0_0_20px_#00f0ff]">📤</div>
                 <div>
-                    <h1 class="text-2xl font-semibold tracking-tight">Instant Transfer</h1>
-                    <p class="text-xs text-[#00d4ff] font-medium">text • photos • videos • files</p>
+                    <h1 class="text-3xl font-semibold tracking-tighter">Instant Transfer</h1>
+                    <p class="text-[#00f0ff] text-sm font-medium">текст • фото • видео • файлы • реал-тайм</p>
                 </div>
             </div>
-            
-            <div class="flex items-center gap-x-2 bg-white/10 px-4 h-10 rounded-3xl text-sm font-medium">
-                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                LIVE
-                <span id="room-display" class="font-mono text-[#00d4ff] ml-1"></span>
+
+            <div class="flex items-center gap-4">
+                <div id="room-pill" onclick="copyRoomLink()" 
+                     class="flex items-center bg-white/10 hover:bg-white/20 px-5 h-10 rounded-3xl text-sm font-medium cursor-pointer transition-colors">
+                    <span class="text-emerald-400 mr-2">●</span>
+                    <span id="room-name" class="font-mono"></span>
+                </div>
+
+                <button onclick="showQR()" 
+                        class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-5 h-10 rounded-3xl text-sm font-medium transition-colors">
+                    <span class="text-xl">📱</span>
+                    QR-код
+                </button>
+
+                <button onclick="togglePrivateMode()" id="private-btn"
+                        class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-5 h-10 rounded-3xl text-sm font-medium transition-colors">
+                    <span id="lock-icon" class="text-xl">🔓</span>
+                    <span id="private-text">Приватный режим</span>
+                </button>
             </div>
-            
-            <a onclick="copyRoomLink()" 
-               class="flex items-center gap-x-2 bg-white/10 hover:bg-white/20 transition-colors px-5 h-10 rounded-3xl text-sm font-medium cursor-pointer">
-                <span class="text-lg">🔗</span>
-                Share room
-            </a>
         </div>
     </div>
 
-    <!-- MESSAGES AREA -->
-    <div id="messages" 
-         class="chat-container flex-1 max-w-4xl mx-auto w-full px-4 py-6 overflow-y-auto flex flex-col gap-6 bg-[#0a0a0a]">
-        <!-- Messages populated by JS -->
-    </div>
+    <!-- MESSAGES -->
+    <div id="messages" class="chat flex-1 max-w-5xl mx-auto w-full px-6 py-8 overflow-y-auto flex flex-col gap-6 bg-[#0a0a0a]"></div>
 
-    <!-- INPUT BAR -->
-    <div class="border-t border-white/10 bg-[#111111] sticky bottom-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 py-4">
-            <div class="flex items-end gap-x-3 bg-white/5 rounded-3xl px-6 py-2 input-focus">
-                
-                <!-- Text input -->
-                <input 
-                    id="text-input"
-                    type="text"
-                    placeholder="Type message or drop files..."
-                    onkeydown="if(event.key === 'Enter') sendTextMessage()"
-                    class="flex-1 bg-transparent outline-none text-lg placeholder:text-white/40">
-                
-                <!-- File attach -->
-                <label onclick="document.getElementById('file-input').click()" 
-                       class="cursor-pointer flex items-center justify-center w-11 h-11 hover:bg-white/10 rounded-2xl transition-colors">
-                    <span class="text-3xl">📎</span>
+    <!-- INPUT -->
+    <div class="bg-[#111] border-t border-white/10 sticky bottom-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 py-5">
+            <div class="flex gap-3 bg-white/5 rounded-3xl px-6 py-3 items-end">
+                <input id="text-input" type="text" 
+                       placeholder="Напиши сообщение или кинь файл..." 
+                       onkeydown="if(event.keyCode===13) sendText()"
+                       class="flex-1 bg-transparent outline-none text-lg placeholder:text-white/40">
+
+                <label class="cursor-pointer flex items-center justify-center w-12 h-12 hover:bg-white/10 rounded-2xl transition-colors">
+                    <span class="text-4xl">📎</span>
+                    <input id="file-input" type="file" class="hidden" onchange="handleFile(this.files[0])">
                 </label>
-                <input id="file-input" type="file" class="hidden" onchange="handleFileSelect(event)">
-                
-                <!-- Send button -->
-                <button onclick="sendTextMessage()" 
-                        class="w-11 h-11 bg-[#00d4ff] hover:bg-[#00b8e0] text-black rounded-2xl flex items-center justify-center text-3xl transition-all active:scale-95">
+
+                <button onclick="sendText()" 
+                        class="w-12 h-12 bg-[#00f0ff] text-black rounded-3xl flex items-center justify-center text-4xl hover:scale-110 active:scale-95 transition-all">
                     →
                 </button>
             </div>
-            
-            <p class="text-center text-[10px] text-white/30 mt-3 font-mono">
-                Room synced in real-time • Works on any device • GitHub Pages ready
-            </p>
+            <p class="text-center text-xs text-white/30 mt-3">GitHub Pages • Без регистрации • Мгновенная синхронизация</p>
+        </div>
+    </div>
+
+    <!-- QR MODAL -->
+    <div id="qr-modal" onclick="if(event.target.id==='qr-modal')hideQR()" 
+         class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[9999]">
+        <div onclick="event.stopImmediatePropagation()" 
+             class="bg-[#111] rounded-3xl p-8 max-w-[340px] w-full text-center">
+            <h3 class="text-2xl font-semibold mb-6">Сканируй и заходи в комнату</h3>
+            <div id="qr-container" class="mx-auto bg-white p-4 rounded-2xl inline-block"></div>
+            <p id="qr-room-text" class="font-mono text-[#00f0ff] mt-6 text-sm"></p>
+            <button onclick="hideQR()" 
+                    class="mt-8 w-full py-4 bg-white/10 hover:bg-white/20 rounded-3xl text-lg">Закрыть</button>
         </div>
     </div>
 
     <script>
-        // =============================================
-        // FIREBASE CONFIG — REPLACE WITH YOUR OWN
-        // =============================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyDUMMY_REPLACE_ME",
-            authDomain: "your-project-id.firebaseapp.com",
-            databaseURL: "https://your-project-id-default-rtdb.firebaseio.com",
-            projectId: "your-project-id",
-            storageBucket: "your-project-id.appspot.com",
-            messagingSenderId: "1234567890",
-            appId: "1:1234567890:web:abcdef1234567890"
-        };
-        
-        // =============================================
-        // GLOBAL VARIABLES
-        // =============================================
-        let app, db, storage;
-        let messagesRef = null;
+        // ====================== CONFIG ======================
+        let gun, messagesRef;
         let currentRoom = '';
-        let myDeviceId = '';
-        let tailwindInitialized = false;
-        
-        // =============================================
-        // UTILITIES
-        // =============================================
-        function escapeHtml(unsafe) {
-            return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+        let myDeviceId = 'dev-' + Math.random().toString(36).slice(2) + Date.now();
+        let encryptionPassword = '';
+        let rendered = new Set();
+
+        // ====================== UTILS ======================
+        function escapeHtml(text) {
+            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
-        
-        function formatTime(timestamp) {
-            const date = new Date(timestamp);
-            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        function formatTime(ts) {
+            return new Date(ts).toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'});
         }
-        
+
         function autoScroll() {
-            const messagesDiv = document.getElementById('messages');
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            const el = document.getElementById('messages');
+            el.scrollTop = el.scrollHeight;
         }
-        
+
         function copyRoomLink() {
-            const url = window.location.href;
-            navigator.clipboard.writeText(url).then(() => {
-                const orig = document.getElementById('room-display').innerHTML;
-                document.getElementById('room-display').innerHTML = '✅ COPIED!';
-                setTimeout(() => {
-                    document.getElementById('room-display').innerHTML = orig;
-                }, 1500);
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const pill = document.getElementById('room-pill');
+                const orig = pill.innerHTML;
+                pill.style.backgroundColor = '#10b981';
+                setTimeout(() => pill.innerHTML = orig, 1200);
             });
         }
-        
-        // =============================================
-        // FIREBASE INITIALIZATION
-        // =============================================
-        function initializeFirebase() {
-            if (app) return;
+
+        // ====================== GUN INIT ======================
+        function initGun() {
+            gun = Gun({
+                peers: [
+                    'https://peer.wallie.io/gun',
+                    'https://gunjs.herokuapp.com/gun'
+                ],
+                localStorage: true,
+                radisk: true
+            });
+
+            const roomKey = 'room-' + currentRoom;
+            messagesRef = gun.get(roomKey).get('messages');
             
-            app = firebase.initializeApp(firebaseConfig);
-            db = firebase.database();
-            storage = firebase.storage();
-            
-            console.log('%c✅ Firebase connected — real-time sync active', 'color:#00d4ff; font-size:11px');
+            // Fixed listener with data check
+            messagesRef.map().on((data, key) => {
+                if (!data || !data.type) return;
+                if (rendered.has(key)) return;
+                rendered.add(key);
+                handleIncomingMessage(data, key);
+            });
         }
-        
-        // =============================================
-        // ROOM MANAGEMENT
-        // =============================================
-        function getRoomFromURL() {
+
+        // ====================== ROOM ======================
+        function getRoomFromHash() {
             let room = window.location.hash.replace('#', '').trim();
             if (!room) {
-                room = 'default-' + Math.floor(Math.random() * 999999);
-                window.location.hash = '#' + room;
+                room = 'room-' + Math.floor(Math.random() * 99999999);
+                window.location.hash = room;
             }
             return room;
         }
-        
-        function switchRoom(newRoom) {
-            if (messagesRef) {
-                messagesRef.off();
-            }
-            
-            // Clear current messages
-            document.getElementById('messages').innerHTML = '';
-            
-            currentRoom = newRoom;
-            document.getElementById('room-display').textContent = '#' + currentRoom;
-            
-            // Update URL without reload
-            window.history.replaceState(null, null, '#' + currentRoom);
-            
-            // Re-subscribe
-            messagesRef = db.ref('rooms/' + currentRoom + '/messages');
-            messagesRef.on('child_added', (snapshot) => {
-                const msg = snapshot.val();
-                if (msg) renderMessage(msg);
-            });
+
+        function updateRoomUI() {
+            document.getElementById('room-name').textContent = '#' + currentRoom;
         }
-        
-        // =============================================
-        // MESSAGE RENDERING
-        // =============================================
-        function renderMessage(msg) {
+
+        // ====================== ENCRYPTION ======================
+        function isEncryptedMode() {
+            return encryptionPassword.length > 0;
+        }
+
+        function encryptPayload(payload) {
+            if (!isEncryptedMode()) return { type: 'plain', data: payload };
+            const json = JSON.stringify(payload);
+            const encrypted = CryptoJS.AES.encrypt(json, encryptionPassword).toString();
+            return { type: 'encrypted', data: encrypted };
+        }
+
+        function decryptIfNeeded(item) {
+            if (item.type === 'plain') return item.data;
+            if (!isEncryptedMode()) return null;
+            try {
+                const bytes = CryptoJS.AES.decrypt(item.data, encryptionPassword);
+                const json = bytes.toString(CryptoJS.enc.Utf8);
+                return JSON.parse(json);
+            } catch(e) {
+                return null;
+            }
+        }
+
+        // ====================== RENDER ======================
+        function renderMessage(msg, isOwn) {
             const container = document.getElementById('messages');
-            const isMine = msg.deviceId === myDeviceId;
-            
-            const messageHTML = `
-                <div class="flex ${isMine ? 'justify-end' : 'justify-start'} group">
-                    <div onclick="copyMessage(this, '${escapeHtml(msg.type === 'text' ? msg.content : msg.url || msg.filename)}')" 
-                         class="message-bubble max-w-[80%] ${isMine 
-                            ? 'bg-[#00d4ff] text-black rounded-3xl rounded-br-none' 
-                            : 'bg-white/10 text-white rounded-3xl rounded-bl-none'} px-5 py-4 cursor-pointer">
-                        
-                        ${msg.type === 'text' 
-                            ? `<p class="text-[17px] leading-relaxed">${escapeHtml(msg.content)}</p>`
-                            : msg.contentType && msg.contentType.startsWith('image/')
-                                ? `<img src="${msg.url}" class="rounded-2xl max-w-[260px] shadow-inner" alt="Shared image">`
-                                : msg.contentType && msg.contentType.startsWith('video/')
-                                    ? `<video src="${msg.url}" controls class="rounded-2xl max-w-[260px] shadow-inner"></video>`
-                                    : `<a href="${msg.url}" target="_blank" class="flex items-center gap-3 hover:underline">
-                                            <span class="text-4xl">📦</span>
-                                            <div>
-                                                <div class="font-medium">${msg.filename}</div>
-                                                <div class="text-xs opacity-70">${(msg.size / 1024 / 1024).toFixed(2)} MB</div>
-                                            </div>
-                                        </a>`
-                        }
-                        
-                        <div class="flex items-center justify-between mt-3 text-xs opacity-70">
+            let html = '';
+
+            if (msg.type === 'text') {
+                html = `
+                <div class="flex ${isOwn ? 'justify-end' : 'justify-start'}">
+                    <div onclick="copyMessage(this)" class="bubble max-w-[75%] px-6 py-4 rounded-3xl ${isOwn ? 'message-own' : 'message-other'} cursor-pointer">
+                        <p class="text-[17px]">${escapeHtml(msg.content)}</p>
+                        <div class="flex justify-between text-xs opacity-70 mt-2">
                             <span>${formatTime(msg.timestamp)}</span>
-                            ${isMine ? '<span class="text-[10px] font-medium tracking-widest">YOU</span>' : ''}
+                            ${isOwn ? '<span class="font-semibold">ТЫ</span>' : ''}
                         </div>
                     </div>
                 </div>`;
-            
-            container.innerHTML += messageHTML;
+            } 
+            else if (msg.type === 'file') {
+                if (msg.contentType && msg.contentType.startsWith('image/')) {
+                    html = `
+                    <div class="flex ${isOwn ? 'justify-end' : 'justify-start'}">
+                        <div class="bubble max-w-[75%] rounded-3xl ${isOwn ? 'message-own' : 'message-other'} p-2 cursor-pointer" onclick="copyMessage(this)">
+                            <img src="${msg.data}" class="rounded-2xl max-w-[280px] shadow-2xl" alt="">
+                            <div class="flex justify-between text-xs opacity-70 px-3 py-2">
+                                <span>${msg.filename}</span>
+                                <span>${formatTime(msg.timestamp)}</span>
+                                ${isOwn ? '<span class="font-semibold">ТЫ</span>' : ''}
+                            </div>
+                        </div>
+                    </div>`;
+                } 
+                else if (msg.contentType && msg.contentType.startsWith('video/')) {
+                    html = `
+                    <div class="flex ${isOwn ? 'justify-end' : 'justify-start'}">
+                        <div class="bubble max-w-[75%] rounded-3xl ${isOwn ? 'message-own' : 'message-other'} p-2 cursor-pointer" onclick="copyMessage(this)">
+                            <video src="${msg.data}" controls class="rounded-2xl max-w-[280px] shadow-2xl"></video>
+                            <div class="flex justify-between text-xs opacity-70 px-3 py-2">
+                                <span>${msg.filename}</span>
+                                <span>${formatTime(msg.timestamp)}</span>
+                                ${isOwn ? '<span class="font-semibold">ТЫ</span>' : ''}
+                            </div>
+                        </div>
+                    </div>`;
+                } 
+                else {
+                    html = `
+                    <div class="flex ${isOwn ? 'justify-end' : 'justify-start'}">
+                        <div onclick="copyMessage(this)" class="bubble max-w-[75%] px-6 py-4 rounded-3xl ${isOwn ? 'message-own' : 'message-other'} cursor-pointer flex items-center gap-4">
+                            <div class="text-5xl">📦</div>
+                            <div class="flex-1">
+                                <div class="font-medium">${msg.filename}</div>
+                                <a href="${msg.data}" download="${msg.filename}" class="text-xs underline">Скачать</a>
+                            </div>
+                            <div class="text-xs opacity-70">${formatTime(msg.timestamp)}</div>
+                            ${isOwn ? '<span class="font-semibold">ТЫ</span>' : ''}
+                        </div>
+                    </div>`;
+                }
+            }
+
+            container.innerHTML += html;
             autoScroll();
         }
-        
-        function copyMessage(el, text) {
+
+        function copyMessage(el) {
+            const text = el.innerText || el.querySelector('p')?.innerText || 'Скопировано';
             navigator.clipboard.writeText(text).then(() => {
-                const original = el.style.backgroundColor;
-                el.style.transitionDuration = '150ms';
+                const origColor = el.style.backgroundColor;
                 el.style.backgroundColor = '#22c55e';
-                setTimeout(() => {
-                    el.style.backgroundColor = original;
-                }, 600);
+                setTimeout(() => { el.style.backgroundColor = origColor || ''; }, 800);
             });
         }
-        
-        // =============================================
-        // SEND TEXT
-        // =============================================
-        function sendTextMessage() {
+
+        function handleIncomingMessage(data, key) {
+            if (!data) return;
+            const decrypted = decryptIfNeeded(data);
+            if (!decrypted) {
+                const container = document.getElementById('messages');
+                container.innerHTML += `
+                <div class="flex justify-center my-4">
+                    <div class="bg-amber-900/30 text-amber-400 text-xs px-6 py-2 rounded-3xl flex items-center gap-2">
+                        <span>🔒 Зашифровано</span>
+                        <span class="cursor-pointer underline" onclick="promptForPassword()">Ввести пароль</span>
+                    </div>
+                </div>`;
+                autoScroll();
+                return;
+            }
+            const isOwn = decrypted.deviceId === myDeviceId;
+            renderMessage(decrypted, isOwn);
+        }
+
+        // ====================== SEND (FIXED with .get().put()) ======================
+        function sendText() {
             const input = document.getElementById('text-input');
             const text = input.value.trim();
-            
             if (!text || !messagesRef) return;
-            
+
             const payload = {
-                deviceId: myDeviceId,
                 type: 'text',
                 content: text,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                deviceId: myDeviceId
             };
-            
-            messagesRef.push(payload);
+
+            const toStore = encryptPayload(payload);
+            const uniqueKey = Date.now() + '_' + Math.random().toString(36).slice(2);
+            messagesRef.get(uniqueKey).put(toStore);
             input.value = '';
         }
-        
-        // =============================================
-        // HANDLE FILE UPLOAD
-        // =============================================
-        async function handleFileSelect(e) {
-            const file = e.target.files[0];
-            if (!file || !storage || !messagesRef) return;
-            
-            // Visual feedback
-            const inputBar = document.querySelector('.bg-white\\/5');
-            const originalPlaceholder = document.getElementById('text-input').placeholder;
-            document.getElementById('text-input').placeholder = 'Uploading file...';
-            
-            try {
-                const filePath = `rooms/${currentRoom}/${Date.now()}-${file.name}`;
-                const fileRef = storage.ref(filePath);
-                
-                const uploadTask = fileRef.put(file);
-                
-                // Show progress in console only (no UI clutter)
-                uploadTask.on('state_changed', 
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        console.log(`%c📤 Upload progress: ${progress.toFixed(0)}%`, 'color:#00d4ff');
-                    },
-                    (error) => {
-                        console.error('Upload error:', error);
-                    },
-                    async () => {
-                        const downloadURL = await fileRef.getDownloadURL();
-                        
-                        const payload = {
-                            deviceId: myDeviceId,
-                            type: 'file',
-                            filename: file.name,
-                            url: downloadURL,
-                            contentType: file.type,
-                            size: file.size,
-                            timestamp: Date.now()
-                        };
-                        
-                        messagesRef.push(payload);
-                        
-                        // Reset UI
-                        document.getElementById('text-input').placeholder = originalPlaceholder;
-                        e.target.value = '';
-                    }
-                );
-            } catch (err) {
-                console.error(err);
-                document.getElementById('text-input').placeholder = originalPlaceholder;
-            }
-        }
-        
-        // =============================================
-        // MAIN INITIALIZATION
-        // =============================================
-        function initializeApp() {
-            // Tailwind
-            if (!tailwindInitialized) {
-                return {
-                    config(userConfig = {}) {
-                        return {
-                            content: [],
-                            theme: {
-                                extend: {},
-                            },
-                            plugins: [],
-                            ...userConfig,
-                        };
-                    },
-                    theme: {
-                        extend: {},
-                    },
+
+        async function handleFile(file) {
+            if (!file || !messagesRef) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const payload = {
+                    type: 'file',
+                    filename: file.name,
+                    contentType: file.type,
+                    data: e.target.result,
+                    timestamp: Date.now(),
+                    deviceId: myDeviceId
                 };
-            }
-            
-            // Device ID (persistent per browser session)
-            if (!myDeviceId) {
-                myDeviceId = 'dev-' + Math.random().toString(36).substring(2, 11) + '-' + Date.now().toString(36);
-            }
-            
-            // Firebase
-            initializeFirebase();
-            
-            // Room
-            currentRoom = getRoomFromURL();
-            document.getElementById('room-display').textContent = '#' + currentRoom;
-            
-            // Subscribe to messages
-            messagesRef = db.ref('rooms/' + currentRoom + '/messages');
-            messagesRef.on('child_added', (snapshot) => {
-                const msg = snapshot.val();
-                if (msg) renderMessage(msg);
-            });
-            
-            // Hash change support
-            window.addEventListener('hashchange', () => {
-                const newRoom = getRoomFromURL();
-                if (newRoom !== currentRoom) {
-                    switchRoom(newRoom);
-                }
-            });
-            
-            console.log('%c🚀 Instant Transfer ready — open this page on another device with the same #room URL', 'color:#00d4ff; font-size:13px; font-weight:500');
-            console.log('%c📱 PC + Phone sync works instantly via Firebase', 'color:#00d4ff; font-size:13px; font-weight:500');
+
+                const toStore = encryptPayload(payload);
+                const uniqueKey = Date.now() + '_' + Math.random().toString(36).slice(2);
+                messagesRef.get(uniqueKey).put(toStore);
+            };
+            reader.readAsDataURL(file);
         }
-        
-        // Boot the app
-        window.onload = initializeApp;
+
+        // ====================== PRIVATE MODE ======================
+        function togglePrivateMode() {
+            if (encryptionPassword) {
+                if (confirm('Отключить приватный режим?')) {
+                    encryptionPassword = '';
+                    sessionStorage.removeItem('enc-' + currentRoom);
+                    document.getElementById('lock-icon').textContent = '🔓';
+                    document.getElementById('private-text').textContent = 'Приватный режим';
+                }
+                return;
+            }
+
+            const pass = prompt('Введи пароль для этой комнаты:');
+            if (!pass) return;
+            encryptionPassword = pass;
+            sessionStorage.setItem('enc-' + currentRoom, pass);
+            document.getElementById('lock-icon').textContent = '🔐';
+            document.getElementById('private-text').textContent = 'Приватно';
+            alert('✅ Приватный режим включён. Сообщи пароль второму устройству!');
+        }
+
+        function promptForPassword() {
+            const pass = prompt('Введи пароль комнаты:');
+            if (pass) {
+                encryptionPassword = pass;
+                sessionStorage.setItem('enc-' + currentRoom, pass);
+                location.reload();
+            }
+        }
+
+        // ====================== QR ======================
+        function showQR() {
+            const modal = document.getElementById('qr-modal');
+            const container = document.getElementById('qr-container');
+            container.innerHTML = '';
+            new QRCode(container, {
+                text: window.location.href,
+                width: 280,
+                height: 280,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            document.getElementById('qr-room-text').innerHTML = `Комната: <b>#${currentRoom}</b>`;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function hideQR() {
+            const modal = document.getElementById('qr-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // ====================== BOOT ======================
+        function start() {
+            currentRoom = getRoomFromHash();
+            updateRoomUI();
+
+            const savedPass = sessionStorage.getItem('enc-' + currentRoom);
+            if (savedPass) {
+                encryptionPassword = savedPass;
+                document.getElementById('lock-icon').textContent = '🔐';
+                document.getElementById('private-text').textContent = 'Приватно';
+            }
+
+            initGun();
+
+            console.log('%c🚀 Instant Transfer — финальная стабильная версия (Gun с .get().put() и проверкой данных)', 'color:#00f0ff;font-size:13px');
+            console.log('%c📱 Открой одинаковый URL на ПК и телефоне (#room123) — сообщения приходят мгновенно', 'color:#00f0ff;font-size:13px');
+        }
+
+        window.onload = start;
     </script>
 </body>
 </html>
