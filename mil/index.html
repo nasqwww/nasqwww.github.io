@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MIL DROP</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<style>
+body{background:#0a0a0b;color:#fff;font-family:monospace;margin:0}
+#msgs{height:85vh;overflow:auto;padding:10px}
+.bar{display:flex}
+input{flex:1;padding:10px;background:#111;border:none;color:#fff}
+button{padding:10px;background:#0f0;color:#000;border:none}
+</style>
+</head>
+<body>
+
+<div id="msgs"></div>
+
+<div class="bar">
+  <input id="msg" placeholder="type...">
+  <button onclick="send()">SEND</button>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD-EXAMPLE",
+  authDomain: "mil-drop.firebaseapp.com",
+  databaseURL: "https://mil-drop-default-rtdb.firebaseio.com",
+  projectId: "mil-drop",
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const room = location.hash.slice(1) || "main";
+const ref = db.ref("rooms/" + room);
+
+ref.on("child_added", snap=>{
+  const d = snap.val();
+  const el = document.createElement("div");
+  el.textContent = d;
+  document.getElementById("msgs").appendChild(el);
+});
+
+function send(){
+  const v = document.getElementById("msg").value;
+  if(!v) return;
+  ref.push(v);
+  document.getElementById("msg").value = "";
+}
+</script>
+
+</body>
+</html>
