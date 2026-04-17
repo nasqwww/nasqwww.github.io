@@ -548,6 +548,58 @@
   }
   #altCanvas { width: 100%; height: 80px; }
 
+  /* ══════════════════════════════════════ */
+  /* VIZ SECTIONS */
+  /* ══════════════════════════════════════ */
+  .viz-section {
+    padding: 52px 48px;
+    border-bottom: 1px solid rgba(91,206,220,0.05);
+  }
+  .viz-section.viz-dark {
+    background: rgba(6,8,24,0.6);
+  }
+  .viz-header {
+    margin-bottom: 32px;
+  }
+  .viz-desc {
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.08em;
+    margin-top: 8px;
+    max-width: 600px;
+    line-height: 1.8;
+  }
+  .viz-center {
+    display: flex;
+    justify-content: center;
+  }
+  .viz-center canvas {
+    max-width: 100%;
+    height: auto;
+  }
+  .viz-split {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  .viz-split .viz-half {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .viz-split .viz-half .section-title { align-self: flex-start; }
+  .viz-split .viz-half .viz-desc { align-self: flex-start; margin-bottom: 24px; }
+  .tidal-info {
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--dim);
+    text-align: center;
+    letter-spacing: 0.1em;
+    line-height: 1.8;
+  }
+  .tidal-info strong { color: var(--gold); font-weight: 400; }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
     header { padding: 24px; }
@@ -764,6 +816,128 @@
       <div class="fact-num fact-num-dyn" id="moonAgeTotal">—</div>
       <div class="fact-label">лунных циклов от рождения Луны</div>
       <div class="fact-desc">Луне ~4.5 млрд лет. За это время она совершила около 55 миллионов оборотов вокруг Земли.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- VIZ 1: SKY DOME -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="viz-section">
+    <div class="viz-header">
+      <div class="section-title">Небосвод · Петергоф сейчас</div>
+      <div class="viz-desc">Вид на южную половину неба. Луна показана с реальной высотой и азимутом.</div>
+    </div>
+    <div class="viz-center">
+      <canvas id="skyDomeCanvas" width="700" height="380"></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- VIZ 2: ORBIT TOP-DOWN -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="viz-section viz-dark">
+    <div class="viz-header">
+      <div class="section-title">Орбита · Вид сверху</div>
+      <div class="viz-desc">Положение Луны на орбите вокруг Земли. Анимировано в реальном масштабе фазы.</div>
+    </div>
+    <div class="viz-center">
+      <canvas id="orbitCanvas" width="700" height="400"></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- VIZ 3: 24H ALTITUDE CHART -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="viz-section">
+    <div class="viz-header">
+      <div class="section-title">Высота Луны · 24 часа</div>
+      <div class="viz-desc">График высоты над горизонтом в течение сегодняшних суток для Петергофа.</div>
+    </div>
+    <div class="viz-center">
+      <canvas id="altChartCanvas" width="900" height="240"></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- VIZ 4: 30-DAY PHASE STRIP -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="viz-section viz-dark">
+    <div class="viz-header">
+      <div class="section-title">Лунный цикл · 30 дней</div>
+      <div class="viz-desc">Текущий цикл от новолуния до новолуния. Текущий день подсвечен.</div>
+    </div>
+    <div class="viz-center">
+      <canvas id="cycleStripCanvas" width="900" height="160"></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- VIZ 5: TIDAL FORCE GAUGE -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="viz-section viz-split">
+    <div class="viz-half">
+      <div class="section-title">Приливная сила</div>
+      <div class="viz-desc">Относительная сила гравитационного влияния Луны на Землю прямо сейчас.</div>
+      <canvas id="tidalCanvas" width="340" height="340"></canvas>
+      <div class="tidal-info" id="tidalInfo">—</div>
+    </div>
+    <div class="viz-half">
+      <div class="section-title">Угловой размер</div>
+      <div class="viz-desc">Сравнение видимого размера Луны сейчас vs в перигее и апогее.</div>
+      <canvas id="angularCanvas" width="340" height="340"></canvas>
+      <div class="tidal-info" id="angularInfo">—</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- VIZ 6: LIBRATION INDICATOR -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="viz-section viz-dark">
+    <div class="viz-header">
+      <div class="section-title">Либрация · Видимая сторона Луны</div>
+      <div class="viz-desc">Луна не стоит идеально — она «кивает» и «покачивается». Жёлтая точка показывает текущий центр видимого диска.</div>
+    </div>
+    <div class="viz-center">
+      <canvas id="librationCanvas" width="500" height="500"></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- VIZ 7: DISTANCE HISTORY (30d) -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="viz-section">
+    <div class="viz-header">
+      <div class="section-title">Расстояние · ±15 дней</div>
+      <div class="viz-desc">Изменение дистанции Земля–Луна вокруг сегодняшней даты. Перигей = ближе / Апогей = дальше.</div>
+    </div>
+    <div class="viz-center">
+      <canvas id="distChartCanvas" width="900" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- VIZ 8: EARTH-MOON-SUN ANGLE -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="viz-section viz-dark">
+    <div class="viz-header">
+      <div class="section-title">Геометрия · Земля–Луна–Солнце</div>
+      <div class="viz-desc">Схема текущего взаимного расположения Солнца, Земли и Луны — объясняет фазу.</div>
+    </div>
+    <div class="viz-center">
+      <canvas id="geometryCanvas" width="700" height="360"></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- VIZ 9: MONTHLY ILLUMINATION CHART -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="viz-section">
+    <div class="viz-header">
+      <div class="section-title">Освещённость · Этот месяц</div>
+      <div class="viz-desc">График процента освещённости Луны на каждый день текущего месяца.</div>
+    </div>
+    <div class="viz-center">
+      <canvas id="illumChartCanvas" width="900" height="200"></canvas>
     </div>
   </div>
 
@@ -1400,11 +1574,9 @@ function update() {
 // ═══════════════════════════════════════
 buildCalendar();
 update();
-setInterval(update, 10000); // update every 10s
+setInterval(update, 10000);
 setInterval(function() {
-  // more frequent minor updates
   const now = new Date();
-  const illum = SunCalc.getMoonIllumination(now);
   const pos = SunCalc.getMoonPosition(now, LAT, LNG);
   const altDeg = pos.altitude * 180 / Math.PI;
   const azDeg = ((pos.azimuth * 180 / Math.PI) + 180 + 360) % 360;
@@ -1413,6 +1585,1381 @@ setInterval(function() {
   document.getElementById('altValSmall').textContent = altDeg.toFixed(1) + '°';
   document.getElementById('azVal').textContent = Math.round(azDeg);
   document.getElementById('azValSmall').textContent = Math.round(azDeg) + '°';
+  drawSkyDome();
+  drawOrbit();
+}, 30000);
+
+// ═══════════════════════════════════════════════════════════════
+// VIZ 1: SKY DOME
+// ═══════════════════════════════════════════════════════════════
+function drawSkyDome() {
+  const canvas = document.getElementById('skyDomeCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H * 0.92;
+  const R = H * 0.88;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Gradient sky
+  const skyGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+  skyGrad.addColorStop(0, '#0d1835');
+  skyGrad.addColorStop(0.6, '#080f22');
+  skyGrad.addColorStop(1, '#020510');
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, Math.PI, 0, false);
+  ctx.fillStyle = skyGrad;
+  ctx.fill();
+
+  // Horizon glow
+  const horizGrad = ctx.createLinearGradient(0, cy - 30, 0, cy + 10);
+  horizGrad.addColorStop(0, 'rgba(201,164,85,0.06)');
+  horizGrad.addColorStop(1, 'rgba(201,164,85,0)');
+  ctx.fillStyle = horizGrad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, Math.PI, 0, false);
+  ctx.fill();
+
+  // Grid lines (altitude circles)
+  [30, 60, 90].forEach(alt => {
+    const yr = cy - (alt / 90) * R;
+    const xr = Math.sqrt(R * R - (yr - cy) * (yr - cy));
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, xr, (alt / 90) * R * 0.12, 0, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(91,206,220,0.06)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(91,206,220,0.3)';
+    ctx.font = '9px JetBrains Mono';
+    ctx.textAlign = 'left';
+    ctx.fillText(alt + '°', cx + xr + 4, cy - (alt / 90) * R * 0.06 + 3);
+  });
+
+  // Horizon line
+  ctx.beginPath();
+  ctx.moveTo(cx - R, cy);
+  ctx.lineTo(cx + R, cy);
+  ctx.strokeStyle = 'rgba(91,206,220,0.15)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Cardinal labels
+  const cards = [['С', -1], ['Ю', 1], ['З', -0.5], ['В', 0.5]];
+  ctx.font = '10px JetBrains Mono';
+  ctx.fillStyle = 'rgba(90,96,112,0.7)';
+  ctx.textAlign = 'center';
+  ctx.fillText('С', cx, cy + 18);
+  ctx.fillText('З', cx - R + 12, cy + 4);
+  ctx.fillText('В', cx + R - 12, cy + 4);
+
+  // Stars on dome
+  const domStars = [
+    {az:30,alt:45},{az:80,alt:60},{az:160,alt:35},{az:200,alt:55},
+    {az:250,alt:40},{az:300,alt:70},{az:330,alt:30},{az:10,alt:80},
+    {az:120,alt:25},{az:180,alt:65},{az:70,alt:20},{az:220,alt:75}
+  ];
+  domStars.forEach(s => {
+    // Convert azimuth (from North, clockwise) to canvas x
+    // az=0=North=cx, az=90=East=right side (but we show South-facing dome)
+    // We show South at center, so offset by 180°
+    const azRad = (s.az - 180) * Math.PI / 180;
+    const altFrac = s.alt / 90;
+    const sx = cx + Math.sin(azRad) * (1 - altFrac) * R;
+    const sy = cy - altFrac * R * 0.6;
+    ctx.beginPath();
+    ctx.arc(sx, sy, Math.random() * 1.2 + 0.4, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.fill();
+  });
+
+  // Sun position
+  const now = new Date();
+  const sunPos = SunCalc.getPosition(now, LAT, LNG);
+  const sunAlt = sunPos.altitude * 180 / Math.PI;
+  const sunAz = ((sunPos.azimuth * 180 / Math.PI) + 180 + 360) % 360;
+
+  if (sunAlt > -18) {
+    const sazRad = (sunAz - 180) * Math.PI / 180;
+    const saltFrac = Math.max(-0.1, sunAlt) / 90;
+    const sx = cx + Math.sin(sazRad) * (1 - Math.max(0, saltFrac)) * R;
+    const sy = cy - Math.max(-20, saltFrac) * R * 0.6;
+    if (sunAlt > 0) {
+      const sunGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 40);
+      sunGrad.addColorStop(0, 'rgba(255,200,80,0.3)');
+      sunGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = sunGrad;
+      ctx.beginPath();
+      ctx.arc(sx, sy, 40, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(sx, sy, 10, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffcc40';
+      ctx.fill();
+    } else {
+      // Twilight glow on horizon
+      const twGrad = ctx.createRadialGradient(sx, cy, 0, sx, cy, 120);
+      twGrad.addColorStop(0, 'rgba(255,120,30,0.12)');
+      twGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = twGrad;
+      ctx.beginPath();
+      ctx.arc(sx, cy, 120, Math.PI, 0, false);
+      ctx.fill();
+    }
+    ctx.font = '9px JetBrains Mono';
+    ctx.fillStyle = 'rgba(255,200,80,0.5)';
+    ctx.textAlign = 'center';
+    ctx.fillText('☀', sx, sy - 16);
+  }
+
+  // Moon position
+  const moonPos = SunCalc.getMoonPosition(now, LAT, LNG);
+  const moonAlt = moonPos.altitude * 180 / Math.PI;
+  const moonAz = ((moonPos.azimuth * 180 / Math.PI) + 180 + 360) % 360;
+
+  const mazRad = (moonAz - 180) * Math.PI / 180;
+  const maltFrac = moonAlt / 90;
+
+  if (moonAlt > 0) {
+    const mx = cx + Math.sin(mazRad) * (1 - maltFrac) * R;
+    const my = cy - maltFrac * R * 0.6;
+
+    // Moon glow
+    const mglow = ctx.createRadialGradient(mx, my, 0, mx, my, 50);
+    mglow.addColorStop(0, 'rgba(201,164,85,0.3)');
+    mglow.addColorStop(1, 'transparent');
+    ctx.fillStyle = mglow;
+    ctx.beginPath();
+    ctx.arc(mx, my, 50, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Moon circle
+    ctx.beginPath();
+    ctx.arc(mx, my, 16, 0, Math.PI * 2);
+    ctx.fillStyle = '#c9a455';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(mx, my, 16, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(201,164,85,0.5)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Dashed line to horizon
+    ctx.setLineDash([3, 4]);
+    ctx.beginPath();
+    ctx.moveTo(mx, my + 16);
+    ctx.lineTo(mx, cy);
+    ctx.strokeStyle = 'rgba(201,164,85,0.2)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Alt label
+    ctx.font = '10px JetBrains Mono';
+    ctx.fillStyle = 'rgba(201,164,85,0.8)';
+    ctx.textAlign = 'center';
+    ctx.fillText(moonAlt.toFixed(1) + '°', mx, my - 22);
+  } else {
+    // Moon below horizon — show where it will rise
+    const mx = cx + Math.sin(mazRad) * R * 0.96;
+    ctx.font = '11px JetBrains Mono';
+    ctx.fillStyle = 'rgba(201,164,85,0.35)';
+    ctx.textAlign = 'center';
+    ctx.fillText('☽', mx, cy + 5);
+    ctx.font = '9px JetBrains Mono';
+    ctx.fillText('за горизонтом', cx, cy - R * 0.3);
+  }
+
+  // Dome border
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, Math.PI, 0, false);
+  ctx.strokeStyle = 'rgba(91,206,220,0.1)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Horizon fill
+  ctx.beginPath();
+  ctx.moveTo(cx - R, cy);
+  ctx.lineTo(cx + R, cy);
+  ctx.arc(cx, cy, R, 0, Math.PI, false);
+  ctx.fillStyle = '#0a1025';
+  ctx.fill();
+
+  // Ground labels
+  ctx.font = '9px JetBrains Mono';
+  ctx.fillStyle = 'rgba(90,96,112,0.4)';
+  ctx.textAlign = 'center';
+  ctx.fillText('Петергоф · горизонт', cx, cy + 32);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VIZ 2: ORBIT TOP-DOWN (animated)
+// ═══════════════════════════════════════════════════════════════
+let orbitAngle = 0;
+function drawOrbit() {
+  const canvas = document.getElementById('orbitCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const now = new Date();
+  const illum = SunCalc.getMoonIllumination(now);
+  const phase = illum.phase;
+  // phase 0=new(Moon between Earth&Sun), 0.5=full(Earth between)
+  // angle: 0=new=Moon at top (toward Sun), going clockwise
+  const moonAngle = phase * Math.PI * 2 - Math.PI / 2;
+
+  // Background
+  const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, 300);
+  bg.addColorStop(0, '#0c1228');
+  bg.addColorStop(1, '#020308');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Stars
+  for (let i = 0; i < 80; i++) {
+    const sx = (Math.sin(i * 137.5) * 0.5 + 0.5) * W;
+    const sy = (Math.cos(i * 137.5 + 1) * 0.5 + 0.5) * H;
+    const sa = 0.2 + (Math.sin(i) * 0.5 + 0.5) * 0.5;
+    ctx.beginPath();
+    ctx.arc(sx, sy, 0.8, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${sa})`;
+    ctx.fill();
+  }
+
+  // Sun direction arrow (far right)
+  const sunX = W - 30;
+  ctx.beginPath();
+  ctx.moveTo(sunX - 20, cy);
+  ctx.lineTo(sunX, cy);
+  ctx.strokeStyle = 'rgba(255,200,80,0.4)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(255,200,80,0.5)';
+  ctx.font = '11px JetBrains Mono';
+  ctx.textAlign = 'center';
+  ctx.fillText('☀ Солнце', sunX - 6, cy - 10);
+
+  // Orbit ellipse
+  const a = 140, b = 130; // semi-axes
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, a, b, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(201,164,85,0.1)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 6]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Perigee / Apogee labels
+  ctx.font = '9px JetBrains Mono';
+  ctx.fillStyle = 'rgba(90,96,112,0.6)';
+  ctx.textAlign = 'center';
+  ctx.fillText('Перигей', cx + a + 2, cy - 12);
+  ctx.fillText('Апогей', cx - a - 2, cy + 14);
+
+  // Earth
+  const earthGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 24);
+  earthGrad.addColorStop(0, '#2a4a8a');
+  earthGrad.addColorStop(0.6, '#1a3060');
+  earthGrad.addColorStop(1, '#0a1828');
+  ctx.beginPath();
+  ctx.arc(cx, cy, 24, 0, Math.PI * 2);
+  ctx.fillStyle = earthGrad;
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(91,206,220,0.3)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(91,206,220,0.7)';
+  ctx.font = '10px JetBrains Mono';
+  ctx.textAlign = 'center';
+  ctx.fillText('⊕', cx, cy + 4);
+
+  // Moon position
+  const mx = cx + Math.cos(moonAngle) * a;
+  const my = cy + Math.sin(moonAngle) * b;
+
+  // Illumination indicator line (from Sun direction)
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(mx, my);
+  ctx.strokeStyle = 'rgba(201,164,85,0.12)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Moon glow
+  const mglow = ctx.createRadialGradient(mx, my, 0, mx, my, 30);
+  mglow.addColorStop(0, 'rgba(201,164,85,0.35)');
+  mglow.addColorStop(1, 'transparent');
+  ctx.fillStyle = mglow;
+  ctx.beginPath();
+  ctx.arc(mx, my, 30, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Mini moon with phase shadow
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(mx, my, 14, 0, Math.PI * 2);
+  ctx.fillStyle = '#b8a878';
+  ctx.fill();
+  // Shadow
+  ctx.beginPath();
+  ctx.arc(mx, my, 14, 0, Math.PI * 2);
+  ctx.clip();
+  // Shadow side (toward Earth = center)
+  const shadowAngle = Math.atan2(cy - my, cx - mx);
+  ctx.beginPath();
+  ctx.arc(mx, my, 14, shadowAngle - Math.PI / 2, shadowAngle + Math.PI / 2);
+  ctx.lineTo(mx, my);
+  ctx.fillStyle = 'rgba(2,3,10,0.85)';
+  ctx.fill();
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(201,164,85,0.4)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(mx, my, 14, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Moon label
+  ctx.font = '9px JetBrains Mono';
+  ctx.fillStyle = 'rgba(201,164,85,0.8)';
+  ctx.textAlign = 'center';
+  ctx.fillText('☽ Луна', mx, my - 20);
+
+  // Phase annotation
+  const phasePct = Math.round(phase * 100);
+  ctx.fillStyle = 'rgba(90,96,112,0.7)';
+  ctx.font = '10px JetBrains Mono';
+  ctx.fillText(`Фаза ${phasePct}%`, cx, H - 16);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VIZ 3: 24H ALTITUDE CHART
+// ═══════════════════════════════════════════════════════════════
+function drawAltChart() {
+  const canvas = document.getElementById('altChartCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const pad = { l: 50, r: 20, t: 20, b: 40 };
+  const cW = W - pad.l - pad.r, cH = H - pad.t - pad.b;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  // Compute altitude for each 10-min interval
+  const points = [];
+  const sunPoints = [];
+  for (let m = 0; m <= 1440; m += 10) {
+    const t = new Date(today.getTime() + m * 60000);
+    const pos = SunCalc.getMoonPosition(t, LAT, LNG);
+    const sunPos = SunCalc.getPosition(t, LAT, LNG);
+    points.push({ m, alt: pos.altitude * 180 / Math.PI });
+    sunPoints.push({ m, alt: sunPos.altitude * 180 / Math.PI });
+  }
+
+  const minAlt = -60, maxAlt = 80;
+  const toX = m => pad.l + (m / 1440) * cW;
+  const toY = alt => pad.t + (1 - (alt - minAlt) / (maxAlt - minAlt)) * cH;
+  const zeroY = toY(0);
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  [-30, 0, 30, 60].forEach(alt => {
+    const y = toY(alt);
+    ctx.beginPath();
+    ctx.moveTo(pad.l, y);
+    ctx.lineTo(pad.l + cW, y);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(90,96,112,0.5)';
+    ctx.font = '9px JetBrains Mono';
+    ctx.textAlign = 'right';
+    ctx.fillText(alt + '°', pad.l - 6, y + 3);
+  });
+
+  // Hour marks
+  for (let h = 0; h <= 24; h += 6) {
+    const x = toX(h * 60);
+    ctx.beginPath();
+    ctx.moveTo(x, pad.t);
+    ctx.lineTo(x, pad.t + cH);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(90,96,112,0.5)';
+    ctx.font = '9px JetBrains Mono';
+    ctx.textAlign = 'center';
+    ctx.fillText(String(h).padStart(2,'0') + ':00', x, pad.t + cH + 16);
+  }
+
+  // Horizon fill
+  ctx.fillStyle = 'rgba(12,18,40,0.5)';
+  ctx.fillRect(pad.l, zeroY, cW, pad.t + cH - zeroY);
+
+  // Night shading (sun below horizon)
+  ctx.save();
+  ctx.rect(pad.l, pad.t, cW, cH);
+  ctx.clip();
+  let inNight = sunPoints[0].alt < 0;
+  let nightStart = inNight ? 0 : null;
+  sunPoints.forEach((p, i) => {
+    const isNight = p.alt < -6;
+    if (!inNight && isNight) { nightStart = p.m; inNight = true; }
+    else if (inNight && !isNight) {
+      ctx.fillStyle = 'rgba(4,6,20,0.5)';
+      ctx.fillRect(toX(nightStart), pad.t, toX(p.m) - toX(nightStart), cH);
+      inNight = false;
+    }
+  });
+  if (inNight && nightStart !== null) {
+    ctx.fillStyle = 'rgba(4,6,20,0.5)';
+    ctx.fillRect(toX(nightStart), pad.t, cW - (toX(nightStart) - pad.l), cH);
+  }
+  ctx.restore();
+
+  // Sun curve (dim)
+  ctx.beginPath();
+  sunPoints.forEach((p, i) => {
+    const x = toX(p.m), y = toY(Math.max(minAlt, p.alt));
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = 'rgba(255,200,80,0.2)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 5]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Moon curve filled
+  ctx.beginPath();
+  points.forEach((p, i) => {
+    const x = toX(p.m), y = toY(Math.max(minAlt, p.alt));
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.lineTo(toX(1440), zeroY);
+  ctx.lineTo(pad.l, zeroY);
+  ctx.closePath();
+  const areaGrad = ctx.createLinearGradient(0, pad.t, 0, zeroY);
+  areaGrad.addColorStop(0, 'rgba(201,164,85,0.25)');
+  areaGrad.addColorStop(1, 'rgba(201,164,85,0.02)');
+  ctx.fillStyle = areaGrad;
+  ctx.fill();
+
+  // Moon curve line
+  ctx.beginPath();
+  points.forEach((p, i) => {
+    const x = toX(p.m), y = toY(Math.max(minAlt, p.alt));
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#c9a455';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Horizon line
+  ctx.beginPath();
+  ctx.moveTo(pad.l, zeroY);
+  ctx.lineTo(pad.l + cW, zeroY);
+  ctx.strokeStyle = 'rgba(91,206,220,0.3)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Current time marker
+  const nowM = now.getHours() * 60 + now.getMinutes();
+  const nowX = toX(nowM);
+  const nowPos = SunCalc.getMoonPosition(now, LAT, LNG);
+  const nowAlt = nowPos.altitude * 180 / Math.PI;
+  const nowY = toY(Math.max(minAlt, nowAlt));
+
+  ctx.beginPath();
+  ctx.moveTo(nowX, pad.t);
+  ctx.lineTo(nowX, pad.t + cH);
+  ctx.strokeStyle = 'rgba(91,206,220,0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([3, 3]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Current dot
+  ctx.beginPath();
+  ctx.arc(nowX, nowY, 6, 0, Math.PI * 2);
+  ctx.fillStyle = '#c9a455';
+  ctx.fill();
+  ctx.shadowColor = '#c9a455';
+  ctx.shadowBlur = 10;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Legend
+  ctx.font = '9px JetBrains Mono';
+  ctx.fillStyle = 'rgba(201,164,85,0.8)';
+  ctx.textAlign = 'left';
+  ctx.fillText('── Луна', pad.l + 8, pad.t + 14);
+  ctx.fillStyle = 'rgba(255,200,80,0.5)';
+  ctx.fillText('- - Солнце', pad.l + 80, pad.t + 14);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VIZ 4: 30-DAY CYCLE STRIP
+// ═══════════════════════════════════════════════════════════════
+function drawCycleStrip() {
+  const canvas = document.getElementById('cycleStripCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const N = 30;
+  const cellW = W / N;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const now = new Date();
+  const illum0 = SunCalc.getMoonIllumination(now);
+  // Find start of current cycle (last new moon)
+  const cycleStartOffset = illum0.phase * 29.53; // days since last new moon
+  const cycleStart = new Date(now.getTime() - cycleStartOffset * 86400000);
+
+  const todayIdx = Math.floor(cycleStartOffset);
+
+  for (let i = 0; i < N; i++) {
+    const t = new Date(cycleStart.getTime() + i * 86400000);
+    const ill = SunCalc.getMoonIllumination(t);
+    const ph = ill.phase;
+    const frac = ill.fraction;
+    const emoji = ['🌑','🌒','🌒','🌓','🌔','🌔','🌕','🌕','🌖','🌖','🌗','🌘','🌘','🌑'][Math.floor(ph * 13.99)];
+
+    const x = i * cellW;
+    const isToday = i === todayIdx;
+
+    // Background
+    if (isToday) {
+      ctx.fillStyle = 'rgba(201,164,85,0.12)';
+      ctx.fillRect(x, 0, cellW, H);
+      ctx.strokeStyle = 'rgba(201,164,85,0.35)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x + 0.5, 0.5, cellW - 1, H - 1);
+    }
+
+    // Mini moon drawing
+    const moonR = (cellW * 0.28);
+    const moonX = x + cellW / 2;
+    const moonY = H * 0.38;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(moonX, moonY, moonR, 0, Math.PI * 2);
+    ctx.fillStyle = '#7a6a45';
+    ctx.fill();
+    ctx.clip();
+
+    // Lit side
+    const litGrad = ctx.createRadialGradient(moonX - moonR * 0.2, moonY - moonR * 0.2, 0, moonX, moonY, moonR);
+    litGrad.addColorStop(0, '#d4c89a');
+    litGrad.addColorStop(1, '#9a8a60');
+    ctx.fillStyle = litGrad;
+    ctx.fillRect(x, 0, cellW, H);
+
+    // Shadow
+    if (ph < 0.49 || ph > 0.51) {
+      const waxing = ph < 0.5;
+      const p = waxing ? ph * 2 : (ph - 0.5) * 2;
+      const termX = Math.cos(p * Math.PI) * moonR;
+      ctx.beginPath();
+      if (waxing) {
+        ctx.arc(moonX, moonY, moonR, -Math.PI / 2, Math.PI / 2, false);
+        ctx.ellipse(moonX, moonY, Math.abs(termX), moonR, 0, Math.PI / 2, -Math.PI / 2, true);
+      } else {
+        ctx.arc(moonX, moonY, moonR, Math.PI / 2, -Math.PI / 2, false);
+        ctx.ellipse(moonX, moonY, Math.abs(termX), moonR, 0, -Math.PI / 2, Math.PI / 2, true);
+      }
+      ctx.fillStyle = 'rgba(2,3,10,0.9)';
+      ctx.fill();
+    } else if (ph < 0.03 || ph > 0.97) {
+      ctx.fillStyle = 'rgba(2,3,10,0.95)';
+      ctx.fillRect(x, 0, cellW, H);
+    }
+    ctx.restore();
+
+    // Day number
+    const dayLabel = t.getDate();
+    ctx.font = `${isToday ? '10px' : '9px'} JetBrains Mono`;
+    ctx.fillStyle = isToday ? '#c9a455' : 'rgba(90,96,112,0.7)';
+    ctx.textAlign = 'center';
+    ctx.fillText(dayLabel, moonX, H - 10);
+
+    // Phase labels at key points
+    if (i === 0 || i === 7 || i === 14 || i === 21) {
+      const labels = ['🌑','🌓','🌕','🌗'];
+      const li = [0,7,14,21].indexOf(i);
+      ctx.font = '13px serif';
+      ctx.fillText(labels[li], moonX, moonY + moonR + 14);
+    }
+
+    // Divider
+    if (i < N - 1) {
+      ctx.beginPath();
+      ctx.moveTo(x + cellW, 0);
+      ctx.lineTo(x + cellW, H);
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VIZ 5: TIDAL GAUGE
+// ═══════════════════════════════════════════════════════════════
+function drawTidal() {
+  const canvas = document.getElementById('tidalCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const now = new Date();
+  const illum = SunCalc.getMoonIllumination(now);
+  const pos = SunCalc.getMoonPosition(now, LAT, LNG);
+
+  // Tidal force ∝ 1/r³, relative to average distance
+  const avgDist = 384400;
+  const dist = pos.distance || avgDist;
+  const tidalForce = Math.pow(avgDist / dist, 3);
+  const tidalPct = Math.min(1, tidalForce);
+
+  // Combined tidal (moon + sun effect at phase)
+  const sunEffect = 0.46 * Math.abs(Math.cos(illum.phase * Math.PI * 2));
+  const totalTidal = (tidalForce + sunEffect) / 1.46;
+  const angle = -Math.PI / 2 + totalTidal * Math.PI * 1.5;
+
+  // Gauge arc
+  const R = 120;
+  const startA = -Math.PI * 0.85, endA = Math.PI * 0.85;
+
+  // Background arc
+  ctx.beginPath();
+  ctx.arc(cx, cy + 20, R, startA, endA);
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 16;
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  // Gradient filled arc
+  const arcGrad = ctx.createLinearGradient(cx - R, cy, cx + R, cy);
+  arcGrad.addColorStop(0, '#1a4a50');
+  arcGrad.addColorStop(0.5, '#c9a455');
+  arcGrad.addColorStop(1, '#ff6644');
+  ctx.beginPath();
+  ctx.arc(cx, cy + 20, R, startA, startA + (endA - startA) * totalTidal);
+  ctx.strokeStyle = arcGrad;
+  ctx.lineWidth = 14;
+  ctx.stroke();
+
+  // Needle
+  const needleAngle = startA + (endA - startA) * totalTidal;
+  const nx = cx + Math.cos(needleAngle) * (R - 10);
+  const ny = (cy + 20) + Math.sin(needleAngle) * (R - 10);
+  ctx.beginPath();
+  ctx.moveTo(cx, cy + 20);
+  ctx.lineTo(nx, ny);
+  ctx.strokeStyle = '#eef0f5';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(cx, cy + 20, 5, 0, Math.PI * 2);
+  ctx.fillStyle = '#eef0f5';
+  ctx.fill();
+
+  // Center value
+  ctx.font = '400 36px Cormorant Garamond';
+  ctx.fillStyle = '#c9a455';
+  ctx.textAlign = 'center';
+  ctx.fillText((totalTidal * 100).toFixed(0) + '%', cx, cy + 16);
+  ctx.font = '10px JetBrains Mono';
+  ctx.fillStyle = 'rgba(90,96,112,0.8)';
+  ctx.fillText('относительная сила', cx, cy + 34);
+
+  // Labels
+  ctx.font = '9px JetBrains Mono';
+  ctx.fillStyle = 'rgba(90,96,112,0.6)';
+  ctx.textAlign = 'left';
+  ctx.fillText('МИН', cx - R - 4, cy + 60);
+  ctx.textAlign = 'right';
+  ctx.fillText('МАКС', cx + R + 4, cy + 60);
+
+  // Info
+  const phase = illum.phase;
+  const isSyzygy = (phase < 0.06 || (phase > 0.44 && phase < 0.56) || phase > 0.94);
+  document.getElementById('tidalInfo').innerHTML =
+    `Расстояние: <strong>${Math.round(dist).toLocaleString('ru-RU')} км</strong><br>` +
+    `Сила Луны: <strong>${(tidalForce * 100).toFixed(1)}%</strong><br>` +
+    `Влияние Солнца: <strong>${(sunEffect * 100).toFixed(1)}%</strong><br>` +
+    (isSyzygy ? '<strong style="color:#c9a455">⚠ Сизигийный прилив (Луна+Солнце)</strong>' :
+      'Квадратурный прилив (ослаблен)');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VIZ 5B: ANGULAR SIZE COMPARISON
+// ═══════════════════════════════════════════════════════════════
+function drawAngular() {
+  const canvas = document.getElementById('angularCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const now = new Date();
+  const pos = SunCalc.getMoonPosition(now, LAT, LNG);
+  const dist = pos.distance || 384400;
+  const avgDist = 384400;
+  const perigee = 356500, apogee = 406700;
+  const moonRadius = 1737.4; // km
+
+  // Angular diameter in arcminutes: 2 * atan(r/d) * (180/π) * 60
+  const angNow = 2 * Math.atan(moonRadius / dist) * (180 / Math.PI) * 60;
+  const angPerigee = 2 * Math.atan(moonRadius / perigee) * (180 / Math.PI) * 60;
+  const angApogee = 2 * Math.atan(moonRadius / apogee) * (180 / Math.PI) * 60;
+
+  const maxR = 100;
+  const scale = maxR / angPerigee;
+
+  // Draw three circles
+  const circles = [
+    { label: 'Апогей', sub: `${apogee.toLocaleString('ru-RU')} км`, ang: angApogee, col: 'rgba(90,96,112,0.4)', tc: '#5a6070', x: 110 },
+    { label: 'СЕЙЧАС', sub: `${Math.round(dist).toLocaleString('ru-RU')} км`, ang: angNow, col: 'rgba(201,164,85,0.5)', tc: '#c9a455', x: 210 },
+    { label: 'Перигей', sub: `${perigee.toLocaleString('ru-RU')} км`, ang: angPerigee, col: 'rgba(201,164,85,0.15)', tc: '#c9a455', x: 310 },
+  ];
+  // Sort by angle for visual clarity
+  circles.sort((a,b) => a.ang - b.ang);
+  const positions = [100, 190, 280];
+  circles.forEach((c, i) => {
+    c.x = positions[i];
+  });
+
+  const cy = H * 0.5;
+  circles.forEach(c => {
+    const r = c.ang * scale;
+    // Glow
+    const grd = ctx.createRadialGradient(c.x, cy, 0, c.x, cy, r);
+    grd.addColorStop(0, c.col.replace(')', ', 0.5)').replace('rgba','rgba').replace(/,\s*[\d.]+\)$/, ', 0.08)'));
+    grd.addColorStop(1, 'transparent');
+    // Simple glow
+    ctx.beginPath();
+    ctx.arc(c.x, cy, r + 10, 0, Math.PI * 2);
+    ctx.fillStyle = c.col.replace(/[\d.]+\)$/, '0.05)');
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(c.x, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = c.col;
+    ctx.lineWidth = c.label === 'СЕЙЧАС' ? 2 : 1;
+    ctx.stroke();
+
+    // Labels
+    ctx.font = c.label === 'СЕЙЧАС' ? '11px JetBrains Mono' : '9px JetBrains Mono';
+    ctx.fillStyle = c.tc;
+    ctx.textAlign = 'center';
+    ctx.fillText(c.label, c.x, cy - r - 12);
+    ctx.font = '9px JetBrains Mono';
+    ctx.fillStyle = 'rgba(90,96,112,0.7)';
+    ctx.fillText(c.ang.toFixed(1) + "'", c.x, cy + r + 16);
+    ctx.font = '8px JetBrains Mono';
+    ctx.fillText(c.sub, c.x, cy + r + 28);
+  });
+
+  // Title
+  ctx.font = '9px JetBrains Mono';
+  ctx.fillStyle = 'rgba(90,96,112,0.5)';
+  ctx.textAlign = 'center';
+  ctx.fillText('угловой диаметр (угловые минуты)', W / 2, H - 10);
+
+  document.getElementById('angularInfo').innerHTML =
+    `Сейчас: <strong>${angNow.toFixed(2)}'</strong> (${dist < avgDist ? 'ближе' : 'дальше'} среднего)<br>` +
+    `Суперлуние: ${angNow > 31.5 ? '<strong style="color:#c9a455">Да!</strong>' : 'Нет'}<br>` +
+    `Перигей–Апогей разница: <strong>${((angPerigee - angApogee) / angApogee * 100).toFixed(1)}%</strong>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VIZ 6: LIBRATION
+// ═══════════════════════════════════════════════════════════════
+function drawLibration() {
+  const canvas = document.getElementById('librationCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+  const R = 200;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const now = new Date();
+  const pos = SunCalc.getMoonPosition(now, LAT, LNG);
+  const illum = SunCalc.getMoonIllumination(now);
+
+  // Libration approximation
+  // Optical libration in longitude ≈ related to true anomaly
+  const d = (now - new Date(2000, 0, 1, 12)) / 86400000;
+  const libLon = 6.3 * Math.sin((d * 13.18 - 96.0) * Math.PI / 180); // degrees, simplified
+  const libLat = 5.1 * Math.sin((d * 13.18 - 96.0 + 23.8) * Math.PI / 180 + 1.1); // degrees
+
+  // Draw moon
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  const moonBg = ctx.createRadialGradient(cx - 50, cy - 60, 0, cx, cy, R);
+  moonBg.addColorStop(0, '#d4c89a');
+  moonBg.addColorStop(0.5, '#b8a878');
+  moonBg.addColorStop(1, '#7a6a45');
+  ctx.fillStyle = moonBg;
+  ctx.fill();
+
+  // Maria
+  const maria = [
+    {x:-0.05,y:-0.15,rx:0.28,ry:0.2,a:0.5,name:'Mare Tranquillitatis'},
+    {x:0.18,y:0.22,rx:0.14,ry:0.1,a:0.45,name:'Mare Fecunditatis'},
+    {x:-0.22,y:0.28,rx:0.12,ry:0.08,a:0.4,name:'Mare Nubium'},
+    {x:0.32,y:-0.05,rx:0.09,ry:0.12,a:0.35,name:'Mare Crisium'},
+    {x:-0.1,y:-0.35,rx:0.2,ry:0.14,a:0.5,name:'Mare Imbrium'},
+    {x:0.1,y:-0.05,rx:0.06,ry:0.08,a:0.3,name:''},
+  ];
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  ctx.clip();
+  maria.forEach(m => {
+    ctx.save();
+    ctx.translate(cx + m.x * R + libLon * R / 100, cy + m.y * R + libLat * R / 100);
+    ctx.scale(m.rx, m.ry);
+    const mg = ctx.createRadialGradient(0, 0, 0, 0, 0, R);
+    mg.addColorStop(0, `rgba(40,35,20,${m.a})`);
+    mg.addColorStop(1, 'transparent');
+    ctx.fillStyle = mg;
+    ctx.beginPath();
+    ctx.arc(0, 0, R, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+  ctx.restore();
+
+  // Phase shadow
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  ctx.clip();
+  const phase = illum.phase;
+  if (!(phase > 0.49 && phase < 0.51)) {
+    const waxing = phase < 0.5;
+    const p = waxing ? phase * 2 : (phase - 0.5) * 2;
+    const termX = Math.cos(p * Math.PI) * R;
+    ctx.beginPath();
+    if (waxing) {
+      ctx.arc(cx, cy, R, -Math.PI / 2, Math.PI / 2, false);
+      ctx.ellipse(cx, cy, Math.abs(termX), R, 0, Math.PI / 2, -Math.PI / 2, true);
+    } else {
+      ctx.arc(cx, cy, R, Math.PI / 2, -Math.PI / 2, false);
+      ctx.ellipse(cx, cy, Math.abs(termX), R, 0, -Math.PI / 2, Math.PI / 2, true);
+    }
+    ctx.fillStyle = 'rgba(2,3,10,0.88)';
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // Libration crosshair (center of visible disk shifted by libration)
+  const dotX = cx + (libLon / 8) * R;
+  const dotY = cy + (libLat / 6) * R;
+  ctx.beginPath();
+  ctx.arc(dotX, dotY, 5, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(201,164,85,0.9)';
+  ctx.fill();
+  ctx.shadowColor = '#c9a455';
+  ctx.shadowBlur = 10;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Grid
+  ctx.strokeStyle = 'rgba(201,164,85,0.1)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 4]);
+  ctx.beginPath(); ctx.moveTo(cx - R, cy); ctx.lineTo(cx + R, cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, cy - R); ctx.lineTo(cx, cy + R); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Rim
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(201,164,85,0.2)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Labels
+  ctx.font = '10px JetBrains Mono';
+  ctx.fillStyle = 'rgba(90,96,112,0.6)';
+  ctx.textAlign = 'center';
+  ctx.fillText(`Либрация по долготе: ${libLon > 0 ? '+' : ''}${libLon.toFixed(1)}°`, cx, H - 8);
+  ctx.fillText(`Либрация по широте: ${libLat > 0 ? '+' : ''}${libLat.toFixed(1)}°`, cx, H - 24);
+
+  // Maria labels (lit side only)
+  ctx.font = '8px JetBrains Mono';
+  ctx.fillStyle = 'rgba(200,190,160,0.5)';
+  maria.filter(m => m.name).forEach(m => {
+    const mx = cx + m.x * R + libLon * R / 100;
+    const my = cy + m.y * R + libLat * R / 100;
+    ctx.textAlign = 'center';
+    ctx.fillText(m.name, mx, my);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VIZ 7: DISTANCE CHART ±15 days
+// ═══════════════════════════════════════════════════════════════
+function drawDistChart() {
+  const canvas = document.getElementById('distChartCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const pad = { l: 70, r: 20, t: 20, b: 40 };
+  const cW = W - pad.l - pad.r, cH = H - pad.t - pad.b;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const now = new Date();
+  const days = 31;
+  const points = [];
+  for (let i = -15; i <= 15; i++) {
+    const t = new Date(now.getTime() + i * 86400000);
+    const pos = SunCalc.getMoonPosition(t, LAT, LNG);
+    points.push({ i, dist: pos.distance || 384400 });
+  }
+
+  const dists = points.map(p => p.dist);
+  const minD = Math.min(...dists) - 2000;
+  const maxD = Math.max(...dists) + 2000;
+
+  const toX = i => pad.l + ((i + 15) / 30) * cW;
+  const toY = d => pad.t + (1 - (d - minD) / (maxD - minD)) * cH;
+
+  // Grid
+  [356500, 370000, 384400, 400000, 406700].forEach(d => {
+    if (d < minD || d > maxD) return;
+    const y = toY(d);
+    ctx.beginPath();
+    ctx.moveTo(pad.l, y);
+    ctx.lineTo(pad.l + cW, y);
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.font = '9px JetBrains Mono';
+    ctx.fillStyle = 'rgba(90,96,112,0.5)';
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(d / 1000) + 'k', pad.l - 4, y + 3);
+  });
+
+  // Area fill
+  ctx.beginPath();
+  points.forEach((p, i) => {
+    const x = toX(p.i), y = toY(p.dist);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.lineTo(toX(15), pad.t + cH);
+  ctx.lineTo(toX(-15), pad.t + cH);
+  ctx.closePath();
+  const areaGrad = ctx.createLinearGradient(0, pad.t, 0, pad.t + cH);
+  areaGrad.addColorStop(0, 'rgba(91,206,220,0.2)');
+  areaGrad.addColorStop(1, 'rgba(91,206,220,0.02)');
+  ctx.fillStyle = areaGrad;
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  points.forEach((p, i) => {
+    const x = toX(p.i), y = toY(p.dist);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#5bcedc';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Average line
+  const avgY = toY(384400);
+  ctx.beginPath();
+  ctx.moveTo(pad.l, avgY);
+  ctx.lineTo(pad.l + cW, avgY);
+  ctx.strokeStyle = 'rgba(201,164,85,0.3)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 5]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.font = '9px JetBrains Mono';
+  ctx.fillStyle = 'rgba(201,164,85,0.5)';
+  ctx.textAlign = 'left';
+  ctx.fillText('среднее', pad.l + 4, avgY - 4);
+
+  // Today marker
+  const todayX = toX(0);
+  const todayY = toY(points[15].dist);
+  ctx.beginPath();
+  ctx.moveTo(todayX, pad.t);
+  ctx.lineTo(todayX, pad.t + cH);
+  ctx.strokeStyle = 'rgba(91,206,220,0.5)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([3, 3]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  ctx.arc(todayX, todayY, 5, 0, Math.PI * 2);
+  ctx.fillStyle = '#5bcedc';
+  ctx.fill();
+  ctx.shadowColor = '#5bcedc';
+  ctx.shadowBlur = 8;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Min/max dots
+  const minP = points.reduce((a, b) => a.dist < b.dist ? a : b);
+  const maxP = points.reduce((a, b) => a.dist > b.dist ? a : b);
+  ctx.font = '9px JetBrains Mono';
+  [[minP, '↓ Перигей', '#c9a455'], [maxP, '↑ Апогей', '#5a6070']].forEach(([p, label, col]) => {
+    const x = toX(p.i), y = toY(p.dist);
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = col;
+    ctx.fill();
+    ctx.fillStyle = col;
+    ctx.textAlign = 'center';
+    ctx.fillText(label, x, y - 12);
+  });
+
+  // X labels
+  ctx.fillStyle = 'rgba(90,96,112,0.5)';
+  ctx.font = '9px JetBrains Mono';
+  [-15, -10, -5, 0, 5, 10, 15].forEach(i => {
+    const t = new Date(now.getTime() + i * 86400000);
+    const label = i === 0 ? 'сег.' : (t.getDate() + '/' + (t.getMonth() + 1));
+    ctx.textAlign = 'center';
+    ctx.fillText(label, toX(i), pad.t + cH + 16);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VIZ 8: EARTH–MOON–SUN GEOMETRY
+// ═══════════════════════════════════════════════════════════════
+function drawGeometry() {
+  const canvas = document.getElementById('geometryCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const now = new Date();
+  const illum = SunCalc.getMoonIllumination(now);
+  const phase = illum.phase;
+
+  // Layout: Sun far left, Earth center, Moon right
+  const sunX = 60, earthX = W / 2, moonX = W - 80;
+  const cy = H / 2;
+
+  // Sun
+  const sunGlow = ctx.createRadialGradient(sunX, cy, 0, sunX, cy, 50);
+  sunGlow.addColorStop(0, 'rgba(255,200,60,0.6)');
+  sunGlow.addColorStop(0.5, 'rgba(255,180,40,0.2)');
+  sunGlow.addColorStop(1, 'transparent');
+  ctx.fillStyle = sunGlow;
+  ctx.beginPath();
+  ctx.arc(sunX, cy, 50, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(sunX, cy, 20, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffcc40';
+  ctx.fill();
+  ctx.font = '10px JetBrains Mono';
+  ctx.fillStyle = 'rgba(255,200,60,0.7)';
+  ctx.textAlign = 'center';
+  ctx.fillText('☀ Солнце', sunX, cy + 34);
+
+  // Rays from sun
+  ctx.strokeStyle = 'rgba(255,200,60,0.08)';
+  ctx.lineWidth = 1;
+  for (let a = 0; a < 360; a += 30) {
+    const rad = a * Math.PI / 180;
+    ctx.beginPath();
+    ctx.moveTo(sunX + Math.cos(rad) * 24, cy + Math.sin(rad) * 24);
+    ctx.lineTo(sunX + Math.cos(rad) * 55, cy + Math.sin(rad) * 55);
+    ctx.stroke();
+  }
+
+  // Light beams to Earth
+  ctx.strokeStyle = 'rgba(255,200,60,0.06)';
+  ctx.lineWidth = 20;
+  ctx.beginPath();
+  ctx.moveTo(sunX + 20, cy);
+  ctx.lineTo(earthX - 22, cy);
+  ctx.stroke();
+
+  // Earth
+  const earthGrad = ctx.createRadialGradient(earthX - 5, cy - 5, 0, earthX, cy, 22);
+  earthGrad.addColorStop(0, '#3a6ab0');
+  earthGrad.addColorStop(0.5, '#1a4070');
+  earthGrad.addColorStop(1, '#0a1830');
+  ctx.beginPath();
+  ctx.arc(earthX, cy, 22, 0, Math.PI * 2);
+  ctx.fillStyle = earthGrad;
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(91,206,220,0.4)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.font = '10px JetBrains Mono';
+  ctx.fillStyle = 'rgba(91,206,220,0.8)';
+  ctx.textAlign = 'center';
+  ctx.fillText('⊕ Земля', earthX, cy + 36);
+
+  // Earth shadow cone
+  ctx.beginPath();
+  ctx.moveTo(earthX + 22, cy - 8);
+  ctx.lineTo(W, cy - 35);
+  ctx.moveTo(earthX + 22, cy + 8);
+  ctx.lineTo(W, cy + 35);
+  ctx.strokeStyle = 'rgba(2,3,10,0.4)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 4]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Dashed line Sun–Earth–Moon
+  ctx.beginPath();
+  ctx.moveTo(sunX + 22, cy);
+  ctx.lineTo(moonX - 18, cy);
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([5, 6]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Phase angle arc
+  const phaseAngleDeg = phase * 360;
+  ctx.beginPath();
+  ctx.arc(earthX, cy, 40, -Math.PI / 2, -Math.PI / 2 + phase * Math.PI * 2);
+  ctx.strokeStyle = 'rgba(201,164,85,0.4)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.font = '9px JetBrains Mono';
+  ctx.fillStyle = 'rgba(201,164,85,0.6)';
+  ctx.textAlign = 'left';
+  ctx.fillText(`${Math.round(phaseAngleDeg)}°`, earthX + 44, cy - 12);
+
+  // Moon
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(moonX, cy, 18, 0, Math.PI * 2);
+  ctx.clip();
+  const moonBg2 = ctx.createRadialGradient(moonX - 4, cy - 4, 0, moonX, cy, 18);
+  moonBg2.addColorStop(0, '#d4c89a');
+  moonBg2.addColorStop(1, '#8a7a50');
+  ctx.fillStyle = moonBg2;
+  ctx.fillRect(moonX - 20, cy - 20, 40, 40);
+
+  // Shadow on moon from geometry perspective
+  // Moon is lit on the Sun-facing side
+  // For this top-down view, the lit side is always left (toward Sun)
+  const litFrac = illum.fraction;
+  if (litFrac < 0.99) {
+    const shadowAng = phase < 0.5 ? 0 : Math.PI;
+    ctx.beginPath();
+    ctx.arc(moonX, cy, 18, -Math.PI / 2, Math.PI / 2, false);
+    const ex = 18 * Math.cos(Math.PI / 2 * (phase < 0.5 ? (1 - phase * 2) : ((phase - 0.5) * 2 - 1)));
+    ctx.ellipse(moonX, cy, Math.abs(ex) || 1, 18, 0, Math.PI / 2, -Math.PI / 2, true);
+    ctx.fillStyle = 'rgba(2,3,10,0.88)';
+    ctx.fill();
+  }
+  ctx.restore();
+  ctx.beginPath();
+  ctx.arc(moonX, cy, 18, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(201,164,85,0.4)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.font = '10px JetBrains Mono';
+  ctx.fillStyle = 'rgba(201,164,85,0.7)';
+  ctx.textAlign = 'center';
+  ctx.fillText('☽ Луна', moonX, cy + 32);
+
+  // Phase annotation box
+  ctx.fillStyle = 'rgba(201,164,85,0.07)';
+  ctx.strokeStyle = 'rgba(201,164,85,0.15)';
+  ctx.lineWidth = 1;
+  const boxX = earthX + 60, boxY = H - 60;
+  ctx.beginPath();
+  ctx.roundRect(boxX, boxY, 180, 40, 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.font = '10px JetBrains Mono';
+  ctx.fillStyle = '#c9a455';
+  ctx.textAlign = 'left';
+  ctx.fillText(`Угол фазы: ${Math.round(phaseAngleDeg)}°`, boxX + 10, boxY + 16);
+  ctx.fillStyle = 'rgba(90,96,112,0.7)';
+  ctx.fillText(`Освещено: ${Math.round(illum.fraction * 100)}%`, boxX + 10, boxY + 30);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VIZ 9: ILLUMINATION CHART (this month)
+// ═══════════════════════════════════════════════════════════════
+function drawIllumChart() {
+  const canvas = document.getElementById('illumChartCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const pad = { l: 40, r: 20, t: 24, b: 32 };
+  const cW = W - pad.l - pad.r, cH = H - pad.t - pad.b;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const now = new Date();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const today = now.getDate();
+
+  const points = [];
+  for (let d = 1; d <= daysInMonth; d++) {
+    const t = new Date(now.getFullYear(), now.getMonth(), d, 12);
+    const ill = SunCalc.getMoonIllumination(t);
+    points.push({ d, frac: ill.fraction, phase: ill.phase });
+  }
+
+  const toX = d => pad.l + ((d - 1) / (daysInMonth - 1)) * cW;
+  const toY = f => pad.t + (1 - f) * cH;
+
+  // Full moon and new moon lines
+  ctx.strokeStyle = 'rgba(201,164,85,0.08)';
+  ctx.lineWidth = 1;
+  [0, 0.5, 1].forEach(f => {
+    const y = toY(f);
+    ctx.beginPath();
+    ctx.moveTo(pad.l, y);
+    ctx.lineTo(pad.l + cW, y);
+    ctx.stroke();
+    ctx.font = '9px JetBrains Mono';
+    ctx.fillStyle = 'rgba(90,96,112,0.5)';
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(f * 100) + '%', pad.l - 4, y + 3);
+  });
+
+  // Area
+  ctx.beginPath();
+  points.forEach((p, i) => {
+    const x = toX(p.d), y = toY(p.frac);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.lineTo(toX(daysInMonth), pad.t + cH);
+  ctx.lineTo(pad.l, pad.t + cH);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + cH);
+  grad.addColorStop(0, 'rgba(201,164,85,0.3)');
+  grad.addColorStop(1, 'rgba(201,164,85,0.02)');
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  points.forEach((p, i) => {
+    const x = toX(p.d), y = toY(p.frac);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#c9a455';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Phase event markers (new/full)
+  points.forEach((p, i) => {
+    if (i > 0) {
+      const prev = points[i - 1];
+      // Full moon peak (local max near 1)
+      if (p.frac > 0.98 && p.frac >= (points[i - 1]?.frac || 0) && p.frac >= (points[i + 1]?.frac || 0)) {
+        const x = toX(p.d), y = toY(p.frac);
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#c9a455';
+        ctx.fill();
+        ctx.font = '9px JetBrains Mono';
+        ctx.fillStyle = '#c9a455';
+        ctx.textAlign = 'center';
+        ctx.fillText('🌕', x, y - 10);
+      }
+      // New moon trough
+      if (p.frac < 0.03 && p.frac <= (points[i - 1]?.frac || 1) && p.frac <= (points[i + 1]?.frac || 1)) {
+        const x = toX(p.d), y = toY(p.frac);
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(90,96,112,0.8)';
+        ctx.fill();
+        ctx.font = '9px JetBrains Mono';
+        ctx.fillStyle = 'rgba(90,96,112,0.8)';
+        ctx.textAlign = 'center';
+        ctx.fillText('🌑', x, y + 14);
+      }
+    }
+  });
+
+  // Today marker
+  const todayP = points[today - 1];
+  const todayX = toX(today);
+  const todayY = toY(todayP.frac);
+  ctx.beginPath();
+  ctx.moveTo(todayX, pad.t);
+  ctx.lineTo(todayX, pad.t + cH);
+  ctx.strokeStyle = 'rgba(91,206,220,0.4)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([3, 3]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  ctx.arc(todayX, todayY, 5, 0, Math.PI * 2);
+  ctx.fillStyle = '#5bcedc';
+  ctx.fill();
+  ctx.shadowColor = '#5bcedc';
+  ctx.shadowBlur = 8;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // X labels
+  ctx.font = '9px JetBrains Mono';
+  ctx.fillStyle = 'rgba(90,96,112,0.5)';
+  ctx.textAlign = 'center';
+  for (let d = 1; d <= daysInMonth; d += 5) {
+    ctx.fillStyle = d === today ? '#5bcedc' : 'rgba(90,96,112,0.5)';
+    ctx.fillText(d, toX(d), pad.t + cH + 16);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT ALL VISUALIZATIONS
+// ═══════════════════════════════════════════════════════════════
+function initAllViz() {
+  drawSkyDome();
+  drawOrbit();
+  drawAltChart();
+  drawCycleStrip();
+  drawTidal();
+  drawAngular();
+  drawLibration();
+  drawDistChart();
+  drawGeometry();
+  drawIllumChart();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ANIMATE ORBIT continuously
+// ═══════════════════════════════════════════════════════════════
+(function animateOrbit() {
+  drawOrbit();
+  // Orbit re-renders only on update, not looped, to save perf
+})();
+
+buildCalendar();
+update();
+initAllViz();
+setInterval(update, 10000);
+setInterval(function() {
+  const now = new Date();
+  const pos = SunCalc.getMoonPosition(now, LAT, LNG);
+  const altDeg = pos.altitude * 180 / Math.PI;
+  const azDeg = ((pos.azimuth * 180 / Math.PI) + 180 + 360) % 360;
+  drawCompass(azDeg);
+  document.getElementById('altVal').textContent = altDeg.toFixed(1);
+  document.getElementById('altValSmall').textContent = altDeg.toFixed(1) + '°';
+  document.getElementById('azVal').textContent = Math.round(azDeg);
+  document.getElementById('azValSmall').textContent = Math.round(azDeg) + '°';
+  drawSkyDome();
+  drawOrbit();
 }, 30000);
 </script>
 </body>
