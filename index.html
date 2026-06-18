@@ -1,866 +1,2482 @@
 <!DOCTYPE html>
-<html lang="en" data-lang="en">
+<html lang="ru">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>nasqdrop — curated internet</title>
-<meta name="description" content="nasqdrop is a curated stream of the internet. One powerful website, every day. No algorithm. No ads."/>
-<meta name="author" content="nasqwww"/>
-<meta name="keywords" content="nasqdrop, curated internet, website of the day, web discovery, interactive web, nasqwww"/>
-<meta name="robots" content="index, follow"/>
-<link rel="canonical" href="https://nasqwww.github.io/nasqdrop/"/>
-<meta property="og:type" content="website"/>
-<meta property="og:site_name" content="nasqdrop"/>
-<meta property="og:title" content="nasqdrop — curated internet"/>
-<meta property="og:description" content="One powerful website, every day. No algorithm. No ads."/>
-<meta property="og:url" content="https://nasqwww.github.io/nasqdrop/"/>
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:site" content="@nasqwww"/>
-<meta name="twitter:title" content="nasqdrop — curated internet"/>
-<meta name="twitter:description" content="One powerful website, every day. No algorithm. No ads."/>
-<meta name="theme-color" content="#080808"/>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='3' fill='%23080808'/%3E%3Ctext x='3' y='24' font-family='Arial Black%2Csans-serif' font-weight='900' font-size='17' fill='%23b8ff00'%3END%3C/text%3E%3C/svg%3E"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NASQ · Index Terminal</title>
+<meta name="description" content="Персональный индекс-терминал. Переходник ко всем проектам, лаборатории и заметкам.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;700;800;900&display=swap">
 <style>
-:root {
-  --ink:   #080808; --ink-1: #0f0f0f; --ink-2: #161616;
-  --paper: #E8E6E1;
-  --p70:   rgba(232,230,225,.70); --p40: rgba(232,230,225,.40);
-  --p18:   rgba(232,230,225,.18); --p10: rgba(232,230,225,.10);
-  --p06:   rgba(232,230,225,.06); --p03: rgba(232,230,225,.03);
-  --acid:  #b8ff00; --acid-lo: rgba(184,255,0,.07);
-  --f-d:   'Anton', sans-serif; --f-b: 'IBM Plex Mono', monospace;
-  --ease:  cubic-bezier(0.16,1,0.3,1);
-}
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { font-size:16px; scroll-behavior:smooth; }
-body {
-  background:var(--ink); color:var(--paper);
-  font-family:var(--f-b); line-height:1.6;
-  overflow-x:hidden; -webkit-font-smoothing:antialiased;
-}
-a { color:inherit; text-decoration:none; }
-button { background:none; border:none; font:inherit; color:inherit; }
+  /* ==================== RESET ==================== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { background: none; border: none; cursor: pointer; color: inherit; font: inherit; }
+  input, textarea { font: inherit; color: inherit; background: none; border: none; outline: none; }
 
-/* NOISE */
-#noise {
-  position:fixed; inset:0; z-index:9000; pointer-events:none;
-  opacity:.028;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
-}
+  /* ==================== TOKENS ==================== */
+  :root {
+    --bg:         #0a0a0a;
+    --bg-soft:    #111111;
+    --bg-card:    #0d0d0d;
+    --text:       #ffffff;
+    --text-soft:  #dadada;
+    --text-mute:  rgba(218,218,218,0.55);
+    --text-dim:   rgba(218,218,218,0.30);
+    --accent:     rgba(200,170,130, 1);
+    --accent-soft:rgba(200,170,130, 0.25);
+    --accent-dim: rgba(200,170,130, 0.08);
+    --line:       rgba(255,255,255,0.10);
+    --line-soft:  rgba(255,255,255,0.05);
 
-/* CURSOR */
-* { cursor:none !important; }
-#cur {
-  position:fixed; z-index:9999; pointer-events:none;
-  width:7px; height:7px; background:var(--acid); border-radius:50%;
-  transform:translate(-50%,-50%);
-  transition:width .16s var(--ease),height .16s var(--ease),opacity .2s;
-  mix-blend-mode:exclusion; will-change:left,top;
-}
-#cur.big { width:44px; height:44px; }
+    --ease-quiet:    cubic-bezier(.22, 1, .36, 1);
+    --ease-precise:  cubic-bezier(.4, 0, .2, 1);
+    --ease-emphasis: cubic-bezier(.16, 1, .3, 1);
 
-/* NAV */
-#nav {
-  position:fixed; top:0; left:0; right:0; z-index:800;
-  height:52px; display:flex; align-items:center; justify-content:space-between;
-  padding:0 48px; background:var(--ink); border-bottom:1px solid var(--p10);
-}
-.nav-logo {
-  font-family:var(--f-d); font-size:1.15rem; letter-spacing:.05em;
-  color:var(--paper); position:relative; display:inline-block; padding-bottom:2px;
-}
-.nav-logo .nd { color:var(--acid); }
-.nav-logo::after {
-  content:''; position:absolute; bottom:-1px; left:0;
-  width:0; height:1px; background:var(--acid);
-  transition:width .32s var(--ease);
-}
-.nav-logo:hover::after { width:100%; }
-.nav-center {
-  display:flex; align-items:center; gap:7px;
-  font-size:.58rem; letter-spacing:.16em; text-transform:uppercase; color:var(--p40);
-}
-.live-dot {
-  width:5px; height:5px; border-radius:50%; background:var(--acid);
-  animation:livePulse 2s ease-in-out infinite;
-}
-@keyframes livePulse {
-  0%,100% { box-shadow:0 0 0 0 rgba(184,255,0,.55); }
-  50%     { box-shadow:0 0 0 4px rgba(184,255,0,0); }
-}
-.nav-right { display:flex; align-items:center; gap:28px; }
-.nav-link {
-  font-size:.58rem; letter-spacing:.14em; text-transform:uppercase;
-  color:var(--p40); transition:color .14s; position:relative;
-}
-.nav-link::after {
-  content:''; position:absolute; bottom:-2px; left:0;
-  width:0; height:1px; background:var(--acid); transition:width .2s var(--ease);
-}
-.nav-link:hover { color:var(--acid); }
-.nav-link:hover::after { width:100%; }
-.lang-toggle { display:flex; border:1px solid var(--p10); height:26px; overflow:hidden; }
-.lang-btn {
-  font-family:var(--f-b); font-size:.58rem; letter-spacing:.1em; text-transform:uppercase;
-  padding:0 9px; height:100%; color:var(--p40); transition:background .14s,color .14s;
-}
-.lang-btn.active { background:var(--acid); color:var(--ink); }
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    --font-sans: 'Inter', system-ui, sans-serif;
+  }
 
-/* HERO */
-#hero { min-height:100svh; padding-top:52px; display:grid; grid-template-rows:1fr auto; }
-.hero-main {
-  display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--p10);
-}
-.hero-l {
-  padding:60px 48px; display:flex; flex-direction:column; justify-content:flex-end;
-  border-right:1px solid var(--p10);
-}
-.hero-eyebrow {
-  font-size:.56rem; letter-spacing:.2em; text-transform:uppercase; color:var(--p40);
-  margin-bottom:20px; opacity:0; animation:up .5s var(--ease) .05s forwards;
-}
-.hero-num {
-  font-family:var(--f-d); font-size:clamp(100px,17vw,220px);
-  line-height:.86; letter-spacing:-.02em; color:var(--paper);
-  user-select:none; position:relative; opacity:0; animation:up .7s var(--ease) .1s forwards;
-}
-.hero-num::after {
-  content:''; position:absolute; bottom:-2px; left:0;
-  width:100%; height:3px; background:var(--acid);
-  transform:scaleX(0); transform-origin:left;
-  animation:lineGrow .45s var(--ease) 1.05s forwards;
-}
-@keyframes lineGrow { to { transform:scaleX(1); } }
-.hero-date {
-  margin-top:18px; font-size:.6rem; letter-spacing:.12em; text-transform:uppercase;
-  color:var(--p40); opacity:0; animation:up .5s var(--ease) .28s forwards;
-}
-.hero-stats { display:flex; gap:28px; margin-top:36px; opacity:0; animation:up .5s var(--ease) .4s forwards; }
-.stat-n { font-family:var(--f-d); font-size:1.35rem; line-height:1; color:var(--paper); }
-.stat-l { font-size:.54rem; letter-spacing:.12em; text-transform:uppercase; color:var(--p40); margin-top:5px; }
+  /* ==================== BASE ==================== */
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    cursor: none;
+  }
+  @media (pointer: coarse) { body { cursor: auto; } }
 
-.hero-r {
-  padding:60px 48px; display:flex; flex-direction:column; justify-content:center;
-  gap:22px; opacity:0; animation:up .7s var(--ease) .18s forwards;
-}
-.chip-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-.chip {
-  display:inline-flex; align-items:center;
-  font-size:.56rem; letter-spacing:.16em; text-transform:uppercase;
-  padding:3px 10px; border:1px solid var(--acid); color:var(--acid); width:fit-content;
-}
-.chip-seen { border-color:var(--p18); color:var(--p40); display:none; }
-.chip-seen.on { display:inline-flex; }
-.hero-title {
-  font-family:var(--f-d); font-size:clamp(1.6rem,3.2vw,2.8rem);
-  letter-spacing:.02em; text-transform:uppercase; line-height:1.02; color:var(--paper);
-}
-.hero-tags { display:flex; flex-wrap:wrap; gap:6px; }
-.tag {
-  font-size:.52rem; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--p40); border:1px solid var(--p10); padding:2px 8px;
-  transition:color .14s,border-color .14s,transform .14s; display:inline-block;
-}
-.tag:hover { color:var(--acid); border-color:rgba(184,255,0,.35); transform:translateY(-1px); }
-.hero-desc { font-size:.77rem; line-height:1.82; color:var(--p70); max-width:44ch; }
-.hero-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-.btn-open {
-  display:inline-flex; align-items:center; gap:10px;
-  font-family:var(--f-d); font-size:.9rem; letter-spacing:.08em; text-transform:uppercase;
-  background:var(--acid); color:var(--ink); padding:13px 26px;
-  width:fit-content; position:relative; overflow:hidden; transition:gap .2s var(--ease);
-}
-.btn-open::before {
-  content:''; position:absolute; inset:0; background:#fff;
-  transform:translateX(-101%); transition:transform .22s var(--ease);
-}
-.btn-open:hover::before { transform:translateX(0); }
-.btn-open:hover { gap:18px; }
-.btn-open > * { position:relative; z-index:1; }
-.btn-random {
-  display:inline-flex; align-items:center; gap:7px;
-  font-family:var(--f-b); font-size:.58rem; letter-spacing:.12em; text-transform:uppercase;
-  color:var(--p40); border:1px solid var(--p10); padding:8px 14px;
-  transition:color .14s,border-color .14s;
-}
-.btn-random:hover { color:var(--paper); border-color:var(--p40); }
+  ::selection { background: var(--accent-soft); color: var(--text); }
 
-/* TICKER */
-.ticker-wrap { height:40px; overflow:hidden; border-top:1px solid var(--p06); display:flex; align-items:center; }
-.ticker-track {
-  display:flex; white-space:nowrap;
-  animation:ticker 50s linear infinite; will-change:transform;
-}
-.ticker-item {
-  font-size:.55rem; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--p10); padding:0 22px; border-right:1px solid var(--p06);
-}
-.ticker-item b { color:var(--acid); margin-right:7px; font-weight:400; }
-@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+  /* ==================== CURSOR ==================== */
+  .cursor-dot, .cursor-ring {
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 50%;
+    mix-blend-mode: difference;
+  }
+  .cursor-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    transform: translate(-50%, -50%);
+    transition: width 200ms var(--ease-quiet), height 200ms var(--ease-quiet);
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(200,170,130,0.6);
+    transform: translate(-50%, -50%);
+    transition: width 300ms var(--ease-quiet), height 300ms var(--ease-quiet), border-color 300ms var(--ease-quiet);
+  }
+  .cursor-dot.is-active { width: 10px; height: 10px; }
+  .cursor-ring.is-active { width: 60px; height: 60px; border-color: var(--accent); }
+  @media (pointer: coarse) { .cursor-dot, .cursor-ring { display: none; } }
 
-/* ARCHIVE */
-#archive { padding:88px 48px; max-width:1440px; margin:0 auto; }
-.arch-head {
-  display:flex; align-items:flex-end; justify-content:space-between;
-  margin-bottom:44px; padding-bottom:20px; border-bottom:1px solid var(--p10);
-  gap:20px; flex-wrap:wrap;
-}
-.arch-heading {
-  font-family:var(--f-d); font-size:clamp(2.2rem,4.5vw,4rem);
-  letter-spacing:.04em; text-transform:uppercase; line-height:1;
-}
-.arch-heading em { color:var(--acid); font-style:normal; }
-.arch-controls { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-.filter-list { display:flex; gap:5px; flex-wrap:wrap; }
-.filter-btn {
-  font-family:var(--f-b); font-size:.55rem; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--p40); border:1px solid var(--p10); padding:4px 10px;
-  transition:all .14s;
-}
-.filter-btn:hover { color:var(--paper); border-color:var(--p40); }
-.filter-btn.active { color:var(--acid); border-color:var(--acid); background:var(--acid-lo); }
-.count-badge {
-  font-size:.55rem; letter-spacing:.12em; text-transform:uppercase;
-  color:var(--p40); padding:4px 10px; border:1px solid var(--p10);
-}
-.arch-grid {
-  display:grid; grid-template-columns:repeat(12,1fr);
-  gap:1px; background:var(--p06); border:1px solid var(--p06);
-}
-.arch-card {
-  background:var(--ink); padding:26px 22px;
-  display:flex; flex-direction:column; gap:9px;
-  position:relative; overflow:hidden; transition:background .18s;
-  opacity:0; transform:translateY(10px);
-}
-.arch-card.show { animation:up .42s var(--ease) forwards; }
-.arch-card:hover { background:var(--ink-2); }
-.arch-card::before {
-  content:''; position:absolute; top:0; left:0; bottom:0; width:2px;
-  background:var(--acid); transform:scaleY(0); transform-origin:bottom;
-  transition:transform .2s var(--ease);
-}
-.arch-card:hover::before { transform:scaleY(1); }
-.arch-card:nth-child(7n+1) { grid-column:span 7; }
-.arch-card:nth-child(7n+2) { grid-column:span 5; }
-.arch-card:nth-child(7n+3) { grid-column:span 4; }
-.arch-card:nth-child(7n+4) { grid-column:span 4; }
-.arch-card:nth-child(7n+5) { grid-column:span 4; }
-.arch-card:nth-child(7n+6) { grid-column:span 6; }
-.arch-card:nth-child(7n+0) { grid-column:span 6; }
-.arch-n {
-  font-family:var(--f-d); font-size:2.6rem; line-height:1;
-  color:var(--p06); user-select:none; transition:color .18s;
-}
-.arch-card:hover .arch-n { color:rgba(184,255,0,.1); }
-.arch-d { font-size:.55rem; letter-spacing:.14em; text-transform:uppercase; color:var(--acid); }
-.arch-t { font-family:var(--f-d); font-size:1.05rem; letter-spacing:.02em; text-transform:uppercase; line-height:1.1; color:var(--paper); }
-.arch-desc { font-size:.68rem; line-height:1.7; color:var(--p40); flex:1; }
-.arch-tags { display:flex; flex-wrap:wrap; gap:5px; margin-top:2px; }
-.arch-tags .tag { font-size:.5rem; }
-.arch-arrow {
-  position:absolute; top:18px; right:18px; font-size:.7rem; letter-spacing:.06em;
-  color:var(--acid); opacity:0; transform:translate(-4px,4px);
-  transition:opacity .18s,transform .18s var(--ease);
-}
-.arch-card:hover .arch-arrow { opacity:1; transform:translate(0,0); }
-.arch-seen {
-  position:absolute; top:18px; right:18px; font-size:.5rem; letter-spacing:.1em;
-  text-transform:uppercase; color:var(--p18); opacity:0;
-}
-.arch-card.seen .arch-seen { opacity:1; }
-.arch-card.seen .arch-arrow { display:none; }
-.arch-card.locked { pointer-events:none; opacity:.1 !important; transform:none !important; }
-#sentinel { height:1px; }
-.arch-foot {
-  margin-top:32px; display:flex; align-items:center; justify-content:center;
-  padding:18px; border-top:1px solid var(--p06);
-  font-size:.55rem; letter-spacing:.14em; text-transform:uppercase; color:var(--p18);
-}
-.arch-foot.end::after { content:attr(data-msg); }
+  /* ==================== LAYOUT ==================== */
+  .container       { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
+  .container-narrow{ max-width: 860px;  margin: 0 auto; padding: 0 2rem; }
+  .container-wide  { max-width: 1600px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 8rem 0; position: relative; }
+  @media (max-width: 768px) { section { padding: 5rem 0; } }
 
-/* FOOTER */
-#footer {
-  border-top:1px solid var(--p10); padding:26px 48px;
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px; flex-wrap:wrap;
-}
-.foot-copy { font-size:.55rem; letter-spacing:.1em; text-transform:uppercase; color:var(--p40); }
-.foot-copy a { color:var(--acid); transition:opacity .14s; }
-.foot-copy a:hover { opacity:.7; }
-.foot-phil { font-size:.55rem; letter-spacing:.07em; color:var(--p18); font-style:italic; text-align:center; }
-.foot-mark { font-family:var(--f-d); font-size:1.5rem; letter-spacing:.04em; color:var(--p06); transition:color .2s; }
-.foot-mark:hover { color:rgba(184,255,0,.12); }
+  /* ==================== TYPE ==================== */
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 12px; font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .eyebrow::before {
+    content: ''; display: inline-block;
+    width: 0; height: 1px; background: currentColor;
+    transition: width 800ms var(--ease-quiet) 300ms;
+  }
+  .is-in .eyebrow::before { width: 2rem; }
 
-@keyframes up { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  .section-number {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-mute);
+    letter-spacing: 0.15em;
+  }
 
-@media (max-width:920px) {
-  #nav{padding:0 24px} .nav-center{display:none}
-  .hero-main{grid-template-columns:1fr}
-  .hero-l{padding:44px 24px;border-right:none;border-bottom:1px solid var(--p10)}
-  .hero-r{padding:40px 24px}
-  #archive{padding:64px 24px}
-  .arch-card{grid-column:span 12 !important}
-  .arch-grid{grid-template-columns:1fr}
-  #footer{flex-direction:column;align-items:flex-start;gap:10px}
-  .arch-head{flex-direction:column;align-items:flex-start}
-}
-@media (max-width:580px) {
-  .hero-num{font-size:clamp(72px,22vw,130px)}
-  .nav-right{gap:14px}
-}
+  h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+  h2 { font-size: clamp(2.5rem, 5vw, 4.25rem); }
+  h3 { font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 700; }
+  h4 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; }
+
+  .headline-enter {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 1100ms var(--ease-quiet), transform 1100ms var(--ease-quiet);
+    will-change: transform, opacity;
+  }
+  .is-in .headline-enter { opacity: 1; transform: none; }
+  .is-in .headline-enter.delay-1 { transition-delay: 150ms; }
+  .is-in .headline-enter.delay-2 { transition-delay: 300ms; }
+  .is-in .headline-enter.delay-3 { transition-delay: 450ms; }
+  .is-in .headline-enter.delay-4 { transition-delay: 600ms; }
+
+  p { color: var(--text-soft); }
+  .mono { font-family: var(--font-mono); }
+
+  /* ==================== NAV ==================== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1rem 2rem;
+    background: rgba(10,10,10,0.72);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border-bottom: 1px solid var(--line-soft);
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .nav__brand {
+    display: flex; align-items: center; gap: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .nav__brand-mark {
+    width: 26px; height: 26px;
+    border: 1px solid var(--accent);
+    display: grid; place-items: center;
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    transition: background 300ms var(--ease-quiet), color 300ms var(--ease-quiet);
+  }
+  .nav__brand:hover .nav__brand-mark { background: var(--accent); color: var(--bg); }
+  .nav__links { display: flex; gap: 2rem; }
+  .nav__links a {
+    color: var(--text-mute);
+    transition: color 300ms var(--ease-quiet);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .nav__links a::after {
+    content: ''; position: absolute;
+    left: 0; right: 0; bottom: -6px;
+    height: 1px; background: var(--accent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 400ms var(--ease-quiet);
+  }
+  .nav__links a:hover { color: var(--accent); }
+  .nav__links a:hover::after { transform: scaleX(1); }
+  .nav__meta {
+    color: var(--text-mute);
+    letter-spacing: 0.15em;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nav__status {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #6ec96e;
+    box-shadow: 0 0 8px rgba(110,201,110,0.7);
+  }
+  @media (max-width: 980px) {
+    .nav__links { display: none; }
+  }
+  @media (max-width: 640px) {
+    .nav__meta { display: none; }
+  }
+
+  /* ==================== HERO ==================== */
+  .hero {
+    min-height: 100vh;
+    padding: 8rem 2rem 6rem;
+    position: relative;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    overflow: hidden;
+  }
+  .hero canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    opacity: 0.6;
+  }
+  .hero__grid-overlay {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(200,170,130,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,170,130,0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .hero__content {
+    position: relative; z-index: 2;
+    max-width: 1400px; margin: 0 auto;
+    width: 100%;
+  }
+  .hero__top {
+    position: absolute; top: 5rem; left: 2rem; right: 2rem;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    z-index: 3;
+  }
+  .hero__top-row { display: flex; gap: 2rem; }
+  .hero__top-row span { display: block; }
+  .hero__top-row strong { color: var(--accent); font-weight: 400; }
+  .hero__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    display: flex; align-items: center; gap: 1rem;
+    opacity: 0; transform: translateY(-20px);
+    transition: opacity 700ms var(--ease-quiet), transform 700ms var(--ease-quiet);
+  }
+  .hero__eyebrow.is-in { opacity: 1; transform: none; }
+  .hero__eyebrow::after {
+    content: ''; width: 3rem; height: 1px; background: var(--accent);
+  }
+  .hero__title {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    font-size: clamp(3rem, 11vw, 11rem);
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+    margin-bottom: 2rem;
+    max-width: 16ch;
+    opacity: 0; transform: translateY(60px);
+    transition: opacity 1300ms var(--ease-quiet) 200ms, transform 1300ms var(--ease-quiet) 200ms;
+  }
+  .hero__title.is-in { opacity: 1; transform: none; }
+  .hero__title em {
+    font-style: normal;
+    color: var(--accent);
+    position: relative;
+  }
+  .hero__title em::after {
+    content: '_';
+    color: var(--accent);
+    animation: blink 1s steps(2) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .hero__sub {
+    font-size: clamp(1rem, 1.25vw, 1.15rem);
+    line-height: 1.65;
+    color: var(--text-soft);
+    max-width: 60ch;
+    margin-bottom: 3rem;
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 1000ms var(--ease-quiet) 500ms, transform 1000ms var(--ease-quiet) 500ms;
+  }
+  .hero__sub.is-in { opacity: 1; transform: none; }
+  .hero__cta-row {
+    display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 800ms var(--ease-quiet) 800ms, transform 800ms var(--ease-quiet) 800ms;
+  }
+  .hero__cta-row.is-in { opacity: 1; transform: none; }
+  .cta {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: background 400ms var(--ease-quiet), color 400ms var(--ease-quiet);
+  }
+  .cta:hover { background: var(--accent); color: var(--bg); }
+  .cta__arrow { transition: transform 400ms var(--ease-quiet); }
+  .cta:hover .cta__arrow { transform: translateX(4px); }
+  .cta--ghost {
+    border-color: var(--line);
+    color: var(--text-soft);
+  }
+  .cta--ghost:hover { border-color: var(--accent); color: var(--accent); background: transparent; }
+
+  .hero__cta-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .hero__scroll-cue {
+    position: absolute; bottom: 2rem; right: 2rem;
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--text-mute);
+    letter-spacing: 0.3em; text-transform: uppercase;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    z-index: 3;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .hero__scroll-cue::after {
+    content: ''; width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+
+  .hero__corner {
+    position: absolute;
+    width: 24px; height: 24px;
+    border: 1px solid var(--accent);
+    z-index: 3;
+  }
+  .hero__corner--tl { top: 5rem; left: 2rem; border-right: none; border-bottom: none; }
+  .hero__corner--tr { top: 5rem; right: 2rem; border-left: none; border-bottom: none; }
+  .hero__corner--bl { bottom: 2rem; left: 2rem; border-right: none; border-top: none; }
+  .hero__corner--br { bottom: 2rem; right: 2rem; border-left: none; border-top: none; }
+
+  /* ==================== SECTION HEAD ==================== */
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    margin-bottom: 6rem;
+    align-items: end;
+  }
+  @media (max-width: 880px) {
+    .section-head { grid-template-columns: 1fr; gap: 2rem; }
+  }
+  .section-head__left {
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .section-head__title { max-width: 18ch; }
+  .section-head__meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-mute);
+    letter-spacing: 0.15em;
+    margin-top: 2rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .section-head__meta span { display: block; }
+  .section-head__meta strong {
+    display: block; color: var(--accent); font-weight: 400;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+  }
+
+  /* ==================== TERMINAL CARD ==================== */
+  .terminal-block {
+    border: 1px solid var(--line);
+    background: var(--bg-card);
+    margin: 4rem 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    overflow: hidden;
+  }
+  .terminal__head {
+    padding: 0.75rem 1.25rem;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 0.75rem;
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .terminal__dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--line);
+  }
+  .terminal__dot--red { background: #c97070; }
+  .terminal__dot--amber { background: var(--accent); }
+  .terminal__dot--green { background: #6ec96e; }
+  .terminal__title { margin-left: auto; }
+  .terminal__body {
+    padding: 1.5rem 1.25rem;
+    line-height: 1.8;
+    color: var(--text-soft);
+    min-height: 280px;
+  }
+  .terminal__line { display: block; }
+  .terminal__prompt { color: var(--accent); }
+  .terminal__comment { color: var(--text-mute); }
+  .terminal__key { color: var(--accent); }
+  .terminal__val { color: var(--text); }
+  .terminal__cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--accent);
+    vertical-align: text-bottom;
+    animation: blink 1s steps(2) infinite;
+  }
+
+  /* ==================== PROJECTS GRID ==================== */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+  @media (max-width: 768px) { .projects-grid { grid-template-columns: 1fr; } }
+  .project-card {
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 2.5rem;
+    position: relative;
+    display: flex; flex-direction: column;
+    min-height: 360px;
+    transition: background 500ms var(--ease-quiet);
+    overflow: hidden;
+  }
+  .project-card::before {
+    content: ''; position: absolute;
+    left: 0; top: 0;
+    width: 2px; height: 0;
+    background: var(--accent);
+    transition: height 700ms var(--ease-quiet);
+  }
+  .project-card:hover { background: rgba(200,170,130,0.025); }
+  .project-card:hover::before { height: 100%; }
+  .project-card__head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 2rem;
+  }
+  .project-card__index {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.3em;
+  }
+  .project-card__status {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-mute);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .project-card__status::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--text-mute);
+  }
+  .project-card__status.is-live::before { background: #6ec96e; box-shadow: 0 0 6px rgba(110,201,110,0.6); }
+  .project-card__status.is-wip::before { background: var(--accent); box-shadow: 0 0 6px var(--accent-soft); }
+  .project-card__name {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    transition: color 500ms var(--ease-quiet);
+  }
+  .project-card:hover .project-card__name { color: var(--accent); }
+  .project-card__latin {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .project-card__body {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text-mute);
+    transition: color 500ms var(--ease-quiet);
+    flex: 1;
+    margin-bottom: 2rem;
+  }
+  .project-card:hover .project-card__body { color: var(--text-soft); }
+  .project-card__foot {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line-soft);
+  }
+  .project-card__tags {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+  }
+  .project-card__tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-mute);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--line);
+    transition: border-color 400ms var(--ease-quiet), color 400ms var(--ease-quiet);
+  }
+  .project-card:hover .project-card__tag { border-color: var(--accent-soft); color: var(--accent); }
+  .project-card__link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: gap 400ms var(--ease-quiet);
+  }
+  .project-card:hover .project-card__link { gap: 1rem; }
+
+  /* ==================== STICKY PAIR ==================== */
+  .sticky-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .sticky-pair .left {
+    position: sticky;
+    top: 88px;
+    height: calc(100vh - 88px);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 4rem 0;
+  }
+  @media (max-width: 880px) {
+    .sticky-pair { grid-template-columns: 1fr; gap: 3rem; }
+    .sticky-pair .left { position: static; height: auto; padding: 0; }
+  }
+  .sticky-pair .right { display: flex; flex-direction: column; gap: 6rem; }
+
+  .right-block { display: flex; flex-direction: column; gap: 1.5rem; }
+  .right-block__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    border-top: 1px solid var(--accent-soft);
+    padding-top: 1rem;
+  }
+  .right-block h3 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .right-block p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-soft);
+  }
+  .right-block blockquote {
+    font-family: var(--font-sans);
+    font-size: 1.35rem;
+    line-height: 1.45;
+    color: var(--text);
+    font-style: italic;
+    border-left: 2px solid var(--accent);
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    margin: 1rem 0;
+  }
+  .right-block cite {
+    display: block;
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 0.75rem;
+  }
+
+  /* ==================== PIN SCROLL (FEATURED) ==================== */
+  .pin-section { position: relative; }
+  .pin-viewport { height: 100vh; width: 100%; }
+  .pin-sticky {
+    position: sticky; top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .pin-header {
+    padding: 5rem 4rem 2rem;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    flex-shrink: 0;
+  }
+  .pin-header__title { max-width: 18ch; }
+  .pin-header__meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: right;
+  }
+  .pin-track-wrap {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .pin-track {
+    display: flex;
+    gap: 2rem;
+    padding: 0 4rem;
+    will-change: transform;
+  }
+  .feature-card {
+    flex: 0 0 460px;
+    height: 60vh;
+    max-height: 560px;
+    border: 1px solid var(--line);
+    background: var(--bg-card);
+    padding: 2.5rem;
+    display: flex; flex-direction: column;
+    position: relative;
+    transition: border-color 500ms var(--ease-quiet), transform 200ms var(--ease-quiet);
+    overflow: hidden;
+  }
+  .feature-card:hover { border-color: var(--accent-soft); }
+  .feature-card__bg-num {
+    position: absolute;
+    right: -2rem; bottom: -4rem;
+    font-family: var(--font-mono);
+    font-size: 18rem;
+    font-weight: 700;
+    color: rgba(200,170,130,0.04);
+    line-height: 0.8;
+    pointer-events: none;
+  }
+  .feature-card__num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.3em;
+    margin-bottom: 1.5rem;
+    position: relative; z-index: 2;
+  }
+  .feature-card__name {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.5rem;
+    position: relative; z-index: 2;
+  }
+  .feature-card__sub {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-mute);
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+    position: relative; z-index: 2;
+  }
+  .feature-card__meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 0.75rem 0;
+    position: relative; z-index: 2;
+  }
+  .feature-card__body {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text-soft);
+    flex: 1;
+    position: relative; z-index: 2;
+  }
+  .feature-card__cta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative; z-index: 2;
+  }
+  .pin-progress {
+    padding: 1.5rem 4rem 3rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    flex-shrink: 0;
+  }
+  .pin-progress__bar {
+    flex: 0 0 12rem;
+    height: 1px;
+    background: var(--line);
+    position: relative;
+  }
+  .pin-progress__fill {
+    position: absolute; left: 0; top: 0; height: 100%;
+    width: 0;
+    background: var(--accent);
+  }
+  .pin-progress__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  @media (max-width: 880px) {
+    .pin-viewport { height: auto; }
+    .pin-sticky { position: static; height: auto; }
+    .pin-track-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .pin-track { transform: none !important; padding: 0 1.5rem 2rem; }
+    .feature-card { flex: 0 0 300px; height: auto; min-height: 480px; }
+    .pin-header { padding: 3rem 1.5rem 1.5rem; flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .pin-progress { display: none; }
+  }
+
+  /* ==================== STACK INVENTORY ==================== */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+  @media (max-width: 980px) { .stack-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px) { .stack-grid { grid-template-columns: 1fr; } }
+  .stack-item {
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 2rem 1.5rem;
+    position: relative;
+    transition: background 400ms var(--ease-quiet);
+    cursor: none;
+  }
+  .stack-item::before {
+    content: ''; position: absolute;
+    left: 0; top: 0;
+    width: 0; height: 2px;
+    background: var(--accent);
+    transition: width 500ms var(--ease-quiet);
+  }
+  .stack-item:hover { background: rgba(200,170,130,0.03); }
+  .stack-item:hover::before { width: 100%; }
+  .stack-item__head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+  .stack-item__symbol {
+    font-family: var(--font-mono);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .stack-item__level {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-mute);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .stack-item__name {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.25rem;
+  }
+  .stack-item__desc {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+  }
+  .stack-item__bar {
+    margin-top: 1rem;
+    height: 1px;
+    background: var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .stack-item__bar-fill {
+    position: absolute; left: 0; top: 0; height: 100%;
+    background: var(--accent);
+    width: 0;
+    transition: width 1200ms var(--ease-quiet) 200ms;
+  }
+  .stack-item.is-in .stack-item__bar-fill { width: var(--lvl, 50%); }
+
+  /* ==================== LAB GRID ==================== */
+  .lab-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  @media (max-width: 880px) { .lab-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px) { .lab-grid { grid-template-columns: 1fr; } }
+  .lab-card {
+    border: 1px solid var(--line);
+    padding: 1.75rem;
+    background: var(--bg-card);
+    position: relative;
+    transition: border-color 400ms var(--ease-quiet), transform 400ms var(--ease-quiet);
+    overflow: hidden;
+    min-height: 220px;
+    display: flex; flex-direction: column;
+  }
+  .lab-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(200,170,130,0.08), transparent 50%);
+    opacity: 0;
+    transition: opacity 400ms var(--ease-quiet);
+    pointer-events: none;
+  }
+  .lab-card:hover { border-color: var(--accent-soft); transform: translateY(-4px); }
+  .lab-card:hover::after { opacity: 1; }
+  .lab-card__head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.25rem;
+  }
+  .lab-card__icon {
+    width: 32px; height: 32px;
+    border: 1px solid var(--accent-soft);
+    display: grid; place-items: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .lab-card__tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-mute);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .lab-card__name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+  .lab-card__body {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--text-mute);
+    flex: 1;
+    margin-bottom: 1rem;
+  }
+  .lab-card__foot {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-mute);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line-soft);
+  }
+  .lab-card__link { color: var(--accent); }
+
+  /* ==================== TIMELINE ==================== */
+  .timeline { border-top: 1px solid var(--line); }
+  .row {
+    display: grid;
+    grid-template-columns: 130px 1fr 1fr 100px;
+    gap: 3rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    transition: background 600ms var(--ease-quiet);
+  }
+  .row::before {
+    content: '';
+    position: absolute;
+    left: -1.5rem; top: 0;
+    width: 2px; height: 0;
+    background: var(--accent);
+    transition: height 700ms var(--ease-quiet);
+  }
+  .row:hover { background: rgba(200,170,130,0.025); }
+  .row:hover::before { height: 100%; }
+  .row__year {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+  .row__title {
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    color: var(--text);
+    transition: color 500ms var(--ease-quiet);
+  }
+  .row:hover .row__title { color: var(--accent); }
+  .row__body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-mute);
+    transition: color 500ms var(--ease-quiet);
+  }
+  .row:hover .row__body { color: var(--text-soft); }
+  .row__tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-mute);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: right;
+    align-self: start;
+  }
+  @media (max-width: 880px) {
+    .row { grid-template-columns: 1fr; gap: 0.5rem; padding: 2rem 0; }
+    .row::before { left: -1rem; }
+    .row__tag { text-align: left; }
+  }
+
+  /* ==================== STATS ==================== */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+  @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat-item {
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-item__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .stat-item__num {
+    font-family: var(--font-mono);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .stat-item__desc {
+    font-size: 0.875rem;
+    color: var(--text-soft);
+    line-height: 1.5;
+  }
+
+  /* ==================== CONTACT ==================== */
+  .contact-block {
+    border: 1px solid var(--line);
+    padding: 4rem;
+    background: var(--bg-card);
+    position: relative;
+  }
+  @media (max-width: 768px) { .contact-block { padding: 2.5rem 1.5rem; } }
+  .contact-block__corner {
+    position: absolute;
+    width: 16px; height: 16px;
+    border: 1px solid var(--accent);
+  }
+  .contact-block__corner--tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .contact-block__corner--tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+  .contact-block__corner--bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+  .contact-block__corner--br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+  @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
+  .contact-channel {
+    display: flex; flex-direction: column; gap: 0.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--line-soft);
+    transition: padding-left 400ms var(--ease-quiet);
+    position: relative;
+  }
+  .contact-channel::before {
+    content: ''; position: absolute;
+    left: 0; top: 50%; transform: translateY(-50%);
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 400ms var(--ease-quiet);
+  }
+  .contact-channel:hover { padding-left: 1.5rem; }
+  .contact-channel:hover::before { width: 1rem; }
+  .contact-channel__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .contact-channel__value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .contact-channel__note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.1em;
+  }
+
+  /* ==================== FOOTER ==================== */
+  .footer {
+    padding: 6rem 0 3rem;
+    border-top: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .footer__big {
+    font-family: var(--font-sans);
+    font-size: clamp(4rem, 14vw, 14rem);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 0.85;
+    color: var(--text);
+    margin-bottom: 4rem;
+    opacity: 0.06;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 5rem;
+  }
+  @media (max-width: 880px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  .footer h4 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+  }
+  .footer p, .footer li {
+    font-size: 0.9rem;
+    color: var(--text-mute);
+    line-height: 1.6;
+  }
+  .footer ul { list-style: none; }
+  .footer li { margin-bottom: 0.5rem; }
+  .footer li a { transition: color 300ms var(--ease-quiet); display: inline-flex; align-items: center; gap: 0.5rem; }
+  .footer li a::before { content: '→'; color: var(--text-dim); transition: color 300ms var(--ease-quiet), transform 300ms var(--ease-quiet); }
+  .footer li a:hover { color: var(--accent); }
+  .footer li a:hover::before { color: var(--accent); transform: translateX(3px); }
+  .footer__brand {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .footer-bottom {
+    border-top: 1px solid var(--line-soft);
+    padding-top: 2rem;
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 1rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ==================== REVEAL ==================== */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 900ms var(--ease-quiet), transform 900ms var(--ease-quiet); }
+  .reveal.is-in { opacity: 1; transform: none; }
+
+  /* ==================== ACCESSIBILITY ==================== */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .hero canvas { display: none; }
+  }
 </style>
 </head>
 <body>
-<div id="noise"></div>
-<div id="cur"></div>
 
-<nav id="nav">
-  <!-- translate="no" prevents browser auto-translation of the brand name -->
-  <a href="#" class="nav-logo" translate="no">nasq<span class="nd">drop</span></a>
-  <div class="nav-center">
-    <div class="live-dot"></div>
-    <span data-i18n="nav_live">Updated daily</span>
+<!-- ==================== CURSOR ==================== -->
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- ==================== NAV ==================== -->
+<nav class="nav">
+  <a href="#hero" class="nav__brand">
+    <span class="nav__brand-mark">NQ</span>
+    <span>NASQ · INDEX</span>
+  </a>
+  <div class="nav__links">
+    <a href="#projects">01 · Projects</a>
+    <a href="#featured">02 · Featured</a>
+    <a href="#stack">03 · Stack</a>
+    <a href="#lab">04 · Lab</a>
+    <a href="#log">05 · Log</a>
+    <a href="#contact">06 · Contact</a>
   </div>
-  <div class="nav-right">
-    <a href="#archive" class="nav-link" data-i18n="nav_archive">Archive</a>
-    <a href="https://github.com/nasqwww" target="_blank" class="nav-link" rel="noopener" translate="no">nasqwww ↗</a>
-    <div class="lang-toggle" id="langToggle">
-      <button class="lang-btn" data-lang="en">EN</button>
-      <button class="lang-btn" data-lang="ru">RU</button>
-    </div>
+  <div class="nav__meta">
+    <span class="nav__status"></span>
+    <span id="nav-clock">--:--:--</span>
   </div>
 </nav>
 
-<section id="hero">
-  <div class="hero-main">
-    <div class="hero-l">
-      <p class="hero-eyebrow" data-i18n="hero_issue">Issue №</p>
-      <div class="hero-num" id="heroNum">001</div>
-      <p class="hero-date" id="heroDate">—</p>
-      <div class="hero-stats">
-        <div class="stat"><div class="stat-n" id="statTotal">—</div><div class="stat-l" data-i18n="stat_curated">Curated sites</div></div>
-        <div class="stat"><div class="stat-n" id="statDays">—</div><div class="stat-l" data-i18n="stat_days">Days running</div></div>
-      </div>
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="hero">
+  <canvas id="glyph-rain"></canvas>
+  <div class="hero__grid-overlay"></div>
+  <div class="hero__corner hero__corner--tl"></div>
+  <div class="hero__corner hero__corner--tr"></div>
+  <div class="hero__corner hero__corner--bl"></div>
+  <div class="hero__corner hero__corner--br"></div>
+
+  <div class="hero__top">
+    <div class="hero__top-row">
+      <span><strong>NODE</strong> nasq-index-v3</span>
+      <span><strong>BUILD</strong> 2024.11.03</span>
+      <span><strong>LOC</strong> 0x7F32A</span>
     </div>
-    <div class="hero-r">
-      <div class="chip-row">
-        <div class="chip" data-i18n="chip_today">Today's drop</div>
-        <div class="chip chip-seen" id="chipSeen" data-i18n="chip_seen">✓ Already seen</div>
+    <div class="hero__top-row">
+      <span><strong>EPOCH</strong> <span id="epoch-time">0000000000</span></span>
+      <span><strong>UPTIME</strong> <span id="uptime">00:00:00</span></span>
+    </div>
+  </div>
+
+  <div class="hero__content">
+    <div class="hero__eyebrow" data-eyebrow>
+      <span>Personal Index · Transition Hub · v3.0</span>
+    </div>
+    <h1 class="hero__title" data-title>
+      Входная<br>точка в <em>сеть</em>.
+    </h1>
+    <p class="hero__sub" data-sub>
+      Это не портфолио. Это командная панель — терминал, из которого запускаются все мои проекты, лабораторные эксперименты, заметки и статьи. Один файл, ноль фреймворков, бесконечный скролл. Если ты здесь впервые — начни сProjects, потом загляни в Lab. Если вернулся — ты знаешь, где что лежит.
+    </p>
+    <div class="hero__cta-row" data-cta>
+      <a href="#projects" class="cta">
+        <span>Открыть индекс</span>
+        <span class="cta__arrow">→</span>
+      </a>
+      <a href="https://github.com/nasqwww" target="_blank" rel="noopener" class="cta cta--ghost">
+        <span>GitHub Profile</span>
+        <span class="cta__arrow">↗</span>
+      </a>
+      <span class="hero__cta-meta">12 projects · 6 featured · 8 lab</span>
+    </div>
+  </div>
+  <div class="hero__scroll-cue">Scroll · Descende</div>
+</section>
+
+<!-- ==================== TERMINAL STATUS ==================== -->
+<section style="padding: 4rem 0 8rem;">
+  <div class="container">
+    <div class="terminal-block reveal">
+      <div class="terminal__head">
+        <span class="terminal__dot terminal__dot--red"></span>
+        <span class="terminal__dot terminal__dot--amber"></span>
+        <span class="terminal__dot terminal__dot--green"></span>
+        <span class="terminal__title">nasq@index:~ · status --read</span>
       </div>
-      <h1 class="hero-title" id="heroTitle">—</h1>
-      <div class="hero-tags" id="heroTags"></div>
-      <p class="hero-desc" id="heroDesc">—</p>
-      <div class="hero-actions">
-        <a class="btn-open" id="heroLink" href="#" target="_blank" rel="noopener">
-          <span data-i18n="btn_open">Open site</span>
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-            <path d="M1.5 11.5L11.5 1.5M11.5 1.5H4.5M11.5 1.5V8.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-        <button class="btn-random" id="btnRandom">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-            <path d="M1 3h8M7 1l2 2-2 2M11 9H3M5 7l-2 2 2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span data-i18n="btn_random">Random</span>
-        </button>
+      <div class="terminal__body" id="terminal-body">
+        <span class="terminal__line"><span class="terminal__comment"># Последний синк с GitHub: только что</span></span>
+        <span class="terminal__line"><span class="terminal__prompt">$</span> whoami</span>
+        <span class="terminal__line">→ <span class="terminal__val">nasq · frontend / creative dev / systems enthusiast</span></span>
+        <span class="terminal__line">&nbsp;</span>
+        <span class="terminal__line"><span class="terminal__prompt">$</span> ls ~/projects/ --sort=modified</span>
+        <span class="terminal__line">→ <span class="terminal__key">roma-aeterna</span>     <span class="terminal__comment"># архив древнего Рима</span></span>
+        <span class="terminal__line">→ <span class="terminal__key">crt-filter-lab</span>    <span class="terminal__comment"># CSS-фильтры под старый монитор</span></span>
+        <span class="terminal__line">→ <span class="terminal__key">music-visualizer</span>  <span class="terminal__comment"># аудио-реактив на canvas</span></span>
+        <span class="terminal__line">→ <span class="terminal__key">ascii-tetris</span>      <span class="terminal__comment"># тетрис в терминале</span></span>
+        <span class="terminal__line">→ <span class="terminal__key">markdown-garden</span>   <span class="terminal__comment"># система заметок</span></span>
+        <span class="terminal__line">→ <span class="terminal__key">weather-cli</span>       <span class="terminal__comment"># погода в терминале</span></span>
+        <span class="terminal__line">&nbsp;</span>
+        <span class="terminal__line"><span class="terminal__prompt">$</span> cat ./manifesto.txt</span>
+        <span class="terminal__line">→ <span class="terminal__val">"Сайт — это не слайд. Это машина."</span></span>
+        <span class="terminal__line">&nbsp;</span>
+        <span class="terminal__line"><span class="terminal__prompt">$</span> _<span class="terminal__cursor"></span></span>
       </div>
     </div>
   </div>
-  <div class="ticker-wrap"><div class="ticker-track" id="ticker"></div></div>
 </section>
 
-<section id="archive">
-  <div class="arch-head">
-    <h2 class="arch-heading"><em>//</em> <span data-i18n="arch_title">Archive</span></h2>
-    <div class="arch-controls">
-      <div class="filter-list" id="filterList"></div>
-      <div class="count-badge" id="countBadge"></div>
+<!-- ==================== I. PROJECTS ==================== -->
+<section id="projects">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__left">
+        <span class="section-number">01 / 06</span>
+        <span class="eyebrow">Projects · Индекс</span>
+      </div>
+      <div>
+        <h2 class="headline-enter">Все публичные сборки.<br>Один клик до запуска.</h2>
+        <div class="section-head__meta">
+          <div><strong>Всего</strong><span>12 репозиториев</span></div>
+          <div><strong>Live</strong><span>9 из 12 задеплоено</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="projects-grid">
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/roma-aeterna/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 001</span>
+          <span class="project-card__status is-live">LIVE</span>
+        </div>
+        <h3 class="project-card__name">Roma Aeterna</h3>
+        <div class="project-card__latin">Архив · 753 BC — 476 AD</div>
+        <p class="project-card__body">
+          Одностраничный архив древнего Рима: от основания до падения. Шесть разделов, горизонтальный pin-scroll с императорами, глифовый дождь из римских цифр на герое. Один HTML-файл, ноль зависимостей.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">HTML</span>
+            <span class="project-card__tag">CSS</span>
+            <span class="project-card__tag">Canvas</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/crt-filter-lab/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 002</span>
+          <span class="project-card__status is-live">LIVE</span>
+        </div>
+        <h3 class="project-card__name">CRT Filter Lab</h3>
+        <div class="project-card__latin">CSS · Visual Toy</div>
+        <p class="project-card__body">
+          Лаборатория CSS-фильтров: сканлайны, хроматическая аберрация, фосфорное свечение, виньетка — всё то, что превращает плоскую страницу в кадр со старого ЭЛТ-монитора. С ползунками и пресетами.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">CSS</span>
+            <span class="project-card__tag">Filter</span>
+            <span class="project-card__tag">Toy</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/music-visualizer/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 003</span>
+          <span class="project-card__status is-live">LIVE</span>
+        </div>
+        <h3 class="project-card__name">Music Visualizer</h3>
+        <div class="project-card__latin">Web Audio · Canvas</div>
+        <p class="project-card__body">
+          Аудио-реактивный визуализатор: загружаешь трек — получаешь пульсирующую геометрию на canvas. FFT-анализ, частотные полосы, настройка чувствительности. Работает с любым аудио-источником.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">WebAudio</span>
+            <span class="project-card__tag">Canvas</span>
+            <span class="project-card__tag">FFT</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/ascii-tetris/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 004</span>
+          <span class="project-card__status is-live">LIVE</span>
+        </div>
+        <h3 class="project-card__name">ASCII Tetris</h3>
+        <div class="project-card__latin">Terminal · Game</div>
+        <p class="project-card__body">
+          Тетрис, отрисованный ASCII-символами в моноширинной сетке. Управление стрелками, уровни скорости, счёт, следующие фигуры. Никаких изображений — только символы и цвет.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">JS</span>
+            <span class="project-card__tag">Game</span>
+            <span class="project-card__tag">ASCII</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/markdown-garden/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 005</span>
+          <span class="project-card__status is-wip">WIP</span>
+        </div>
+        <h3 class="project-card__name">Markdown Garden</h3>
+        <div class="project-card__latin">Notes · Digital Garden</div>
+        <p class="project-card__body">
+          Система заметок с бэк-ссылками, тегами и графом связей. Заметки пишутся в markdown, рендерятся в HTML на лету, связи между ними визуализируются как мини-граф. Без бэкенда — pure front.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">JS</span>
+            <span class="project-card__tag">Markdown</span>
+            <span class="project-card__tag">Graph</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/weather-cli/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 006</span>
+          <span class="project-card__status is-live">LIVE</span>
+        </div>
+        <h3 class="project-card__name">Weather CLI</h3>
+        <div class="project-card__latin">Terminal · API</div>
+        <p class="project-card__body">
+          Погода в виде вывода терминала. Вводишь город — получаешь прогноз в моноширинной таблице с ASCII-артом состояния неба. Открытый API, без ключей, кэш в localStorage.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">JS</span>
+            <span class="project-card__tag">API</span>
+            <span class="project-card__tag">CLI</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/chess-engine/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 007</span>
+          <span class="project-card__status is-wip">WIP</span>
+        </div>
+        <h3 class="project-card__name">Chess Engine</h3>
+        <div class="project-card__latin">JS · Minimax · Alpha-Beta</div>
+        <p class="project-card__body">
+          Шахматный движок на чистом JS: генерация ходов, minimax с альфа-бета отсечением, оценочная функция по материалу и позиции. Без библиотек — всё с нуля. Сейчас работает на глубине 3-4 хода.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">JS</span>
+            <span class="project-card__tag">AI</span>
+            <span class="project-card__tag">Algo</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/retro-crt-sim/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 008</span>
+          <span class="project-card__status is-live">LIVE</span>
+        </div>
+        <h3 class="project-card__name">Retro CRT Sim</h3>
+        <div class="project-card__latin">WebGL · Shader</div>
+        <p class="project-card__body">
+          Полноэкранная симуляция старого ЭЛТ-монитора на WebGL-шейдерах: изгиб кинескопа, муар, дрожание строк, разогрев лампы при включении. Можно вставить любой URL и посмотреть на сайт «через 1987 год».
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">WebGL</span>
+            <span class="project-card__tag">Shader</span>
+            <span class="project-card__tag">GLSL</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/typewriter-poems/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 009</span>
+          <span class="project-card__status is-live">LIVE</span>
+        </div>
+        <h3 class="project-card__name">Typewriter Poems</h3>
+        <div class="project-card__latin">Text · Animation</div>
+        <p class="project-card__body">
+          Коллекция коротких стихов, которые печатаются сами — посимвольно, с ошибками, исправлениями и паузами. Как будто за машинкой сидит живой человек. Звук печатной машинки опционален.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">JS</span>
+            <span class="project-card__tag">Text</span>
+            <span class="project-card__tag">Audio</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/pixel-painter/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 010</span>
+          <span class="project-card__status is-live">LIVE</span>
+        </div>
+        <h3 class="project-card__name">Pixel Painter</h3>
+        <div class="project-card__latin">Canvas · Tool</div>
+        <p class="project-card__body">
+          Простой пиксельный редактор: сетка 32×32, палитра 16 цветов, экспорт в PNG,撤销/redo. Сделан как инструмент для скетчей спрайтов — ничего лишнего.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">Canvas</span>
+            <span class="project-card__tag">Tool</span>
+            <span class="project-card__tag">Art</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/mandelbrot-explorer/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 011</span>
+          <span class="project-card__status is-live">LIVE</span>
+        </div>
+        <h3 class="project-card__name">Mandelbrot Explorer</h3>
+        <div class="project-card__latin">WebGL · Fractal</div>
+        <p class="project-card__body">
+          Исследователь множества Мандельброта на WebGL: зум колесом мыши, панель с координатами, настройка количества итераций и палитры. Можно уйти в глубину 10^-14 — пока float не сломается.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">WebGL</span>
+            <span class="project-card__tag">Math</span>
+            <span class="project-card__tag">Fractal</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/index/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 012</span>
+          <span class="project-card__status is-live">THIS</span>
+        </div>
+        <h3 class="project-card__name">Index (этот сайт)</h3>
+        <div class="project-card__latin">Meta · Self-ref</div>
+        <p class="project-card__body">
+          Эта страница. Переходник, командная панель, портал ко всему остальному. Один файл, ноль фреймворков, бесконечный скролл. Если ты читаешь это описание с самого сайта — ты уже внутри.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">Meta</span>
+            <span class="project-card__tag">HTML</span>
+            <span class="project-card__tag">CSS</span>
+          </div>
+          <span class="project-card__link">Рефреш →</span>
+        </div>
+      </a>
+
     </div>
   </div>
-  <div class="arch-grid" id="archGrid"></div>
-  <div id="sentinel"></div>
-  <div class="arch-foot" id="archFoot" data-msg="—"></div>
 </section>
 
-<footer id="footer">
-  <p class="foot-copy">© 2025 <a href="https://github.com/nasqwww" target="_blank" rel="noopener" translate="no">nasqwww</a> · <span translate="no">nasqdrop</span></p>
-  <p class="foot-phil" data-i18n="foot_phil">The internet is vast. nasqdrop finds the parts worth your time.</p>
-  <div class="foot-mark" aria-hidden="true" translate="no">ND</div>
+<!-- ==================== II. FEATURED PIN SCROLL ==================== -->
+<section id="featured" class="pin-section">
+  <div class="pin-viewport" id="pin-viewport">
+    <div class="pin-sticky">
+      <div class="pin-header">
+        <div>
+          <span class="section-number" style="display:block; margin-bottom:0.5rem;">02 / 06</span>
+          <span class="eyebrow">Featured · Избранное</span>
+          <h2 class="pin-header__title headline-enter" style="margin-top:1.5rem;">Шесть проектов,<br>которыми горжусь.</h2>
+        </div>
+        <div class="pin-header__meta">
+          Scroll to explore<br>
+          06 cards · horizontal
+        </div>
+      </div>
+      <div class="pin-track-wrap">
+        <div class="pin-track" id="pin-track">
+
+          <div class="feature-card">
+            <div class="feature-card__bg-num">01</div>
+            <div class="feature-card__num">F · 01</div>
+            <div class="feature-card__name">Roma<br>Aeterna</div>
+            <div class="feature-card__sub">Архив древнего Рима</div>
+            <div class="feature-card__meta">12 sections · 1 file · 0 deps</div>
+            <div class="feature-card__body">
+              Самый плотный проект на сегодня. Шесть разделов, горизонтальный pin-scroll с шестью императорами, sticky-двухколоночник для философии, глифовый дождь из римских цифр. Один HTML-файл — около 1500 строк.
+            </div>
+            <div class="feature-card__cta">
+              <span>nasqwww.github.io/roma-aeterna</span>
+              <span>→</span>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card__bg-num">02</div>
+            <div class="feature-card__num">F · 02</div>
+            <div class="feature-card__name">Music<br>Visualizer</div>
+            <div class="feature-card__sub">Audio-reactive canvas</div>
+            <div class="feature-card__meta">FFT · 256 bands · 60fps</div>
+            <div class="feature-card__body">
+              Загружаешь любой трек — получаешь пульсирующую геометрию. FFT-анализ в реальном времени, частотные полосы, реверс-режим, чувствительность по децибелам. Главный момент — когда бас попадает в правильную частоту.
+            </div>
+            <div class="feature-card__cta">
+              <span>nasqwww.github.io/music-visualizer</span>
+              <span>→</span>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card__bg-num">03</div>
+            <div class="feature-card__num">F · 03</div>
+            <div class="feature-card__name">Retro<br>CRT Sim</div>
+            <div class="feature-card__sub">WebGL · GLSL shader</div>
+            <div class="feature-card__meta">Full-screen · curved · scanlines</div>
+            <div class="feature-card__body">
+              Симуляция старого ЭЛТ-монитора. Изгиб кинескопа, муар, дрожание строк, фосфорное послесвечение, разогрев при включении. Можно подставить любой URL и посмотреть на современный сайт «через 1987 год».
+            </div>
+            <div class="feature-card__cta">
+              <span>nasqwww.github.io/retro-crt-sim</span>
+              <span>→</span>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card__bg-num">04</div>
+            <div class="feature-card__num">F · 04</div>
+            <div class="feature-card__name">Mandelbrot<br>Explorer</div>
+            <div class="feature-card__sub">Fractal · WebGL</div>
+            <div class="feature-card__meta">Zoom 10⁻¹⁴ · custom palette</div>
+            <div class="feature-card__body">
+              Зум колесом мыши до глубины 10⁻¹⁴ — пока float32 не ломается. Кастомные палитры, настройка итераций, панель с координатами. Можно сохранять «координаты красивых мест» и делиться ими.
+            </div>
+            <div class="feature-card__cta">
+              <span>nasqwww.github.io/mandelbrot-explorer</span>
+              <span>→</span>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card__bg-num">05</div>
+            <div class="feature-card__num">F · 05</div>
+            <div class="feature-card__name">ASCII<br>Tetris</div>
+            <div class="feature-card__sub">Terminal game</div>
+            <div class="feature-card__meta">Pure JS · no images · 60fps</div>
+            <div class="feature-card__body">
+              Тетрис, отрисованный ASCII-символами в моноширинной сетке. Стрелки — движение, пробел — дроп, P — пауза. Семь фигур, десять уровней скорости, счёт, таблица рекордов в localStorage.
+            </div>
+            <div class="feature-card__cta">
+              <span>nasqwww.github.io/ascii-tetris</span>
+              <span>→</span>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card__bg-num">06</div>
+            <div class="feature-card__num">F · 06</div>
+            <div class="feature-card__name">Chess<br>Engine</div>
+            <div class="feature-card__sub">Minimax · alpha-beta</div>
+            <div class="feature-card__meta">Depth 4 · 0 libs · pure JS</div>
+            <div class="feature-card__body">
+              Шахматный движок на чистом JS. Генерация ходов, minimax с альфа-бета отсечением, оценочная функция по материалу и позиции. Без библиотек — всё с нуля. Глубина 3-4 хода за разумное время.
+            </div>
+            <div class="feature-card__cta">
+              <span>nasqwww.github.io/chess-engine</span>
+              <span>→</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="pin-progress">
+        <span class="pin-progress__label">Прогресс</span>
+        <div class="pin-progress__bar"><div class="pin-progress__fill" id="pin-fill"></div></div>
+        <span class="pin-progress__label" id="pin-counter">01 / 06</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== III. STACK INVENTORY ==================== -->
+<section id="stack">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__left">
+        <span class="section-number">03 / 06</span>
+        <span class="eyebrow">Stack · Инвентарь</span>
+      </div>
+      <div>
+        <h2 class="headline-enter">Чем работаю.<br>Никаких фреймворков<br>для галочки.</h2>
+        <div class="section-head__meta">
+          <div><strong>Подход</strong><span>Vanilla first</span></div>
+          <div><strong>Категорий</strong><span>16 инструментов</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-grid">
+      <div class="stack-item reveal" style="--lvl: 95%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">JS</span>
+          <span class="stack-item__level">LVL · 95</span>
+        </div>
+        <div class="stack-item__name">JavaScript</div>
+        <div class="stack-item__desc">ES2023+, vanilla, без jQuery</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 92%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">CSS</span>
+          <span class="stack-item__level">LVL · 92</span>
+        </div>
+        <div class="stack-item__name">CSS3</div>
+        <div class="stack-item__desc">Grid, animation, variables</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 90%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">H™</span>
+          <span class="stack-item__level">LVL · 90</span>
+        </div>
+        <div class="stack-item__name">HTML5</div>
+        <div class="stack-item__desc">Semantic, accessible, SEO</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 78%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">GL</span>
+          <span class="stack-item__level">LVL · 78</span>
+        </div>
+        <div class="stack-item__name">WebGL</div>
+        <div class="stack-item__desc">Shaders, fractals, post-fx</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 85%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">CV</span>
+          <span class="stack-item__level">LVL · 85</span>
+        </div>
+        <div class="stack-item__name">Canvas 2D</div>
+        <div class="stack-item__desc">Games, viz, particles</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 70%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">SV</span>
+          <span class="stack-item__level">LVL · 70</span>
+        </div>
+        <div class="stack-item__name">SVG</div>
+        <div class="stack-item__desc">Icons, paths, morphing</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 65%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">Nj</span>
+          <span class="stack-item__level">LVL · 65</span>
+        </div>
+        <div class="stack-item__name">Node.js</div>
+        <div class="stack-item__desc">CLI tools, scripts, build</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 60%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">P²</span>
+          <span class="stack-item__level">LVL · 60</span>
+        </div>
+        <div class="stack-item__name">Python</div>
+        <div class="stack-item__desc">Scripts, parsing, automation</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 75%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">WA</span>
+          <span class="stack-item__level">LVL · 75</span>
+        </div>
+        <div class="stack-item__name">Web Audio</div>
+        <div class="stack-item__desc">FFT, synthesis, routing</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 80%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">G™</span>
+          <span class="stack-item__level">LVL · 80</span>
+        </div>
+        <div class="stack-item__name">Git</div>
+        <div class="stack-item__desc">Branches, rebase, hooks</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 68%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">Re</span>
+          <span class="stack-item__level">LVL · 68</span>
+        </div>
+        <div class="stack-item__name">RegEx</div>
+        <div class="stack-item__desc">Parsing, validation, search</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 72%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">Ax</span>
+          <span class="stack-item__level">LVL · 72</span>
+        </div>
+        <div class="stack-item__name">Algorithms</div>
+        <div class="stack-item__desc">Trees, graphs, dynamic</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 55%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">TS</span>
+          <span class="stack-item__level">LVL · 55</span>
+        </div>
+        <div class="stack-item__name">TypeScript</div>
+        <div class="stack-item__desc">Types, generics, inference</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 50%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">Rn</span>
+          <span class="stack-item__level">LVL · 50</span>
+        </div>
+        <div class="stack-item__name">React</div>
+        <div class="stack-item__desc">Когда надо — можно</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 45%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">W5</span>
+          <span class="stack-item__level">LVL · 45</span>
+        </div>
+        <div class="stack-item__name">WASM</div>
+        <div class="stack-item__desc">Rust → wasm, perf-critical</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+
+      <div class="stack-item reveal" style="--lvl: 88%;">
+        <div class="stack-item__head">
+          <span class="stack-item__symbol">UX</span>
+          <span class="stack-item__level">LVL · 88</span>
+        </div>
+        <div class="stack-item__name">Motion / UX</div>
+        <div class="stack-item__desc">Easing, timing, choreography</div>
+        <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== IV. LAB ==================== -->
+<section id="lab">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__left">
+        <span class="section-number">04 / 06</span>
+        <span class="eyebrow">Lab · Лаборатория</span>
+      </div>
+      <div>
+        <h2 class="headline-enter">Эксперименты,<br>которые не стали<br>проектами.</h2>
+        <div class="section-head__meta">
+          <div><strong>Статус</strong><span>Alpha · Beta · Toy</span></div>
+          <div><strong>Доступ</strong><span>Открытый, без гарантий</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-grid">
+      <a class="lab-card reveal" href="#" data-lab>
+        <div class="lab-card__head">
+          <span class="lab-card__icon">α</span>
+          <span class="lab-card__tag">EXPERIMENT · 001</span>
+        </div>
+        <h4 class="lab-card__name">Glyph Particle Field</h4>
+        <p class="lab-card__body">
+          4000 частиц, каждая — ASCII-символ. Движутся по полю векторов, реагируют на курсор. Прототип рендера для будущего проекта.
+        </p>
+        <div class="lab-card__foot">
+          <span>Canvas · 60fps</span>
+          <span class="lab-card__link">open →</span>
+        </div>
+      </a>
+
+      <a class="lab-card reveal" href="#" data-lab>
+        <div class="lab-card__head">
+          <span class="lab-card__icon">β</span>
+          <span class="lab-card__tag">EXPERIMENT · 002</span>
+        </div>
+        <h4 class="lab-card__name">Markdown Hot-Reload</h4>
+        <p class="lab-card__body">
+          Редактор markdown с мгновенным рендером. Пишешь слева — справа обновляется. Без framework, без бандла, без сервера.
+        </p>
+        <div class="lab-card__foot">
+          <span>JS · textarea</span>
+          <span class="lab-card__link">open →</span>
+        </div>
+      </a>
+
+      <a class="lab-card reveal" href="#" data-lab>
+        <div class="lab-card__head">
+          <span class="lab-card__icon">γ</span>
+          <span class="lab-card__tag">EXPERIMENT · 003</span>
+        </div>
+        <h4 class="lab-card__name">Lissajous Oscilloscope</h4>
+        <p class="lab-card__body">
+          Фигуры Лиссажу на canvas с настройкой частот и фаз. Простой, но залипательный. Используется в Music Visualizer как режим.
+        </p>
+        <div class="lab-card__foot">
+          <span>Canvas · math</span>
+          <span class="lab-card__link">open →</span>
+        </div>
+      </a>
+
+      <a class="lab-card reveal" href="#" data-lab>
+        <div class="lab-card__head">
+          <span class="lab-card__icon">δ</span>
+          <span class="lab-card__tag">EXPERIMENT · 004</span>
+        </div>
+        <h4 class="lab-card__name">Cellular Automaton</h4>
+        <p class="lab-card__body">
+          Game of Life с настраиваемыми правилами. Конвейевские планеры, глайдер-пушки, осцилляторы. Кнопка randomize — и сразу красивый хаос.
+        </p>
+        <div class="lab-card__foot">
+          <span>Canvas · 200×200</span>
+          <span class="lab-card__link">open →</span>
+        </div>
+      </a>
+
+      <a class="lab-card reveal" href="#" data-lab>
+        <div class="lab-card__head">
+          <span class="lab-card__icon">ε</span>
+          <span class="lab-card__tag">EXPERIMENT · 005</span>
+        </div>
+        <h4 class="lab-card__name">Reactive Type</h4>
+        <p class="lab-card__body">
+          Буквы, которые дышат, реагируют на курсор и шум Перлина. Поэзия как живой организм — текст нельзя «прочитать», его можно «наблюдать».
+        </p>
+        <div class="lab-card__foot">
+          <span>SVG · noise</span>
+          <span class="lab-card__link">open →</span>
+        </div>
+      </a>
+
+      <a class="lab-card reveal" href="#" data-lab>
+        <div class="lab-card__head">
+          <span class="lab-card__icon">ζ</span>
+          <span class="lab-card__tag">EXPERIMENT · 006</span>
+        </div>
+        <h4 class="lab-card__name">Pathfinding Visualizer</h4>
+        <p class="lab-card__body">
+          A* и Дейкстра на сетке с препятствиями. Рисуешь стены — смотришь, как алгоритм находит путь. Полезно для понимания эвристик.
+        </p>
+        <div class="lab-card__foot">
+          <span>JS · grid</span>
+          <span class="lab-card__link">open →</span>
+        </div>
+      </a>
+
+      <a class="lab-card reveal" href="#" data-lab>
+        <div class="lab-card__head">
+          <span class="lab-card__icon">η</span>
+          <span class="lab-card__tag">EXPERIMENT · 007</span>
+        </div>
+        <h4 class="lab-card__name">Voronoi Generator</h4>
+        <p class="lab-card__body">
+          Диаграмма Вороного на случайных точках с настройкой количества ячеек и цветовых палитр. Каждый раз — другой паттерн.
+        </p>
+        <div class="lab-card__foot">
+          <span>Canvas · O(n log n)</span>
+          <span class="lab-card__link">open →</span>
+        </div>
+      </a>
+
+      <a class="lab-card reveal" href="#" data-lab>
+        <div class="lab-card__head">
+          <span class="lab-card__icon">θ</span>
+          <span class="lab-card__tag">EXPERIMENT · 008</span>
+        </div>
+        <h4 class="lab-card__name">Tape Echo Simulator</h4>
+        <p class="lab-card__body">
+          Эмуляция ленточного эха на Web Audio. Пишешь в микрофон — получаешь повтор с деградацией, как со старой ленты. С настройкой скорости и feedback.
+        </p>
+        <div class="lab-card__foot">
+          <span>WebAudio · mic</span>
+          <span class="lab-card__link">open →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== V. LOG / TIMELINE ==================== -->
+<section id="log">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__left">
+        <span class="section-number">05 / 06</span>
+        <span class="eyebrow">Log · Журнал</span>
+      </div>
+      <div>
+        <h2 class="headline-enter">Что делал.<br>Что бросил.<br>Что планирую.</h2>
+        <div class="section-head__meta">
+          <div><strong>Период</strong><span>2022 — 2024</span></div>
+          <div><strong>Записей</strong><span>9 значимых</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="row reveal">
+        <span class="row__year">2022 · 03</span>
+        <span class="row__title">Первый коммит на GitHub</span>
+        <span class="row__body">Простая страница-визитка на чистом HTML. Один файл, никаких стилей кроме дефолтных. С этого началось.</span>
+        <span class="row__tag">START</span>
+      </div>
+      <div class="row reveal">
+        <span class="row__year">2022 · 07</span>
+        <span class="row__title">Освоил Flexbox и Grid</span>
+        <span class="row__body">Перестал бояться CSS. Понял, что flex и grid — это не два конкурента, а два инструмента для разных задач.</span>
+        <span class="row__tag">LEARN</span>
+      </div>
+      <div class="row reveal">
+        <span class="row__year">2022 · 11</span>
+        <span class="row__title">Запустил Markdown Garden v0.1</span>
+        <span class="row__body">Первая попытка сделать «цифровой сад». Криво, с багами, но работало. С тех пор веду заметки в одном markdown-файле.</span>
+        <span class="row__tag">SHIP</span>
+      </div>
+      <div class="row reveal">
+        <span class="row__year">2023 · 02</span>
+        <span class="row__title">Бросил React после 4 месяцев</span>
+        <span class="row__body">Понял, что для моих задач он избыточен. Большинство проектов — это одна страница с интерактивом. Vanilla JS справляется лучше и быстрее.</span>
+        <span class="row__tag">DROP</span>
+      </div>
+      <div class="row reveal">
+        <span class="row__year">2023 · 06</span>
+        <span class="row__title">Первый шейдер на WebGL</span>
+        <span class="row__body">Мandelbrot на минималках. Два дня мучений с GLSL, потом — щелчок, и фрактал ожил. С тех пор шейдеры — любимый инструмент.</span>
+        <span class="row__tag">BREAKTHROUGH</span>
+      </div>
+      <div class="row reveal">
+        <span class="row__year">2023 · 10</span>
+        <span class="row__title">Music Visualizer — первый live-запуск</span>
+        <span class="row__body">Запустил визуализатор, наложил трек, смотрел час. Это был момент, когда код перестал быть кодом и стал опытом.</span>
+        <span class="row__tag">SHIP</span>
+      </div>
+      <div class="row reveal">
+        <span class="row__year">2024 · 02</span>
+        <span class="row__title">Retro CRT Sim — открытый релиз</span>
+        <span class="row__body">Симулятор старого монитора на WebGL. Самый «залипательный» проект. Друзья игрались с ним дольше, чем я писал.</span>
+        <span class="row__tag">SHIP</span>
+      </div>
+      <div class="row reveal">
+        <span class="row__year">2024 · 06</span>
+        <span class="row__title">Roma Aeterna — большой археологический проект</span>
+        <span class="row__body">1500 строк про древний Рим в одном HTML. После него понял, что один файл — это не ограничение, а формат.</span>
+        <span class="row__tag">SHIP</span>
+      </div>
+      <div class="row reveal">
+        <span class="row__year">2024 · 11</span>
+        <span class="row__title">Этот индекс-терминал</span>
+        <span class="row__body">Переходник ко всему. Стыдно иметь 12 проектов и не иметь одной точки входа. Теперь есть. Сейчас читаешь её.</span>
+        <span class="row__tag">NOW</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== VI. MANIFESTO (STICKY) ==================== -->
+<section id="manifesto">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__left">
+        <span class="section-number">06 / 06</span>
+        <span class="eyebrow">Manifesto · Подход</span>
+      </div>
+      <div>
+        <h2 class="headline-enter">Почему один файл.<br>Почему vanilla.<br>Почему медленно.</h2>
+      </div>
+    </div>
+
+    <div class="sticky-pair">
+      <div class="left">
+        <span class="eyebrow">Philosophy</span>
+        <p class="philosophy-quote" style="font-family: var(--font-sans); font-size: clamp(1.5rem, 2.5vw, 2.25rem); line-height: 1.35; font-style: italic; color: var(--text); border-left: 2px solid var(--accent); padding: 0.5rem 0 0.5rem 2rem; margin: 2rem 0; max-width: 28ch;">
+          Сайт — это не слайд. Это машина.
+        </p>
+        <p style="margin-top: 2.5rem; font-size: 1rem; line-height: 1.7; color: var(--text-soft); max-width: 36ch;">
+          Каждый проект здесь — попытка доказать, что веб ещё не умер под весом фреймворков. Что один HTML-файл может быть полноценным произведением. Что 60 fps на canvas — это ещё не предел.
+        </p>
+        <p style="margin-top: 1.5rem; font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); letter-spacing: 0.15em;">
+          SIC · FLUIT · WEB
+        </p>
+      </div>
+      <div class="right">
+        <div class="right-block reveal">
+          <span class="right-block__label">01 / Один файл</span>
+          <h3>HTML, CSS, JS в одном документе.</h3>
+          <p>
+            Никаких бандлеров, никаких npm install, никаких node_modules на 400 мегабайт. Один файл — ты можешь открыть его в любом текстовом редакторе, изменить любую строку и выложить на GitHub Pages. Это формат, а не ограничение.
+          </p>
+        </div>
+
+        <div class="right-block reveal">
+          <span class="right-block__label">02 / Vanilla first</span>
+          <h3>Сначала язык, потом библиотека.</h3>
+          <p>
+            Прежде чем тянуть React или Vue — я задаю себе вопрос: «Это правда нужно, или я просто привык?». В 90% случаев для моей работы vanilla JS справляется быстрее, проще и предсказуемее. Библиотеки — это костыли для случаев, когда ты не знаешь язык.
+          </p>
+          <blockquote>
+            Если ты не можешь написать это на чистом JS — ты не умеешь это писать.
+            <cite>— Личное правило</cite>
+          </blockquote>
+        </div>
+
+        <div class="right-block reveal">
+          <span class="right-block__label">03 / Производительность — это этика</span>
+          <h3>60 fps — это не цель, это минимум.</h3>
+          <p>
+            Каждая анимация должна работать на 60 fps на пятилетнем ноутбуке. Каждый шейдер должен держаться, пока не сломается. Каждый проект должен загружаться за одну секунду на 3G. Если мой код тормозит — это не «особенность платформы», это моя вина.
+          </p>
+        </div>
+
+        <div class="right-block reveal">
+          <span class="right-block__label">04 / Движение как содержание</span>
+          <h3>Анимация — не украшение.</h3>
+          <p>
+            Движение на странице — это часть смысла. То, как появляется текст, как реагирует курсор, как переходят секции — это всё говорит читателю о том, что это за проект. Статичный сайт — это мёртвый сайт. Анимированный неправильно — раздражающий. Анимированный правильно — живой.
+          </p>
+        </div>
+
+        <div class="right-block reveal">
+          <span class="right-block__label">05 / Открытый исходник</span>
+          <h3>Всё, что я делаю — твоё.</h3>
+          <p>
+            Каждый проект на GitHub. Каждый файл можно форкнуть, прочитать, разобрать на части, собрать заново. Я не верю в «интеллектуальную собственность» на код — я верю в общее поле. Если тебе понравилась анимация — скопируй. Если хочешь понять, как сделано — открой исходник.
+          </p>
+        </div>
+
+        <div class="right-block reveal">
+          <span class="right-block__label">06 / Тишина важнее шума</span>
+          <h3>Никаких баннеров. Никаких попапов.</h3>
+          <p>
+            Никакой рекламы. Никаких cookie-баннеров (я не собираю cookies). Никакой подписки на рассылку. Никакого «поделиться в соцсетях». Сайт приходит к тебе тихо и уходит тихо. Если ты хочешь вернуться — ты вернёшься.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STATS ==================== -->
+<section style="padding: 6rem 0;">
+  <div class="container">
+    <div class="section-head" style="margin-bottom: 3rem;">
+      <div class="section-head__left">
+        <span class="section-number">∞</span>
+        <span class="eyebrow">Telemetry · Метрики</span>
+      </div>
+      <div>
+        <h2 class="headline-enter">В цифрах.</h2>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-item__label">Commits · 2024</div>
+        <div class="stat-item__num">1.2k</div>
+        <div class="stat-item__desc">в этом году на GitHub</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-item__label">Repository count</div>
+        <div class="stat-item__num">12</div>
+        <div class="stat-item__desc">публичных, активных</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-item__label">Lines of code</div>
+        <div class="stat-item__num">38k</div>
+        <div class="stat-item__desc">в основных проектах</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-item__label">Cofffee / week</div>
+        <div class="stat-item__num">21</div>
+        <div class="stat-item__desc">чашек эспрессо, в среднем</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CONTACT ==================== -->
+<section id="contact">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__left">
+        <span class="section-number">07 / 06</span>
+        <span class="eyebrow">Contact · Связь</span>
+      </div>
+      <div>
+        <h2 class="headline-enter">Открыт для коллабораций,<br>вопросов и тишины.</h2>
+        <div class="section-head__meta">
+          <div><strong>Ответ</strong><span>В течение 48 часов</span></div>
+          <div><strong>Языки</strong><span>RU · EN</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-block reveal">
+      <div class="contact-block__corner contact-block__corner--tl"></div>
+      <div class="contact-block__corner contact-block__corner--tr"></div>
+      <div class="contact-block__corner contact-block__corner--bl"></div>
+      <div class="contact-block__corner contact-block__corner--br"></div>
+
+      <div class="contact-grid">
+        <div>
+          <a class="contact-channel" href="https://github.com/nasqwww" target="_blank" rel="noopener">
+            <span class="contact-channel__label">01 · GitHub</span>
+            <span class="contact-channel__value">github.com/nasqwww</span>
+            <span class="contact-channel__note">Основной канал. Коммиты, issues, обсуждения.</span>
+          </a>
+          <a class="contact-channel" href="mailto:nasq@example.com">
+            <span class="contact-channel__label">02 · Email</span>
+            <span class="contact-channel__value">nasq@example.com</span>
+            <span class="contact-channel__note">Для длинных писем и предложений.</span>
+          </a>
+          <a class="contact-channel" href="https://t.me/" target="_blank" rel="noopener">
+            <span class="contact-channel__label">03 · Telegram</span>
+            <span class="contact-channel__value">@nasq</span>
+            <span class="contact-channel__note">Для быстрого обмена. Не всегда оперативно.</span>
+          </a>
+        </div>
+        <div>
+          <a class="contact-channel" href="https://nasqwww.github.io/" target="_blank" rel="noopener">
+            <span class="contact-channel__label">04 · GitHub Pages</span>
+            <span class="contact-channel__value">nasqwww.github.io</span>
+            <span class="contact-channel__note">Главная страница портала.</span>
+          </a>
+          <a class="contact-channel" href="#" onclick="event.preventDefault();">
+            <span class="contact-channel__label">05 · PGP</span>
+            <span class="contact-channel__value">0x7F32A · AES-256</span>
+            <span class="contact-channel__note">Для приватной переписки. Ключ по запросу.</span>
+          </a>
+          <a class="contact-channel" href="#hero" onclick="event.preventDefault(); window.scrollTo({top:0,behavior:'smooth'});">
+            <span class="contact-channel__label">06 · Сам сайт</span>
+            <span class="contact-channel__value">Начни с начала</span>
+            <span class="contact-channel__note">Если что-то пропустил — скролл вверх.</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="container-wide">
+    <div class="footer__big">NASQ · INDEX</div>
+    <div class="footer-grid">
+      <div>
+        <div class="footer__brand">nasq · index</div>
+        <p>Персональный портал-переходник ко всем проектам, лаборатории и заметкам. Один файл, ноль фреймворков, бесконечный скролл. Сделано в тёмной комнате, на плохом кофе, в хорошем настроении.</p>
+      </div>
+      <div>
+        <h4>Разделы</h4>
+        <ul>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#featured">Featured</a></li>
+          <li><a href="#stack">Stack</a></li>
+          <li><a href="#lab">Lab</a></li>
+          <li><a href="#log">Log</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Проекты</h4>
+        <ul>
+          <li><a href="https://nasqwww.github.io/roma-aeterna/" target="_blank" rel="noopener">Roma Aeterna</a></li>
+          <li><a href="https://nasqwww.github.io/music-visualizer/" target="_blank" rel="noopener">Music Visualizer</a></li>
+          <li><a href="https://nasqwww.github.io/retro-crt-sim/" target="_blank" rel="noopener">Retro CRT Sim</a></li>
+          <li><a href="https://nasqwww.github.io/mandelbrot-explorer/" target="_blank" rel="noopener">Mandelbrot Explorer</a></li>
+          <li><a href="https://nasqwww.github.io/ascii-tetris/" target="_blank" rel="noopener">ASCII Tetris</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Колофон</h4>
+        <ul>
+          <li>HTML · CSS · Vanilla JS</li>
+          <li>JetBrains Mono · Inter</li>
+          <li>Bronze on black</li>
+          <li>1 файл · 0 зависимостей</li>
+          <li>Без аналитики · без cookies</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 · nasq · open archive</span>
+      <span>build 2024.11.03 · v3.0</span>
+      <span>sub luce nihil novi</span>
+    </div>
+  </div>
 </footer>
 
 <script>
-'use strict';
+(function() {
+  'use strict';
 
-/* ── I18N ─────────────────────────────────────────────────────── */
-const I18N = {
-  en: {
-    nav_live:'Updated daily', nav_archive:'Archive', hero_issue:'Issue №',
-    stat_curated:'Curated sites', stat_days:'Days running',
-    chip_today:"Today's drop", chip_seen:'✓ Already seen',
-    btn_open:'Open site', btn_random:'Random', arch_title:'Archive',
-    arch_end:'— end of archive —', arch_seen:'seen',
-    foot_phil:'The internet is vast. nasqdrop finds the parts worth your time.',
-    filter_all:'All', locked_lbl:'Coming soon',
-  },
-  ru: {
-    nav_live:'Обновляется каждый день', nav_archive:'Архив', hero_issue:'Выпуск №',
-    stat_curated:'Сайтов собрано', stat_days:'Дней работы',
-    chip_today:'Дроп сегодня', chip_seen:'✓ Уже смотрел',
-    btn_open:'Открыть сайт', btn_random:'Случайный', arch_title:'Архив',
-    arch_end:'— конец архива —', arch_seen:'просмотрено',
-    foot_phil:'Интернет огромен. nasqdrop находит то, что стоит твоего времени.',
-    filter_all:'Все', locked_lbl:'Скоро',
-  }
-};
-let lang = localStorage.getItem('nq_lang') || 'en';
-const t = k => (I18N[lang] || I18N.en)[k] || k;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
-function applyI18n() {
-  document.documentElement.lang = lang;
-  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
-  document.querySelectorAll('.lang-btn').forEach(b => { b.classList.toggle('active', b.dataset.lang === lang); });
-  const foot = document.getElementById('archFoot');
-  if (foot.classList.contains('end')) foot.dataset.msg = t('arch_end');
-}
+  // ===================== CUSTOM CURSOR =====================
+  function initCursor() {
+    if (isTouch) return;
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    if (!dot || !ring) return;
 
-/* ── SITES DATA ───────────────────────────────────────────────── */
-const SITES = [
-  // ── INTERACTIVE / DO STUFF ────────────────────────────────────
-  { id:1,  url:'https://neal.fun',                                 tags:['interactive'],      title:{en:'Neal.fun',ru:'Neal.fun'},                            description:{en:'A portal of addictive interactive toys — spend hours on things that barely exist.',ru:'Портал интерактивных игрушек — часами залипаешь на вещах, которые едва существуют.'} },
-  { id:2,  url:'https://pointerpointer.com',                       tags:['interactive'],      title:{en:'Pointer Pointer'},                                   description:{en:'Move your cursor anywhere on screen. It finds a photo of someone pointing exactly there.',ru:'Двигай курсором — находит фото человека, который указывает именно туда.'} },
-  { id:3,  url:'https://theuselessweb.com',                        tags:['interactive'],      title:{en:'The Useless Web'},                                   description:{en:'One button. One random weird website. Infinite descent into beautiful nonsense.',ru:'Одна кнопка. Один случайный странный сайт. Бесконечное погружение в прекрасный абсурд.'} },
-  { id:4,  url:'https://www.patatap.com',                          tags:['interactive','music'], title:{en:'Patatap'},                                        description:{en:'Every keyboard key triggers a unique sound and animation. Make music you can see.',ru:'Каждая клавиша — уникальный звук и анимация. Создавай музыку, которую видно.'} },
-  { id:5,  url:'https://weavesilk.com',                            tags:['interactive','art'], title:{en:'Silk'},                                            description:{en:'Draw symmetrical silk patterns with your mouse. Every stroke blooms into something new.',ru:'Рисуй симметричные шёлковые узоры мышью. Каждый штрих расцветает чем-то новым.'} },
-  { id:6,  url:'https://paveldogreat.github.io/WebGL-Fluid-Simulation/', tags:['interactive','webgl'], title:{en:'WebGL Fluid'},                             description:{en:'Fluid dynamics in your browser. Move through liquid light. Insanely satisfying.',ru:'Симуляция жидкости в браузере. Двигайся сквозь жидкий свет. Невероятно приятно.'} },
-  { id:7,  url:'https://zoomquilt.org',                            tags:['interactive','art'], title:{en:'Zoomquilt'},                                       description:{en:'An infinite zooming painting with no beginning and no end. Fall forever.',ru:'Бесконечное зумирование в картину без начала и конца. Падай вечно.'} },
-  { id:8,  url:'https://www.incredibox.com',                       tags:['interactive','music'], title:{en:'Incredibox'},                                    description:{en:'Drag sound icons onto characters to layer beats. No music theory needed.',ru:'Перетаскивай иконки звуков на персонажей. Никакой теории музыки не нужно.'} },
-  { id:9,  url:'https://quickdraw.withgoogle.com',                 tags:['interactive','ai'], title:{en:'Quick, Draw!'},                                     description:{en:"Draw something. Google's neural net guesses what it is in 20 seconds.",ru:'Нарисуй что-нибудь. Нейросеть Google угадывает за 20 секунд.'} },
-  { id:10, url:'https://www.windows93.net',                        tags:['interactive','retro'], title:{en:'Windows 93'},                                   description:{en:'A fully operational fake OS from an alternate 1993. Rabbit hole guaranteed.',ru:'Полноценная фейковая ОС из альтернативного 1993 года. Кроличья нора гарантирована.'} },
-  { id:11, url:'https://dust.supply',                              tags:['interactive','art'], title:{en:'Dust'},                                            description:{en:'Move your mouse. Particles follow, scatter, and settle like real dust.',ru:'Двигай мышкой. Частицы следуют, рассеиваются и оседают как настоящая пыль.'} },
-  { id:12, url:'https://www.geoguessr.com',                        tags:['interactive','game'], title:{en:'GeoGuessr'},                                      description:{en:"Dropped somewhere on Earth via Street View. Guess where. World's best geography game.",ru:'Тебя бросают куда-то на Земле через Street View. Угадай где.'} },
-  { id:13, url:'https://skribbl.io',                               tags:['interactive','game'], title:{en:'skribbl.io'},                                     description:{en:'Multiplayer online Pictionary. Draw badly, guess desperately, laugh constantly.',ru:'Мультиплеерный Pictionary. Рисуй плохо, угадывай отчаянно, смейся постоянно.'} },
-  { id:14, url:'https://www.sporcle.com',                          tags:['interactive','game'], title:{en:'Sporcle'},                                        description:{en:'Millions of quizzes on every topic imaginable. Trivia heaven.',ru:'Миллионы викторин на любую тему. Рай для тривии.'} },
-  { id:15, url:'https://www.typeracer.com',                        tags:['interactive','game'], title:{en:'TypeRacer'},                                      description:{en:'Race other humans by typing book passages. Competitive typing at its best.',ru:'Гонки с людьми через набор текста из книг. Лучший соревновательный тайпинг.'} },
-  { id:16, url:'https://www.hackertyper.com',                      tags:['interactive','game'], title:{en:'Hacker Typer'},                                   description:{en:'Type any keys. Looks like you\'re hacking the mainframe. Ridiculous and perfect.',ru:'Жми любые клавиши — выглядишь как хакер взламывающий мейнфрейм.'} },
-  { id:17, url:'https://randomstreetview.com',                     tags:['interactive','maps'], title:{en:'Random Street View'},                             description:{en:'Teleport to a random place on Earth via Street View. Every click is a mystery.',ru:'Телепортируйся в случайное место на Земле. Каждый клик — тайна.'} },
-  { id:18, url:'https://www.donothingfor2minutes.com',             tags:['interactive'],      title:{en:'Do Nothing For 2 Minutes'},                         description:{en:'Listen to ocean waves and do nothing for two minutes. Harder than it sounds.',ru:'Слушай океан и ничего не делай 2 минуты. Сложнее, чем кажется.'} },
-  { id:19, url:'https://www.pixilart.com',                         tags:['interactive','art'], title:{en:'Pixilart'},                                        description:{en:'Pixel art editor in your browser. Draw, animate, share with thousands.',ru:'Пиксельный редактор в браузере. Рисуй, анимируй, делись с тысячами.'} },
-  { id:20, url:'https://www.aggie.io',                             tags:['interactive','art'], title:{en:'Aggie.io'},                                        description:{en:'Real-time collaborative drawing. Multiple people, one canvas, infinite chaos.',ru:'Совместный рисунок в реальном времени. Несколько людей, один холст, бесконечный хаос.'} },
-  { id:21, url:'https://kleki.com',                                tags:['interactive','art'], title:{en:'Kleki'},                                           description:{en:'A serious browser paint tool. Layers, brushes, effects — no download needed.',ru:'Серьёзный браузерный инструмент для рисования. Слои, кисти, эффекты — без загрузки.'} },
-  { id:22, url:'https://www.autodraw.com',                         tags:['interactive','ai'], title:{en:'AutoDraw'},                                         description:{en:'Draw anything badly. AI recognizes your scribble and offers professional alternatives.',ru:'Рисуй плохо. ИИ распознаёт каракули и предлагает профессиональные варианты.'} },
-  { id:23, url:'https://musiclab.chromeexperiments.com',           tags:['interactive','music'], title:{en:'Chrome Music Lab'},                              description:{en:"Google's music experiments — shared piano, spectrograms, rhythm builders.",ru:'Музыкальные эксперименты Google — пианино, спектрограммы, построители ритма.'} },
-  { id:24, url:'https://www.incredibox.com',                       tags:['interactive','music'], title:{en:'Incredibox v10'},                                description:{en:'The newest version. Drag, mix, and feel like a real music producer.',ru:'Новейшая версия. Перетаскивай, смешивай — чувствуй себя настоящим музыкальным продюсером.'} },
-  { id:25, url:'https://touchpianist.com',                         tags:['interactive','music'], title:{en:'Touch Pianist'},                                 description:{en:'Tap any key to the rhythm. AI plays the notes, you control the timing.',ru:'Нажимай любую клавишу в ритм. ИИ играет ноты, ты контролируешь тайминг.'} },
-  { id:26, url:'https://www.beatsurfer.com',                       tags:['interactive','music'], title:{en:'Beat Surfer'},                                   description:{en:'Visualize music as a 3D landscape you fly through. Trippy and hypnotic.',ru:'Визуализируй музыку как 3D-пейзаж, сквозь который летишь. Трипово и гипнотично.'} },
-  { id:27, url:'https://noisedeck.app',                            tags:['interactive','music'], title:{en:'Noisedeck'},                                     description:{en:'Browser synthesizer with real-time visuals. Make electronic sounds without any expertise.',ru:'Браузерный синтезатор с визуализацией в реальном времени. Без опыта.'} },
-  { id:28, url:'https://www.patatap.com',                          tags:['interactive','music'], title:{en:'Patatap Classic'},                               description:{en:'Original version. Infinite combinations of sounds and geometric animations.',ru:'Оригинальная версия. Бесконечные комбинации звуков и геометрических анимаций.'} },
-  { id:29, url:'https://www.ableton.com/en/learning-music',        tags:['interactive','music'], title:{en:'Learning Music by Ableton'},                     description:{en:'Learn how music works through interactive exercises. From Ableton, for everyone.',ru:'Узнай как работает музыка через интерактивные упражнения от Ableton.'} },
-  { id:30, url:'https://experiments.withgoogle.com/collection/ai', tags:['interactive','ai'], title:{en:'Google AI Experiments'},                           description:{en:'Playful AI experiments from Google. Draw with music, teach machines, explore.',ru:'Игривые ИИ-эксперименты от Google. Рисуй музыкой, обучай машины, исследуй.'} },
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    let raf;
 
-  // ── ART & VISUALS ─────────────────────────────────────────────
-  { id:31, url:'https://www.shadertoy.com',                        tags:['art','webgl'],      title:{en:'Shadertoy'},                                        description:{en:'Community painting galaxies and oceans in pure math. The web\'s best generative gallery.',ru:'Сообщество рисует галактики и океаны чистой математикой. Лучшая генеративная галерея.'} },
-  { id:32, url:'https://generativeartistry.com',                   tags:['art','code'],       title:{en:'Generative Artistry'},                              description:{en:'Tutorials recreating iconic generative artworks with code. Beautiful and educational.',ru:'Туториалы по воссозданию культовых генеративных работ кодом.'} },
-  { id:33, url:'https://openprocessing.org',                       tags:['art','code'],       title:{en:'OpenProcessing'},                                   description:{en:'Community for creative coding in p5.js and Processing. Thousands of visual sketches.',ru:'Комьюнити творческого кодинга на p5.js и Processing. Тысячи визуальных набросков.'} },
-  { id:34, url:'https://tholman.com/texter',                       tags:['art','interactive'], title:{en:'Texter'},                                          description:{en:'Draw with the text you type. Your words become the brush.',ru:'Рисуй текстом, который печатаешь. Твои слова становятся кистью.'} },
-  { id:35, url:'https://www.artbreeder.com',                       tags:['art','ai'],         title:{en:'Artbreeder'},                                       description:{en:'Blend and evolve images with AI sliders. Portraits morph into surreal landscapes.',ru:'Смешивай и эволюционируй изображения с ИИ-слайдерами.'} },
-  { id:36, url:'https://www.are.na',                               tags:['art','design'],     title:{en:'Are.na'},                                           description:{en:'A platform for saving and connecting ideas. Anti-social media for deep thinkers.',ru:'Платформа для сохранения идей. Антисоцсеть для глубоких мыслителей.'} },
-  { id:37, url:'https://www.deviantart.com/tag/generative',        tags:['art'],              title:{en:'Generative on DeviantArt'},                         description:{en:'A living feed of generative and algorithmic art from thousands of artists.',ru:'Живая лента генеративного искусства тысяч художников.'} },
-  { id:38, url:'https://stars.chromeexperiments.com',              tags:['art','webgl'],      title:{en:'100,000 Stars'},                                    description:{en:'Interactive 3D map of the 100,000 stars nearest to our sun. Scale-defying.',ru:'Интерактивная 3D-карта 100 000 звёзд, ближайших к Солнцу.'} },
-  { id:39, url:'https://haikei.app',                               tags:['art','design'],     title:{en:'Haikei'},                                           description:{en:'Generate unique SVG blobs, waves, and gradients for projects. Endlessly customizable.',ru:'Генерируй уникальные SVG-блобы, волны и градиенты. Бесконечная настройка.'} },
-  { id:40, url:'https://www.geogebra.org',                         tags:['art','math'],       title:{en:'GeoGebra'},                                         description:{en:'Interactive math tools — geometry, algebra, graphing. Surprisingly beautiful.',ru:'Интерактивные математические инструменты — геометрия, алгебра, графики. Неожиданно красиво.'} },
-
-  // ── WEBGL / 3D ────────────────────────────────────────────────
-  { id:41, url:'https://bruno-simon.com',                          tags:['webgl','game'],     title:{en:'Bruno Simon Portfolio'},                            description:{en:'Drive a toy car through a 3D portfolio. The most fun way to show work ever made.',ru:'Езди на игрушечной машине по 3D-портфолио. Самый веселый портфолио в истории.'} },
-  { id:42, url:'https://www.ro.me',                                tags:['webgl','art'],      title:{en:'3 Dreams of Black'},                                description:{en:'An interactive WebGL film by Chris Milk & Google. Poetic and technically stunning.',ru:'Интерактивный WebGL-фильм от Криса Милка и Google. Поэтично и технически блестяще.'} },
-  { id:43, url:'https://www.active-theory.com',                    tags:['webgl','design'],   title:{en:'Active Theory'},                                    description:{en:'Portfolio of one of the world\'s greatest interactive studios. Every project raises the bar.',ru:'Портфолио одной из лучших интерактивных студий. Каждый проект поднимает планку.'} },
-  { id:44, url:'https://lusion.co',                                tags:['webgl','design'],   title:{en:'Lusion'},                                           description:{en:'Creative studio that turns websites into WebGL art. The craft here is unreal.',ru:'Студия, превращающая сайты в WebGL-искусство. Ремесло здесь нереальное.'} },
-  { id:45, url:'https://oimo.io/works',                            tags:['webgl','art'],      title:{en:'Yoichi Kobayashi'},                                 description:{en:'Mesmerising interactive 3D works by a Japanese creative coder. Pure craft.',ru:'Завораживающие интерактивные 3D-работы японского творческого кодера.'} },
-  { id:46, url:'https://herebedragons.io',                         tags:['webgl'],            title:{en:'Here Be Dragons'},                                  description:{en:'A single beautiful WebGL dragon. Technically and aesthetically exceptional.',ru:'Один красивый WebGL-дракон. Технически и эстетически исключительный.'} },
-  { id:47, url:'https://www.gsap.com/showcase',                    tags:['webgl','design'],   title:{en:'GSAP Showcase'},                                    description:{en:'The best animation work on the web, all powered by GreenSock.',ru:'Лучшие анимационные работы в вебе на GreenSock.'} },
-  { id:48, url:'https://spline.design',                            tags:['webgl','design'],   title:{en:'Spline'},                                           description:{en:'Design and publish 3D for the web without writing code. Drag-and-drop 3D.',ru:'Дизайн и публикация 3D для веба без кода. 3D с перетаскиванием.'} },
-  { id:49, url:'https://experiments.withgoogle.com',               tags:['webgl','interactive'], title:{en:'Google Experiments'},                            description:{en:'Creative experiments with AI, web tech, and 3D from Google\'s teams.',ru:'Творческие эксперименты с ИИ, веб-технологиями и 3D от команд Google.'} },
-  { id:50, url:'https://codepen.io/trending',                      tags:['webgl','design'],   title:{en:'CodePen Trending'},                                 description:{en:'The hottest creative coding demos right now. CSS magic, JS art, WebGL tricks.',ru:'Самые горячие демо творческого кодинга прямо сейчас.'} },
-
-  // ── AI TOOLS ──────────────────────────────────────────────────
-  { id:51, url:'https://claude.ai',                                tags:['ai'],               title:{en:'Claude'},                                           description:{en:"Anthropic's AI — thoughtful, nuanced, capable of deep reasoning across any domain.",ru:'ИИ Anthropic — вдумчивый, способен к глубоким рассуждениям по любой теме.'} },
-  { id:52, url:'https://perplexity.ai',                            tags:['ai','search'],      title:{en:'Perplexity'},                                       description:{en:'AI search that cites its sources. Answers questions instead of listing links.',ru:'ИИ-поиск, цитирующий источники. Отвечает на вопросы, а не перечисляет ссылки.'} },
-  { id:53, url:'https://krea.ai',                                  tags:['ai','art'],         title:{en:'Krea'},                                             description:{en:'Real-time AI image generation that responds to your brush strokes as you paint.',ru:'Генерация изображений ИИ в реальном времени — реагирует на мазки кисти.'} },
-  { id:54, url:'https://huggingface.co/spaces',                    tags:['ai','ml'],          title:{en:'HuggingFace Spaces'},                               description:{en:'Thousands of live ML demos in your browser — from image models to language models.',ru:'Тысячи живых ML-демо в браузере — от моделей изображений до языковых.'} },
-  { id:55, url:'https://elevenlabs.io',                            tags:['ai','audio'],       title:{en:'ElevenLabs'},                                       description:{en:'AI voice cloning and text-to-speech. Type words, hear any voice.',ru:'Клонирование голоса и синтез речи. Напечатай слова — услышь любой голос.'} },
-  { id:56, url:'https://websim.ai',                                tags:['ai','tech'],        title:{en:'WebSim'},                                           description:{en:"Simulate any website that doesn't exist. AI builds it in real time.",ru:'Симулируй любой сайт, которого нет. ИИ строит его в реальном времени.'} },
-  { id:57, url:'https://www.autodraw.com',                         tags:['ai','art'],         title:{en:'AutoDraw by Google'},                               description:{en:'Scribble anything. AI guesses and replaces with clean professional art.',ru:'Черкай что угодно. ИИ угадывает и заменяет чистым профессиональным рисунком.'} },
-  { id:58, url:'https://www.remove.bg',                            tags:['ai','utility'],     title:{en:'remove.bg'},                                        description:{en:'Remove image backgrounds in seconds with AI. Startlingly accurate.',ru:'Удаляй фон изображений за секунды с ИИ. Поразительно точно.'} },
-  { id:59, url:'https://gamma.app',                                tags:['ai','design'],      title:{en:'Gamma'},                                            description:{en:'AI generates polished presentations and docs from a single sentence.',ru:'ИИ создаёт отшлифованные презентации из одного предложения.'} },
-  { id:60, url:'https://boredhumans.com',                          tags:['ai','creative'],    title:{en:'Bored Humans'},                                     description:{en:'100+ AI demos on one page — face aging, poem generation, mood detection.',ru:'100+ ИИ-демо на одной странице — старение лица, генерация стихов, определение настроения.'} },
-
-  // ── DATA & MAPS ───────────────────────────────────────────────
-  { id:61, url:'https://earth.nullschool.net',                     tags:['data','science'],   title:{en:'Earth Nullschool'},                                 description:{en:'Live global wind, temperature, and ocean current map. The planet as living data.',ru:'Живая карта мировых ветров, температур и течений. Планета как живые данные.'} },
-  { id:62, url:'https://thetruesize.com',                          tags:['data','maps'],      title:{en:'The True Size Of'},                                 description:{en:'Drag countries on Mercator to reveal their actual size. Africa is gigantic.',ru:'Перетаскивай страны на карте Меркатора — узнай настоящие размеры. Африка гигантская.'} },
-  { id:63, url:'https://ourworldindata.org',                       tags:['data','science'],   title:{en:'Our World in Data'},                                description:{en:'Every chart about humanity\'s challenges. Mortality, poverty, climate — all in one place.',ru:'Все графики о проблемах человечества. Смертность, бедность, климат — всё в одном месте.'} },
-  { id:64, url:'https://pudding.cool',                             tags:['data','writing'],   title:{en:'The Pudding'},                                      description:{en:'Visual data essays on culture. The web\'s best longform journalism.',ru:'Визуальные эссе о культуре. Лучший лонгрид-журнализм в вебе.'} },
-  { id:65, url:'https://www.gapminder.org/tools',                  tags:['data'],             title:{en:'Gapminder'},                                        description:{en:'Animate global statistics over decades. Hans Rosling\'s vision, fully interactive.',ru:'Анимируй мировую статистику за десятилетия. Видение Ганса Рослинга, полностью интерактивно.'} },
-  { id:66, url:'https://information-is-beautiful.net',             tags:['data','design'],    title:{en:'Information is Beautiful'},                         description:{en:'Data visualisation as high art. McCandless turns numbers into unforgettable graphics.',ru:'Визуализация данных как высокое искусство. МакКэндлесс превращает числа в графику.'} },
-  { id:67, url:'https://www.nytimes.com/spotlight/graphics',       tags:['data','writing'],   title:{en:'NYT Graphics'},                                     description:{en:'The gold standard of data journalism. Interactive charts that make news tangible.',ru:'Золотой стандарт дата-журнализма. Интерактивные графики, делающие новости осязаемыми.'} },
-  { id:68, url:'https://neal.fun/life-stats',                      tags:['data','creative'],  title:{en:'Life Stats'},                                       description:{en:'Enter your birthday. See how many times your heart has beaten. Humbling.',ru:'Введи дату рождения. Узнай сколько раз билось твоё сердце. Это смиряет.'} },
-  { id:69, url:'https://www.worldometers.info',                    tags:['data','science'],   title:{en:'Worldometers'},                                     description:{en:'Real-time world statistics — births, deaths, CO2, food. The planet live.',ru:'Мировая статистика в реальном времени — рождения, смерти, CO2. Планета вживую.'} },
-  { id:70, url:'https://flowingdata.com',                          tags:['data'],             title:{en:'FlowingData'},                                      description:{en:'Nathan Yau\'s craft site. Statistics and visualisation explored with genuine care.',ru:'Сайт ремесла Натана Яу. Статистика и визуализация с настоящим вниманием.'} },
-
-  // ── GAMES ─────────────────────────────────────────────────────
-  { id:71, url:'https://lichess.org',                              tags:['game'],             title:{en:'Lichess'},                                          description:{en:'The world\'s best free chess platform. Open-source, ad-free, forever.',ru:'Лучшая бесплатная шахматная платформа. Открытый код, без рекламы, навсегда.'} },
-  { id:72, url:'https://wordle.game',                              tags:['game'],             title:{en:'Wordle'},                                           description:{en:'Guess the five-letter word in six tries. A global daily ritual.',ru:'Угадай пятибуквенное слово за шесть попыток. Глобальный ежедневный ритуал.'} },
-  { id:73, url:'https://www.nytimes.com/games/connections',        tags:['game'],             title:{en:'Connections'},                                      description:{en:"NYT's daily word grouping puzzle. Four categories, sixteen words.",ru:'Ежедневная головоломка NYT. Четыре категории, шестнадцать слов.'} },
-  { id:74, url:'https://diep.io',                                  tags:['game','interactive'], title:{en:'Diep.io'},                                        description:{en:'Multiplayer tank shooter in your browser. Level up, specialize, dominate.',ru:'Браузерный мультиплеерный танковый шутер. Прокачивайся, специализируйся, доминируй.'} },
-  { id:75, url:'https://www.agar.io',                              tags:['game','interactive'], title:{en:'Agar.io'},                                        description:{en:'The original browser multiplayer. Eat dots, absorb players, become the biggest cell.',ru:'Оригинальная браузерная мультиплеерная. Поглощай клетки, стань самой большой.'} },
-  { id:76, url:'https://krunker.io',                               tags:['game'],             title:{en:'Krunker.io'},                                       description:{en:'Surprisingly good first-person shooter in your browser. No download, full game.',ru:'Удивительно хороший шутер от первого лица в браузере. Без загрузки, полная игра.'} },
-  { id:77, url:'https://minesweeper.online',                       tags:['game'],             title:{en:'Minesweeper Online'},                               description:{en:'The classic, perfected. Online leaderboards, custom sizes, world records.',ru:'Классика, доведённая до совершенства. Онлайн-таблицы рекордов, мировые рекорды.'} },
-  { id:78, url:'https://cssbattle.dev',                            tags:['game','design'],    title:{en:'CSS Battle'},                                       description:{en:'Recreate target images with the fewest CSS characters. Pure CSS golf.',ru:'Воссоздавай изображения минимальным CSS. Чистый CSS-гольф.'} },
-  { id:79, url:'https://flexboxfroggy.com',                        tags:['game','education'], title:{en:'Flexbox Froggy'},                                   description:{en:'Learn CSS Flexbox by guiding frogs to lily pads. 24 levels.',ru:'Учи CSS Flexbox, направляя лягушек. 24 уровня.'} },
-  { id:80, url:'https://cssgridgarden.com',                        tags:['game','education'], title:{en:'CSS Grid Garden'},                                  description:{en:'Learn CSS Grid by watering a garden. 28 levels of grid mastery.',ru:'Учи CSS Grid, поливая огород. 28 уровней освоения grid.'} },
-
-  // ── EDUCATION & DEEP READS ────────────────────────────────────
-  { id:81, url:'https://www.khanacademy.org',                      tags:['education'],        title:{en:'Khan Academy'},                                     description:{en:'World-class education from algebra to art history. Entirely free. Genuinely good.',ru:'Образование мирового класса от алгебры до истории искусств. Бесплатно.'} },
-  { id:82, url:'https://waitbutwhy.com',                           tags:['education','writing'], title:{en:'Wait But Why'},                                  description:{en:"Tim Urban's epic deep-dives on AI, Elon Musk, procrastination, the Fermi paradox.",ru:'Эпические погружения в ИИ, Маска, прокрастинацию и парадокс Ферми.'} },
-  { id:83, url:'https://ncase.me',                                 tags:['education','interactive'], title:{en:'Nicky Case'},                                description:{en:'Interactive essays on complex systems. Trust, anxiety, evolution — explained through play.',ru:'Интерактивные эссе о сложных системах. Доверие, тревога, эволюция — через игру.'} },
-  { id:84, url:'https://www.3blue1brown.com',                      tags:['education','math'], title:{en:'3Blue1Brown'},                                      description:{en:"Grant Sanderson's visual mathematics. The most beautiful math content ever made.",ru:'Визуальная математика Гранта Сандерсона. Самый красивый математический контент.'} },
-  { id:85, url:'https://explained.ai',                             tags:['education','ml'],   title:{en:'Explained.ai'},                                     description:{en:'Machine learning concepts made genuinely clear with visuals. No hype.',ru:'Концепции машинного обучения сделаны понятными с визуализацией. Без хайпа.'} },
-  { id:86, url:'https://joshwcomeau.com',                          tags:['education','design'], title:{en:'Josh W. Comeau'},                                 description:{en:'The most beautiful CSS and React tutorials on the internet. Interactive by default.',ru:'Самые красивые CSS и React туториалы. По умолчанию интерактивные.'} },
-  { id:87, url:'https://brilliant.org',                            tags:['education','science'], title:{en:'Brilliant'},                                     description:{en:'Learn math, science, CS through guided problem-solving. Actually sticks.',ru:'Изучай математику через решение задач. Действительно запоминается.'} },
-  { id:88, url:'https://ocw.mit.edu',                              tags:['education'],        title:{en:'MIT OpenCourseWare'},                               description:{en:'Free access to virtually all MIT course materials. No login needed.',ru:'Бесплатный доступ к материалам MIT. Без регистрации.'} },
-  { id:89, url:'https://maggieappleton.com',                       tags:['education','art'],  title:{en:'Maggie Appleton'},                                  description:{en:'Illustrated digital garden on technology, anthropology, and programming.',ru:'Иллюстрированный цифровой сад о технологиях, антропологии и программировании.'} },
-  { id:90, url:'https://www.youtube.com/c/Kurzgesagt',             tags:['education','science'], title:{en:'Kurzgesagt'},                                    description:{en:'Animated explainers on science, existential risk, and the universe. Stunning visuals.',ru:'Анимированные объяснения науки, экзистенциальных рисков и вселенной.'} },
-
-  // ── MUSIC & SOUND ─────────────────────────────────────────────
-  { id:91, url:'https://radiooooo.com',                            tags:['music'],            title:{en:'Radiooooo'},                                        description:{en:'Time-and-place radio. Pick any country, any decade, hear what was playing.',ru:'Радиомашина времени. Выбери страну и десятилетие — слушай что играло.'} },
-  { id:92, url:'https://asoftmurmur.com',                          tags:['music','utility'],  title:{en:'A Soft Murmur'},                                    description:{en:'Mix rain, thunder, fire, ocean into your perfect ambient soundscape.',ru:'Смешивай дождь, гром, огонь, океан в идеальный звуковой ландшафт.'} },
-  { id:93, url:'https://everynoise.com',                           tags:['music','data'],     title:{en:'Every Noise at Once'},                              description:{en:'Map of 6000+ music genres with sample tracks. Click any to hear it.',ru:'Карта 6000+ жанров с образцами треков. Кликни любой — услышишь его.'} },
-  { id:94, url:'https://poolsuite.net',                            tags:['music','design'],   title:{en:'Poolsuite FM'},                                     description:{en:'Retro-designed player with eternal summer playlists. A vibe you can\'t describe.',ru:'Плеер в ретро-стиле с плейлистами вечного лета. Атмосфера, которую не описать.'} },
-  { id:95, url:'https://www.lofi.cafe',                            tags:['music'],            title:{en:'lofi.cafe'},                                        description:{en:'Lofi hip-hop with a view. Different virtual environments to study and relax in.',ru:'Lofi хип-хоп с видом. Разные виртуальные среды для учёбы и отдыха.'} },
-  { id:96, url:'https://www.soundsnap.com',                        tags:['music','utility'],  title:{en:'Soundsnap'},                                        description:{en:'Massive sound effect library. Every sound you\'ve ever needed.',ru:'Огромная библиотека звуковых эффектов. Каждый звук, который тебе нужен.'} },
-  { id:97, url:'https://www.musicmap.info',                        tags:['music','data'],     title:{en:'Musicmap'},                                         description:{en:'The exhaustive genealogy of popular music genres. Every connection mapped.',ru:'Исчерпывающая генеалогия популярных музыкальных жанров.'} },
-  { id:98, url:'https://freemusicarchive.org',                     tags:['music','archive'],  title:{en:'Free Music Archive'},                               description:{en:'Legal free music for any project. Curated by WFMU.',ru:'Легальная бесплатная музыка для любого проекта. Курируется WFMU.'} },
-  { id:99, url:'https://mynoise.net',                              tags:['music','utility'],  title:{en:'myNoise'},                                          description:{en:'Customizable noise machines for focus, sleep, tinnitus masking. Over 200 environments.',ru:'Настраиваемые генераторы шума для фокуса и сна. Более 200 сред.'} },
-  { id:100, url:'https://www.last.fm',                             tags:['music','data'],     title:{en:'Last.fm'},                                          description:{en:'Scrobble your music and discover what you actually listen to. Data about your taste.',ru:'Скробблируй музыку и узнай что ты реально слушаешь. Данные о вкусе.'} },
-
-  // ── DESIGN & CREATIVE TOOLS ───────────────────────────────────
-  { id:101, url:'https://www.awwwards.com',                        tags:['design'],           title:{en:'Awwwards'},                                         description:{en:'The web\'s most prestigious design awards. Daily dose of the world\'s best UI.',ru:'Самая престижная награда в веб-дизайне. Ежедневная порция лучшего UI.'} },
-  { id:102, url:'https://www.siteinspire.com',                     tags:['design'],           title:{en:'SiteInspire'},                                      description:{en:'Curated gallery of fine web design. Filtered by style, type, and subject.',ru:'Отборная галерея тонкого веб-дизайна. Фильтрация по стилю, типу и теме.'} },
-  { id:103, url:'https://mobbin.com',                              tags:['design'],           title:{en:'Mobbin'},                                           description:{en:'The largest library of real mobile app UI screens. Browse by flow and component.',ru:'Крупнейшая библиотека реальных экранов мобильных приложений.'} },
-  { id:104, url:'https://www.codrops.com',                         tags:['design','code'],    title:{en:'Codrops'},                                          description:{en:'Creative coding tutorials and UI experiments that consistently blow minds.',ru:'Туториалы по творческому кодингу и UI-эксперименты.'} },
-  { id:105, url:'https://uiverse.io',                              tags:['design','code'],    title:{en:'UIverse'},                                          description:{en:'Open-source CSS elements. Buttons, loaders, cards — copy and use instantly.',ru:'UI-элементы с открытым кодом на CSS. Копируй и используй мгновенно.'} },
-  { id:106, url:'https://animista.net',                            tags:['design','utility'], title:{en:'Animista'},                                         description:{en:'On-demand CSS animations. Preview, customize, grab the code.',ru:'CSS-анимации по требованию. Предпросмотр, настройка, забери код.'} },
-  { id:107, url:'https://fffuel.co',                               tags:['design','art'],     title:{en:'fffuel'},                                           description:{en:'Free SVG generators for backgrounds, gradients, noise, patterns. All visual.',ru:'Бесплатные SVG-генераторы для фонов, градиентов, шума, паттернов.'} },
-  { id:108, url:'https://typewolf.com',                            tags:['design','type'],    title:{en:'Typewolf'},                                         description:{en:'What fonts are trending in web design. Font pairing guides, site of the day.',ru:'Какие шрифты в тренде в веб-дизайне. Гайды по сочетанию шрифтов.'} },
-  { id:109, url:'https://www.fontsinuse.com',                      tags:['design','type'],    title:{en:'Fonts In Use'},                                     description:{en:'Real-world font usage catalogued. Find typefaces by context and industry.',ru:'Каталог реального использования шрифтов. Найди гарнитуры по контексту.'} },
-  { id:110, url:'https://land-book.com',                           tags:['design'],           title:{en:'Land-book'},                                        description:{en:'The best landing pages ever made. Organized for easy design reference.',ru:'Лучшие лендинги, когда-либо созданные. Удобная навигация для дизайн-референсов.'} },
-
-  // ── UTILITIES ─────────────────────────────────────────────────
-  { id:111, url:'https://squoosh.app',                             tags:['utility'],          title:{en:'Squoosh'},                                          description:{en:'Google\'s image compression tool. Compare formats live. No upload limits.',ru:'Инструмент сжатия изображений Google. Сравнивай форматы живьём.'} },
-  { id:112, url:'https://excalidraw.com',                          tags:['utility','design'], title:{en:'Excalidraw'},                                       description:{en:'Virtual whiteboard that looks hand-drawn. Perfect for architecture diagrams.',ru:'Виртуальная доска с рукописным стилем. Идеально для диаграмм архитектуры.'} },
-  { id:113, url:'https://carbon.now.sh',                           tags:['utility','design'], title:{en:'Carbon'},                                           description:{en:'Create beautiful code screenshots instantly. Used everywhere.',ru:'Создавай красивые скриншоты кода мгновенно.'} },
-  { id:114, url:'https://regex101.com',                            tags:['utility','code'],   title:{en:'Regex101'},                                         description:{en:'Build and debug regex with live matching, explanations, and test cases.',ru:'Создавай и отлаживай regex с живым совпадением и объяснениями.'} },
-  { id:115, url:'https://www.wolframalpha.com',                    tags:['utility','science'], title:{en:'Wolfram Alpha'},                                   description:{en:'Computational knowledge engine. Math, science, dates — precise answers.',ru:'Вычислительный движок знаний. Математика, наука, даты — точные ответы.'} },
-  { id:116, url:'https://archive.ph',                              tags:['utility','archive'], title:{en:'Archive.ph'},                                     description:{en:'Snapshot any webpage permanently. Essential for research.',ru:'Сохраняй снимок любой страницы навсегда. Незаменимо для исследований.'} },
-  { id:117, url:'https://app.diagrams.net',                        tags:['utility'],          title:{en:'diagrams.net'},                                     description:{en:'Free, powerful diagramming. Flowcharts, network diagrams, UML, anything.',ru:'Бесплатное мощное построение диаграмм. Блок-схемы, сетевые диаграммы, UML.'} },
-  { id:118, url:'https://bundlephobia.com',                        tags:['utility','tech'],   title:{en:'Bundle Phobia'},                                    description:{en:'Find the real cost of any npm package before adding it.',ru:'Узнай реальную стоимость любого npm-пакета перед добавлением.'} },
-  { id:119, url:'https://caniuse.com',                             tags:['utility','tech'],   title:{en:'Can I Use'},                                        description:{en:'Browser support tables for every web feature. The developer\'s daily reference.',ru:'Таблицы поддержки браузерами для каждой веб-функции. Ежедневный справочник.'} },
-  { id:120, url:'https://www.futureme.org',                        tags:['utility','creative'], title:{en:'FutureMe'},                                      description:{en:'Write an email to your future self. Delivered on any date you set.',ru:'Напиши письмо себе в будущее. Доставляется в любую дату.'} },
-
-  // ── TECH & CODE ───────────────────────────────────────────────
-  { id:121, url:'https://news.ycombinator.com',                    tags:['tech'],             title:{en:'Hacker News'},                                      description:{en:'The web\'s best tech discussion board. Signal without noise.',ru:'Лучшая техническая доска обсуждений. Сигнал без шума.'} },
-  { id:122, url:'https://www.producthunt.com',                     tags:['tech'],             title:{en:'Product Hunt'},                                     description:{en:'The day\'s best new products, voted on by the tech community.',ru:'Лучшие новые продукты дня, оцениваемые технологическим сообществом.'} },
-  { id:123, url:'https://github.com/trending',                     tags:['tech','code'],      title:{en:'GitHub Trending'},                                  description:{en:'The most starred repos today. What the world is building right now.',ru:'Самые популярные репозитории сегодня. Что строит мир прямо сейчас.'} },
-  { id:124, url:'https://roadmap.sh',                              tags:['tech','education'], title:{en:'roadmap.sh'},                                       description:{en:'Community-built dev roadmaps for frontend, backend, DevOps. Clear paths.',ru:'Дорожные карты разработчика от сообщества. Чёткие пути.'} },
-  { id:125, url:'https://www.val.town',                            tags:['tech','code'],      title:{en:'Val Town'},                                         description:{en:'Write and run JS in the cloud, shareable like a link. Instant deployment.',ru:'Пиши и запускай JS в облаке, делиться как ссылкой. Мгновенный деплой.'} },
-  { id:126, url:'https://www.tldraw.com',                          tags:['tech','utility'],   title:{en:'tldraw'},                                           description:{en:'Infinite virtual whiteboard. Best in class for diagrams and collaboration.',ru:'Бесконечная виртуальная доска. Лучшая в классе для диаграмм и совместной работы.'} },
-  { id:127, url:'https://developer.mozilla.org',                   tags:['tech','education'], title:{en:'MDN Web Docs'},                                     description:{en:'The definitive web reference. HTML, CSS, JS — all documented precisely.',ru:'Окончательный веб-справочник. HTML, CSS, JS — всё задокументировано точно.'} },
-  { id:128, url:'https://css-tricks.com',                          tags:['tech','design'],    title:{en:'CSS-Tricks'},                                       description:{en:'The internet\'s best collection of CSS techniques and property references.',ru:'Лучшая коллекция CSS-техник и справочников в интернете.'} },
-  { id:129, url:'https://www.smashingmagazine.com',                tags:['tech','design'],    title:{en:'Smashing Magazine'},                                description:{en:'In-depth articles on web design and development. Trusted for 18+ years.',ru:'Глубокие статьи о веб-дизайне и разработке. Надёжные 18+ лет.'} },
-  { id:130, url:'https://overreacted.io',                          tags:['tech','education'], title:{en:'Overreacted'},                                      description:{en:"Dan Abramov's blog. Deep dives on React, mental models, software thinking.",ru:'Блог Дэна Абрамова. Глубокие погружения в React и мышление о ПО.'} },
-
-  // ── ARCHIVES & HISTORY ────────────────────────────────────────
-  { id:131, url:'https://web.archive.org',                         tags:['archive'],          title:{en:'Wayback Machine'},                                  description:{en:'The internet\'s memory. 800+ billion pages saved since 1996. History preserved.',ru:'Память интернета. 800+ миллиардов страниц с 1996 года.'} },
-  { id:132, url:'https://archive.org',                             tags:['archive'],          title:{en:'Internet Archive'},                                 description:{en:'Books, movies, music, software — a digital library of human culture. Forever free.',ru:'Книги, фильмы, музыка, ПО — цифровая библиотека культуры. Навсегда бесплатно.'} },
-  { id:133, url:'https://publicdomainreview.org',                  tags:['archive','art'],    title:{en:'Public Domain Review'},                             description:{en:'Curated essays on history\'s most fascinating out-of-copyright works.',ru:'Эссе о самых увлекательных работах, вышедших из-под авторских прав.'} },
-  { id:134, url:'https://digitalcollections.nypl.org',             tags:['archive','art'],    title:{en:'NYPL Digital Collections'},                         description:{en:'900,000+ high-res historical images from the New York Public Library.',ru:'900 000+ исторических изображений из Нью-Йоркской публичной библиотеки.'} },
-  { id:135, url:'https://www.europeana.eu',                        tags:['archive','art'],    title:{en:'Europeana'},                                        description:{en:'50+ million digitised cultural heritage items from European museums.',ru:'50+ миллионов оцифрованных культурных объектов европейских музеев.'} },
-  { id:136, url:'https://monoskop.org',                            tags:['archive','art'],    title:{en:'Monoskop'},                                         description:{en:'Wiki for arts, media, humanities with links to free books. Deep rabbit hole.',ru:'Вики по искусству, медиа и гуманитарным наукам с бесплатными книгами.'} },
-  { id:137, url:'https://archive.org/details/computerchronicles', tags:['archive','retro'],   title:{en:'Computer Chronicles'},                              description:{en:'Every episode of the legendary 1983–2002 tech TV show.',ru:'Все серии легендарного тех-шоу 1983–2002 годов.'} },
-  { id:138, url:'https://theoldnet.com',                           tags:['archive','retro'],  title:{en:'The Old Net'},                                      description:{en:'Browse the internet as it looked in 1999. Time machine for the early web.',ru:'Просматривай интернет таким, каким он был в 1999. Машина времени для раннего веба.'} },
-  { id:139, url:'https://neal.fun/internet-artifacts',             tags:['archive','retro'],  title:{en:'Internet Artifacts'},                               description:{en:'A museum of the internet\'s most important artifacts. From the first website to the first tweet.',ru:'Музей самых важных артефактов интернета. От первого сайта до первого твита.'} },
-  { id:140, url:'https://www.historypin.org',                      tags:['archive','maps'],   title:{en:'Historypin'},                                       description:{en:'Pin historical photos to their exact locations on a map. See how places changed.',ru:'Прикрепляй исторические фото к точным местам на карте. Смотри как менялись места.'} },
-
-  // ── CREATIVE / RANDOM / FUN ───────────────────────────────────
-  { id:141, url:'https://perchance.org',                           tags:['creative','utility'], title:{en:'Perchance'},                                     description:{en:'Build and share random generators for anything. Names, stories, dungeons, loot.',ru:'Создавай генераторы всего подряд. Имена, истории, подземелья, добыча.'} },
-  { id:142, url:'https://neal.fun/password-game',                  tags:['creative','game'],  title:{en:'The Password Game'},                               description:{en:'Create a password that satisfies increasingly absurd rules. Viral for good reason.',ru:'Создай пароль, удовлетворяющий всё более абсурдным правилам. Вирусный не зря.'} },
-  { id:143, url:'https://www.mapcrunch.com',                       tags:['creative','maps'],  title:{en:'Map Crunch'},                                      description:{en:'Teleport to a random Street View location. Explore the world from your chair.',ru:'Телепортируйся в случайный Street View. Исследуй мир с кресла.'} },
-  { id:144, url:'https://www.supercook.com',                       tags:['creative','utility'], title:{en:'Supercook'},                                     description:{en:'Enter what\'s in your fridge. Get recipes using only those ingredients.',ru:'Введи что есть в холодильнике. Получи рецепты только из этих ингредиентов.'} },
-  { id:145, url:'https://www.sporcle.com',                         tags:['creative','game'],  title:{en:'Sporcle'},                                         description:{en:'Millions of trivia quizzes. Every topic from geography to pop culture.',ru:'Миллионы викторин. Любая тема — от географии до поп-культуры.'} },
-  { id:146, url:'https://letter.wiki',                             tags:['creative','writing'], title:{en:'Letter Wiki'},                                   description:{en:'A collection of famous letters throughout history. Read Einstein\'s, Hemingway\'s.',ru:'Коллекция знаменитых писем из истории. Читай письма Эйнштейна, Хемингуэя.'} },
-  { id:147, url:'https://www.typelit.io',                          tags:['creative','game'],  title:{en:'TypeLit'},                                         description:{en:'Practice typing by retyping classic literature. Improve speed, absorb great books.',ru:'Тренируй набор текста, перепечатывая классику. Улучшай скорость, впитывай книги.'} },
-  { id:148, url:'https://linea.app',                               tags:['creative','art'],   title:{en:'Linea'},                                           description:{en:'Minimalist drawing app in the browser. Clean lines, smooth flow, no clutter.',ru:'Минималистичное приложение для рисования в браузере. Чистые линии, плавность.'} },
-  { id:149, url:'https://www.thisismyjam.com',                     tags:['creative','music'], title:{en:'This Is My Jam'},                                   description:{en:'Archive of the one song each user was obsessed with at a moment in time.',ru:'Архив одной песни, которой был одержим каждый пользователь в момент времени.'} },
-  { id:150, url:'https://boredbutton.com',                         tags:['creative'],         title:{en:'Bored Button'},                                    description:{en:'Click when bored. Teleported to a random activity or distraction.',ru:'Нажми когда скучно. Тебя телепортируют к случайному занятию или развлечению.'} },
-
-  // ── MORE INTERACTIVE GEMS ─────────────────────────────────────
-  { id:151, url:'https://www.koalastothemax.com',                  tags:['interactive'],      title:{en:'Koalas to the Max'},                               description:{en:'Hover over dots to reveal a hidden image. Satisfying to the core.',ru:'Наводи на точки чтобы открыть скрытое изображение. Невероятно приятно.'} },
-  { id:152, url:'https://themaximumtemperature.com',               tags:['interactive'],      title:{en:'The Maximum Temperature'},                         description:{en:'An oddly satisfying web experiment you have to try.',ru:'Странно удовлетворяющий веб-эксперимент, который нужно попробовать.'} },
-  { id:153, url:'https://www.fallingfalling.com',                  tags:['interactive','art'], title:{en:'Falling Falling'},                                description:{en:'Hypnotic geometric descent. One of the oldest web experiments still running.',ru:'Гипнотическое геометрическое падение. Один из старейших веб-экспериментов.'} },
-  { id:154, url:'https://eelslap.com',                             tags:['interactive'],      title:{en:'Eelslap'},                                         description:{en:'Move your mouse. Someone gets slapped with an eel. That\'s it. It\'s perfect.',ru:'Двигай мышкой. Кто-то получает удар угрём. Это всё. Это идеально.'} },
-  { id:155, url:'https://www.staggeringbeauty.com',                tags:['interactive'],      title:{en:'Staggering Beauty'},                               description:{en:'Shake the worm. Something happens. Epilepsy warning — shake it gently first.',ru:'Потряси червяка. Кое-что произойдёт. Предупреждение — сначала осторожно.'} },
-  { id:156, url:'https://headsortails.xyz',                        tags:['interactive'],      title:{en:'Heads or Tails'},                                  description:{en:'A coin flip with ridiculous production value. The most dramatic decision tool.',ru:'Орёл или решка с безумным уровнем производства. Самый драматичный инструмент.'} },
-  { id:157, url:'https://www.whatismyipaddress.com',               tags:['utility','tech'],   title:{en:'What Is My IP'},                                    description:{en:'Your IP, location, ISP, and connection info. Know what the internet sees.',ru:'Твой IP, местоположение, провайдер. Знай что видит интернет.'} },
-  { id:158, url:'https://neal.fun/deep-sea',                       tags:['interactive','science'], title:{en:'The Deep Sea'},                               description:{en:'Scroll down into the ocean. See what lives at each depth. Mind-expanding.',ru:'Скроллируй вниз в океан. Смотри что живёт на каждой глубине.'} },
-  { id:159, url:'https://neal.fun/space-elevator',                 tags:['interactive','science'], title:{en:'Space Elevator'},                             description:{en:'Scroll up from Earth to space. See the scale of everything above us.',ru:'Скроллируй вверх от Земли в космос. Ощути масштаб всего что над нами.'} },
-  { id:160, url:'https://www.drawastickman.com',                   tags:['interactive','game'], title:{en:'Draw a Stickman'},                               description:{en:'Draw a stick figure. Watch it come to life in an adventure you help create.',ru:'Нарисуй человечка. Наблюдай как он оживает в приключении, которое ты создаёшь.'} },
-];
-
-/* ── CONSTANTS & STATE ────────────────────────────────────────── */
-const EPOCH    = new Date(2025, 0, 1);
-const BATCH    = 12;
-const ALL_TAGS = ['all','interactive','art','webgl','ai','data','game','design',
-                  'education','music','archive','tech','creative','utility','maps','science'];
-const state    = { filter:'all', rendered:0, filtered:[], loading:false };
-
-/* ── UTILS ────────────────────────────────────────────────────── */
-const dayIndex  = d => { const n = Math.floor((d - EPOCH) / 86400000); return ((n % SITES.length) + SITES.length) % SITES.length; };
-const dayNumber = d => Math.max(1, Math.floor((d - EPOCH) / 86400000) + 1);
-const fmtDate   = d => d.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', { day:'numeric', month:'long', year:'numeric' });
-const siteTitle = s => (s.title && typeof s.title === 'object') ? (s.title[lang] || s.title.en || '') : (s.title || '');
-const siteDesc  = s => (s.description && typeof s.description === 'object') ? (s.description[lang] || s.description.en || '') : (s.description || '');
-const seenKey   = ds => `nq_seen_${ds}`;
-const todayStr  = ()  => new Date().toISOString().slice(0, 10);
-const isSeenDay = ds  => !!localStorage.getItem(seenKey(ds));
-const markSeen  = ds  => localStorage.setItem(seenKey(ds), '1');
-
-function countUp(el, target, dur = 900) {
-  const t0 = performance.now();
-  const pad = v => String(v).padStart(3, '0');
-  (function tick(now) {
-    const p = Math.min((now - t0) / dur, 1);
-    el.textContent = pad(Math.round((1 - Math.pow(1 - p, 3)) * target));
-    if (p < 1) requestAnimationFrame(tick);
-  })(t0);
-}
-
-/* ── HERO ─────────────────────────────────────────────────────── */
-function initHero() {
-  const today = new Date();
-  const site  = SITES[dayIndex(today)];
-  const n     = dayNumber(today);
-
-  setTimeout(() => countUp(document.getElementById('heroNum'), n, 900), 150);
-  document.getElementById('heroDate').textContent   = fmtDate(today).toUpperCase();
-  document.getElementById('statTotal').textContent  = SITES.length + '+';
-  document.getElementById('statDays').textContent   = n;
-
-  renderHeroCard(site);
-
-  const ds = todayStr();
-  if (isSeenDay(ds)) document.getElementById('chipSeen').classList.add('on');
-
-  document.getElementById('heroLink').addEventListener('click', () => {
-    markSeen(ds);
-    document.getElementById('chipSeen').classList.add('on');
-  });
-}
-
-function renderHeroCard(site) {
-  document.getElementById('heroTitle').textContent = siteTitle(site);
-  document.getElementById('heroDesc').textContent  = siteDesc(site);
-  document.getElementById('heroLink').href         = site.url;
-  const wrap = document.getElementById('heroTags');
-  wrap.innerHTML = '';
-  (site.tags || []).forEach(tag => {
-    const s = document.createElement('span');
-    s.className = 'tag'; s.textContent = tag;
-    wrap.appendChild(s);
-  });
-}
-
-/* ── TICKER ───────────────────────────────────────────────────── */
-function initTicker() {
-  const items = SITES.map(s => `<span class="ticker-item"><b>+</b>${siteTitle(s)}</span>`).join('');
-  const el = document.getElementById('ticker');
-  el.innerHTML = items + items;
-}
-
-/* ── RANDOM ───────────────────────────────────────────────────── */
-function initRandom() {
-  document.getElementById('btnRandom').addEventListener('click', () => {
-    window.open(SITES[Math.floor(Math.random() * SITES.length)].url, '_blank', 'noopener');
-  });
-}
-
-/* ── FILTERS ──────────────────────────────────────────────────── */
-function initFilters() {
-  const list = document.getElementById('filterList');
-  list.innerHTML = '';
-  ALL_TAGS.forEach(tag => {
-    const btn = document.createElement('button');
-    btn.className = 'filter-btn' + (tag === state.filter ? ' active' : '');
-    btn.textContent = tag === 'all' ? t('filter_all') : tag;
-    btn.dataset.tag = tag;
-    btn.addEventListener('click', () => {
-      state.filter   = tag;
-      state.rendered = 0;
-      list.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.tag === tag));
-      buildList(); clearGrid(); renderBatch();
+    window.addEventListener('mousemove', (e) => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = 'translate(' + mx + 'px,' + my + 'px) translate(-50%, -50%)';
     });
-    list.appendChild(btn);
-  });
-}
 
-/* ── ARCHIVE ──────────────────────────────────────────────────── */
-function buildList() {
-  const today  = new Date();
-  const totalN = dayNumber(today);
-  const days   = [];
-  for (let i = 1; i < Math.min(totalN, SITES.length + 1); i++) {
-    const d    = new Date(today);
-    d.setDate(d.getDate() - i);
-    const site = SITES[dayIndex(d)];
-    if (state.filter === 'all' || (site.tags || []).includes(state.filter)) {
-      days.push({ site, date: d, dayN: dayNumber(d) });
+    function tick() {
+      rx += (mx - rx) * 0.18;
+      ry += (my - ry) * 0.18;
+      ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%, -50%)';
+      raf = requestAnimationFrame(tick);
     }
-  }
-  state.filtered = days;
-  document.getElementById('countBadge').textContent =
-    days.length + (lang === 'ru' ? ' записей' : ' entries');
-}
+    tick();
 
-function clearGrid() {
-  document.getElementById('archGrid').innerHTML = '';
-  const foot = document.getElementById('archFoot');
-  foot.className = 'arch-foot';
-  foot.dataset.msg = '';
-}
-
-function renderBatch() {
-  if (state.loading) return;
-  const grid  = document.getElementById('archGrid');
-  const start = state.rendered;
-  const end   = Math.min(start + BATCH, state.filtered.length);
-
-  if (start >= state.filtered.length) {
-    const foot = document.getElementById('archFoot');
-    foot.className = 'arch-foot end';
-    foot.dataset.msg = t('arch_end');
-    renderLocked();
-    return;
-  }
-
-  state.loading = true;
-  const frag = document.createDocumentFragment();
-
-  for (let i = start; i < end; i++) {
-    const { site, date, dayN } = state.filtered[i];
-    const ds   = date.toISOString().slice(0, 10);
-    const seen = isSeenDay(ds);
-
-    const a = document.createElement('a');
-    a.className = 'arch-card' + (seen ? ' seen' : '');
-    a.href = site.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
-    a.style.animationDelay = ((i - start) * 0.04) + 's';
-    a.innerHTML = `
-      <div class="arch-n">${String(dayN).padStart(3,'0')}</div>
-      <div class="arch-d">${fmtDate(date).toUpperCase()}</div>
-      <div class="arch-t">${siteTitle(site)}</div>
-      <div class="arch-desc">${siteDesc(site)}</div>
-      <div class="arch-tags">${(site.tags||[]).map(tg=>`<span class="tag">${tg}</span>`).join('')}</div>
-      <span class="arch-seen">${t('arch_seen')}</span>
-      <span class="arch-arrow">↗</span>`;
-    a.addEventListener('click', () => { markSeen(ds); a.classList.add('seen'); });
-    frag.appendChild(a);
-  }
-
-  grid.appendChild(frag);
-  state.rendered = end;
-  state.loading  = false;
-
-  requestAnimationFrame(() => {
-    grid.querySelectorAll('.arch-card:not(.show)').forEach(c => revealIO.observe(c));
-  });
-
-  if (state.rendered >= state.filtered.length) {
-    const foot = document.getElementById('archFoot');
-    foot.className = 'arch-foot end';
-    foot.dataset.msg = t('arch_end');
-    renderLocked();
-  }
-}
-
-function renderLocked() {
-  const grid  = document.getElementById('archGrid');
-  const today = new Date();
-  for (let i = 1; i <= 3; i++) {
-    const d = new Date(today); d.setDate(d.getDate() + i);
-    const n = dayNumber(d);
-    const div = document.createElement('div');
-    div.className = 'arch-card locked show';
-    div.innerHTML = `
-      <div class="arch-n">${String(n).padStart(3,'0')}</div>
-      <div class="arch-d">${fmtDate(d).toUpperCase()}</div>
-      <div class="arch-t">${t('locked_lbl')}</div>`;
-    grid.appendChild(div);
-  }
-}
-
-/* ── OBSERVERS ────────────────────────────────────────────────── */
-const revealIO = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('show'); revealIO.unobserve(e.target); }
-  });
-}, { threshold: 0.06 });
-
-const sentinelIO = new IntersectionObserver(entries => {
-  if (entries[0].isIntersecting) renderBatch();
-}, { rootMargin: '200px' });
-
-/* ── LANGUAGE ─────────────────────────────────────────────────── */
-function initLang() {
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      lang = btn.dataset.lang;
-      localStorage.setItem('nq_lang', lang);
-      applyI18n();
-      const today = new Date();
-      renderHeroCard(SITES[dayIndex(today)]);
-      document.getElementById('heroDate').textContent = fmtDate(today).toUpperCase();
-      initTicker(); initFilters(); buildList(); clearGrid(); renderBatch();
+    document.querySelectorAll('a, button, .stack-item, .lab-card, .project-card, .contact-channel').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        dot.classList.add('is-active');
+        ring.classList.add('is-active');
+      });
+      el.addEventListener('mouseleave', () => {
+        dot.classList.remove('is-active');
+        ring.classList.remove('is-active');
+      });
     });
-  });
-  applyI18n();
-}
+  }
 
-/* ── CURSOR ───────────────────────────────────────────────────── */
-function initCursor() {
-  const el = document.getElementById('cur');
-  document.addEventListener('mousemove', e => {
-    el.style.left = e.clientX + 'px';
-    el.style.top  = e.clientY + 'px';
-  });
-  document.addEventListener('mouseover', e => { if (e.target.closest('a,button')) el.classList.add('big'); });
-  document.addEventListener('mouseout',  e => { if (e.target.closest('a,button')) el.classList.remove('big'); });
-  document.addEventListener('mouseleave', () => { el.style.opacity = '0'; });
-  document.addEventListener('mouseenter', () => { el.style.opacity = '1'; });
-}
+  // ===================== GLYPH RAIN =====================
+  function initGlyphRain() {
+    if (prefersReducedMotion) return;
+    const canvas = document.getElementById('glyph-rain');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-/* ── BOOT ─────────────────────────────────────────────────────── */
-document.addEventListener('DOMContentLoaded', () => {
-  initLang();
-  initHero();
-  initTicker();
-  initRandom();
-  initFilters();
-  buildList();
-  renderBatch();
-  sentinelIO.observe(document.getElementById('sentinel'));
-  initCursor();
-});
+    const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789·{}[]()<>=+-*/&|^~;:.,?!#$%@_'.split('');
+    let columns, drops, fontSize;
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+      fontSize = 16;
+      columns = Math.floor(rect.width / fontSize);
+      drops = Array.from({ length: columns }, () => Math.random() * -rect.height);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    let running = true;
+    const hero = document.getElementById('hero');
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        entries.forEach(e => { running = e.isIntersecting; });
+      }, { threshold: 0 }).observe(hero);
+    }
+
+    function frame() {
+      if (running) {
+        const rect = canvas.getBoundingClientRect();
+        ctx.fillStyle = 'rgba(10, 10, 10, 0.08)';
+        ctx.fillRect(0, 0, rect.width, rect.height);
+        ctx.font = fontSize + 'px "JetBrains Mono", monospace';
+        for (let i = 0; i < drops.length; i++) {
+          const y = drops[i];
+          const x = i * fontSize;
+          const bright = Math.random() < 0.025;
+          ctx.fillStyle = bright ? 'rgba(255,230,180,0.95)' : 'rgba(200,170,130,0.7)';
+          const char = glyphs[Math.floor(Math.random() * glyphs.length)];
+          ctx.fillText(char, x, y);
+          drops[i] = y > rect.height && Math.random() > 0.975 ? 0 : y + fontSize;
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+    frame();
+  }
+
+  // ===================== HERO ENTRANCE =====================
+  function initHeroEntrance() {
+    const items = ['eyebrow', 'title', 'sub', 'cta'];
+    items.forEach((key, i) => {
+      const el = document.querySelector('[data-' + key + ']');
+      if (!el) return;
+      setTimeout(() => el.classList.add('is-in'), 300 + i * 200);
+    });
+  }
+
+  // ===================== SECTION REVEAL =====================
+  function initReveal() {
+    const targets = document.querySelectorAll('section, .reveal, .headline-enter, .sticky-pair .left, .right-block, .stack-item');
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach(t => t.classList.add('is-in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    targets.forEach(t => io.observe(t));
+  }
+
+  // ===================== PIN SCROLL =====================
+  function initPinScroll() {
+    const viewport = document.getElementById('pin-viewport');
+    const track = document.getElementById('pin-track');
+    const fill = document.getElementById('pin-fill');
+    const counter = document.getElementById('pin-counter');
+    if (!viewport || !track) return;
+
+    if (window.innerWidth < 881) {
+      viewport.style.height = 'auto';
+      track.style.transform = 'none';
+      return;
+    }
+
+    let scrollWidth = 0;
+    let lastY = window.scrollY;
+
+    function recalc() {
+      if (window.innerWidth < 881) return;
+      scrollWidth = Math.max(0, track.scrollWidth - window.innerWidth);
+      viewport.style.height = (window.innerHeight + scrollWidth) + 'px';
+    }
+    recalc();
+    window.addEventListener('resize', recalc);
+
+    const cards = track.querySelectorAll('.feature-card');
+    const totalCards = cards.length;
+
+    function onScroll() {
+      if (window.innerWidth < 881) return;
+      const rect = viewport.getBoundingClientRect();
+      const top = rect.top;
+      if (top <= 0 && top >= -scrollWidth) {
+        const progress = (-top) / scrollWidth;
+        const tx = -progress * scrollWidth;
+        track.style.transform = 'translate3d(' + tx + 'px, 0, 0)';
+        if (fill) fill.style.width = (progress * 100) + '%';
+        if (counter) {
+          const idx = Math.min(totalCards, Math.max(1, Math.ceil(progress * totalCards) || 1));
+          counter.textContent = String(idx).padStart(2, '0') + ' / ' + String(totalCards).padStart(2, '0');
+        }
+
+        const v = window.scrollY - lastY;
+        const skew = Math.max(-8, Math.min(8, v * 0.4));
+        cards.forEach(c => {
+          c.style.transform = 'skewX(' + skew + 'deg)';
+        });
+        clearTimeout(track._skewTimer);
+        track._skewTimer = setTimeout(() => {
+          cards.forEach(c => { c.style.transform = 'skewX(0deg)'; });
+        }, 200);
+      }
+      lastY = window.scrollY;
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  // ===================== LIVE CLOCK =====================
+  function initClock() {
+    const navClock = document.getElementById('nav-clock');
+    const epochTime = document.getElementById('epoch-time');
+    const uptimeEl = document.getElementById('uptime');
+    const start = Date.now();
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function tick() {
+      const now = new Date();
+      if (navClock) navClock.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+      if (epochTime) epochTime.textContent = Math.floor(now.getTime() / 1000);
+
+      if (uptimeEl) {
+        const diff = Math.floor((Date.now() - start) / 1000);
+        const h = Math.floor(diff / 3600);
+        const m = Math.floor((diff % 3600) / 60);
+        const s = diff % 60;
+        uptimeEl.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
+      }
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  // ===================== LAB CARD MOUSE TRACK =====================
+  function initLabCards() {
+    document.querySelectorAll('.lab-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const mx = ((e.clientX - rect.left) / rect.width) * 100;
+        const my = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mx', mx + '%');
+        card.style.setProperty('--my', my + '%');
+      });
+    });
+  }
+
+  // ===================== INIT =====================
+  function init() {
+    initCursor();
+    initGlyphRain();
+    initHeroEntrance();
+    initReveal();
+    initPinScroll();
+    initClock();
+    initLabCards();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
 </script>
 </body>
 </html>
