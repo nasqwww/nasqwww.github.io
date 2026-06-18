@@ -3,26 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NASQ · Index Terminal</title>
-<meta name="description" content="Персональный индекс-терминал. Переходник ко всем проектам, лаборатории и заметкам.">
+<title>NASQ · Index Terminal · v3.1</title>
+<meta name="description" content="Персональный индекс-терминал. Переходник ко всем live-проектам, репозиториям и экспериментам nasq.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;700;800;900&display=swap">
 <style>
-  /* ==================== RESET ==================== */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-  body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
-  }
+  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden; }
   img { max-width: 100%; display: block; }
   a { color: inherit; text-decoration: none; }
   button { background: none; border: none; cursor: pointer; color: inherit; font: inherit; }
   input, textarea { font: inherit; color: inherit; background: none; border: none; outline: none; }
 
-  /* ==================== TOKENS ==================== */
   :root {
     --bg:         #0a0a0a;
     --bg-soft:    #111111;
@@ -36,6 +30,8 @@
     --accent-dim: rgba(200,170,130, 0.08);
     --line:       rgba(255,255,255,0.10);
     --line-soft:  rgba(255,255,255,0.05);
+    --red:        #c97070;
+    --green:      #6ec96e;
 
     --ease-quiet:    cubic-bezier(.22, 1, .36, 1);
     --ease-precise:  cubic-bezier(.4, 0, .2, 1);
@@ -45,7 +41,6 @@
     --font-sans: 'Inter', system-ui, sans-serif;
   }
 
-  /* ==================== BASE ==================== */
   body {
     background: var(--bg);
     color: var(--text);
@@ -55,10 +50,8 @@
     cursor: none;
   }
   @media (pointer: coarse) { body { cursor: auto; } }
-
   ::selection { background: var(--accent-soft); color: var(--text); }
 
-  /* ==================== CURSOR ==================== */
   .cursor-dot, .cursor-ring {
     position: fixed; top: 0; left: 0;
     pointer-events: none;
@@ -82,14 +75,12 @@
   .cursor-ring.is-active { width: 60px; height: 60px; border-color: var(--accent); }
   @media (pointer: coarse) { .cursor-dot, .cursor-ring { display: none; } }
 
-  /* ==================== LAYOUT ==================== */
   .container       { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
   .container-narrow{ max-width: 860px;  margin: 0 auto; padding: 0 2rem; }
   .container-wide  { max-width: 1600px; margin: 0 auto; padding: 0 2rem; }
   section { padding: 8rem 0; position: relative; }
   @media (max-width: 768px) { section { padding: 5rem 0; } }
 
-  /* ==================== TYPE ==================== */
   .eyebrow {
     display: inline-flex; align-items: center; gap: 0.75rem;
     font-family: var(--font-mono);
@@ -131,7 +122,6 @@
   p { color: var(--text-soft); }
   .mono { font-family: var(--font-mono); }
 
-  /* ==================== NAV ==================== */
   .nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     padding: 1rem 2rem;
@@ -145,25 +135,22 @@
   }
   .nav__brand {
     display: flex; align-items: center; gap: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    letter-spacing: 0.15em; text-transform: uppercase;
   }
   .nav__brand-mark {
     width: 26px; height: 26px;
     border: 1px solid var(--accent);
     display: grid; place-items: center;
     color: var(--accent);
-    font-size: 10px;
-    font-weight: 700;
+    font-size: 10px; font-weight: 700;
     transition: background 300ms var(--ease-quiet), color 300ms var(--ease-quiet);
   }
   .nav__brand:hover .nav__brand-mark { background: var(--accent); color: var(--bg); }
-  .nav__links { display: flex; gap: 2rem; }
+  .nav__links { display: flex; gap: 1.75rem; }
   .nav__links a {
     color: var(--text-mute);
     transition: color 300ms var(--ease-quiet);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    letter-spacing: 0.15em; text-transform: uppercase;
     position: relative;
   }
   .nav__links a::after {
@@ -182,17 +169,12 @@
   }
   .nav__status {
     width: 6px; height: 6px; border-radius: 50%;
-    background: #6ec96e;
+    background: var(--green);
     box-shadow: 0 0 8px rgba(110,201,110,0.7);
   }
-  @media (max-width: 980px) {
-    .nav__links { display: none; }
-  }
-  @media (max-width: 640px) {
-    .nav__meta { display: none; }
-  }
+  @media (max-width: 980px) { .nav__links { display: none; } }
+  @media (max-width: 640px) { .nav__meta { display: none; } }
 
-  /* ==================== HERO ==================== */
   .hero {
     min-height: 100vh;
     padding: 8rem 2rem 6rem;
@@ -203,8 +185,7 @@
   .hero canvas {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
-    z-index: 0;
-    opacity: 0.6;
+    z-index: 0; opacity: 0.6;
   }
   .hero__grid-overlay {
     position: absolute; inset: 0;
@@ -212,13 +193,11 @@
       linear-gradient(rgba(200,170,130,0.04) 1px, transparent 1px),
       linear-gradient(90deg, rgba(200,170,130,0.04) 1px, transparent 1px);
     background-size: 80px 80px;
-    z-index: 1;
-    pointer-events: none;
+    z-index: 1; pointer-events: none;
   }
   .hero__content {
     position: relative; z-index: 2;
-    max-width: 1400px; margin: 0 auto;
-    width: 100%;
+    max-width: 1400px; margin: 0 auto; width: 100%;
   }
   .hero__top {
     position: absolute; top: 5rem; left: 2rem; right: 2rem;
@@ -228,15 +207,13 @@
     letter-spacing: 0.2em; text-transform: uppercase;
     z-index: 3;
   }
-  .hero__top-row { display: flex; gap: 2rem; }
+  .hero__top-row { display: flex; gap: 2rem; flex-wrap: wrap; }
   .hero__top-row span { display: block; }
   .hero__top-row strong { color: var(--accent); font-weight: 400; }
   .hero__eyebrow {
     font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--accent);
+    font-size: 12px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--accent);
     margin-bottom: 2rem;
     display: flex; align-items: center; gap: 1rem;
     opacity: 0; transform: translateY(-20px);
@@ -259,22 +236,17 @@
   }
   .hero__title.is-in { opacity: 1; transform: none; }
   .hero__title em {
-    font-style: normal;
-    color: var(--accent);
-    position: relative;
+    font-style: normal; color: var(--accent);
   }
   .hero__title em::after {
-    content: '_';
-    color: var(--accent);
+    content: '_'; color: var(--accent);
     animation: blink 1s steps(2) infinite;
   }
   @keyframes blink { 50% { opacity: 0; } }
   .hero__sub {
     font-size: clamp(1rem, 1.25vw, 1.15rem);
-    line-height: 1.65;
-    color: var(--text-soft);
-    max-width: 60ch;
-    margin-bottom: 3rem;
+    line-height: 1.65; color: var(--text-soft);
+    max-width: 62ch; margin-bottom: 3rem;
     opacity: 0; transform: translateY(30px);
     transition: opacity 1000ms var(--ease-quiet) 500ms, transform 1000ms var(--ease-quiet) 500ms;
   }
@@ -291,8 +263,7 @@
     border: 1px solid var(--accent);
     color: var(--accent);
     font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.2em;
+    font-size: 12px; letter-spacing: 0.2em;
     text-transform: uppercase;
     transition: background 400ms var(--ease-quiet), color 400ms var(--ease-quiet);
   }
@@ -304,15 +275,11 @@
     color: var(--text-soft);
   }
   .cta--ghost:hover { border-color: var(--accent); color: var(--accent); background: transparent; }
-
   .hero__cta-meta {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-mute);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    font-size: 11px; color: var(--text-mute);
+    letter-spacing: 0.18em; text-transform: uppercase;
   }
-
   .hero__scroll-cue {
     position: absolute; bottom: 2rem; right: 2rem;
     font-family: var(--font-mono); font-size: 10px;
@@ -327,7 +294,6 @@
     content: ''; width: 1px; height: 40px;
     background: linear-gradient(to bottom, var(--accent), transparent);
   }
-
   .hero__corner {
     position: absolute;
     width: 24px; height: 24px;
@@ -339,7 +305,6 @@
   .hero__corner--bl { bottom: 2rem; left: 2rem; border-right: none; border-top: none; }
   .hero__corner--br { bottom: 2rem; right: 2rem; border-left: none; border-top: none; }
 
-  /* ==================== SECTION HEAD ==================== */
   .section-head {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -350,14 +315,11 @@
   @media (max-width: 880px) {
     .section-head { grid-template-columns: 1fr; gap: 2rem; }
   }
-  .section-head__left {
-    display: flex; flex-direction: column; gap: 1rem;
-  }
+  .section-head__left { display: flex; flex-direction: column; gap: 1rem; }
   .section-head__title { max-width: 18ch; }
   .section-head__meta {
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text-mute);
+    font-size: 12px; color: var(--text-mute);
     letter-spacing: 0.15em;
     margin-top: 2rem;
     border-top: 1px solid var(--line);
@@ -371,11 +333,9 @@
     display: block; color: var(--accent); font-weight: 400;
     margin-bottom: 0.25rem;
     text-transform: uppercase;
-    font-size: 10px;
-    letter-spacing: 0.2em;
+    font-size: 10px; letter-spacing: 0.2em;
   }
 
-  /* ==================== TERMINAL CARD ==================== */
   .terminal-block {
     border: 1px solid var(--line);
     background: var(--bg-card);
@@ -389,30 +349,26 @@
     background: rgba(255,255,255,0.02);
     border-bottom: 1px solid var(--line);
     display: flex; align-items: center; gap: 0.75rem;
-    font-size: 11px;
-    color: var(--text-mute);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    font-size: 11px; color: var(--text-mute);
+    letter-spacing: 0.15em; text-transform: uppercase;
   }
-  .terminal__dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--line);
-  }
-  .terminal__dot--red { background: #c97070; }
+  .terminal__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+  .terminal__dot--red { background: var(--red); }
   .terminal__dot--amber { background: var(--accent); }
-  .terminal__dot--green { background: #6ec96e; }
+  .terminal__dot--green { background: var(--green); }
   .terminal__title { margin-left: auto; }
   .terminal__body {
     padding: 1.5rem 1.25rem;
-    line-height: 1.8;
-    color: var(--text-soft);
-    min-height: 280px;
+    line-height: 1.8; color: var(--text-soft);
+    min-height: 320px;
   }
   .terminal__line { display: block; }
   .terminal__prompt { color: var(--accent); }
   .terminal__comment { color: var(--text-mute); }
   .terminal__key { color: var(--accent); }
   .terminal__val { color: var(--text); }
+  .terminal__ok { color: var(--green); }
+  .terminal__err { color: var(--red); }
   .terminal__cursor {
     display: inline-block;
     width: 8px; height: 14px;
@@ -421,7 +377,6 @@
     animation: blink 1s steps(2) infinite;
   }
 
-  /* ==================== PROJECTS GRID ==================== */
   .projects-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -455,48 +410,40 @@
   }
   .project-card__index {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--accent);
+    font-size: 11px; color: var(--accent);
     letter-spacing: 0.3em;
   }
   .project-card__status {
     font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text-mute);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 10px; color: var(--text-mute);
+    letter-spacing: 0.2em; text-transform: uppercase;
     display: flex; align-items: center; gap: 0.5rem;
   }
   .project-card__status::before {
     content: ''; width: 6px; height: 6px; border-radius: 50%;
     background: var(--text-mute);
   }
-  .project-card__status.is-live::before { background: #6ec96e; box-shadow: 0 0 6px rgba(110,201,110,0.6); }
+  .project-card__status.is-live::before { background: var(--green); box-shadow: 0 0 6px rgba(110,201,110,0.6); }
   .project-card__status.is-wip::before { background: var(--accent); box-shadow: 0 0 6px var(--accent-soft); }
+  .project-card__status.is-404::before { background: var(--red); box-shadow: 0 0 6px rgba(201,112,112,0.5); }
   .project-card__name {
-    font-size: 1.75rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    font-size: 1.75rem; font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.1;
     margin-bottom: 0.5rem;
     transition: color 500ms var(--ease-quiet);
   }
   .project-card:hover .project-card__name { color: var(--accent); }
   .project-card__latin {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-mute);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 11px; color: var(--text-mute);
+    letter-spacing: 0.2em; text-transform: uppercase;
     margin-bottom: 1.5rem;
   }
   .project-card__body {
-    font-size: 0.95rem;
-    line-height: 1.65;
+    font-size: 0.95rem; line-height: 1.65;
     color: var(--text-mute);
     transition: color 500ms var(--ease-quiet);
-    flex: 1;
-    margin-bottom: 2rem;
+    flex: 1; margin-bottom: 2rem;
   }
   .project-card:hover .project-card__body { color: var(--text-soft); }
   .project-card__foot {
@@ -504,15 +451,11 @@
     padding-top: 1.5rem;
     border-top: 1px solid var(--line-soft);
   }
-  .project-card__tags {
-    display: flex; gap: 0.5rem; flex-wrap: wrap;
-  }
+  .project-card__tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
   .project-card__tag {
     font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text-mute);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    font-size: 10px; color: var(--text-mute);
+    letter-spacing: 0.15em; text-transform: uppercase;
     padding: 0.25rem 0.6rem;
     border: 1px solid var(--line);
     transition: border-color 400ms var(--ease-quiet), color 400ms var(--ease-quiet);
@@ -520,16 +463,20 @@
   .project-card:hover .project-card__tag { border-color: var(--accent-soft); color: var(--accent); }
   .project-card__link {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.2em; text-transform: uppercase;
     display: inline-flex; align-items: center; gap: 0.5rem;
     transition: gap 400ms var(--ease-quiet);
   }
   .project-card:hover .project-card__link { gap: 1rem; }
+  .project-card__url {
+    font-family: var(--font-mono);
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-top: 0.5rem;
+    word-break: break-all;
+  }
 
-  /* ==================== STICKY PAIR ==================== */
   .sticky-pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -552,30 +499,22 @@
   .right-block { display: flex; flex-direction: column; gap: 1.5rem; }
   .right-block__label {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.25em; text-transform: uppercase;
     border-top: 1px solid var(--accent-soft);
     padding-top: 1rem;
   }
   .right-block h3 {
-    font-size: 1.5rem;
-    line-height: 1.2;
-    font-weight: 700;
-    letter-spacing: -0.01em;
+    font-size: 1.5rem; line-height: 1.2;
+    font-weight: 700; letter-spacing: -0.01em;
   }
   .right-block p {
-    font-size: 1rem;
-    line-height: 1.7;
-    color: var(--text-soft);
+    font-size: 1rem; line-height: 1.7; color: var(--text-soft);
   }
   .right-block blockquote {
     font-family: var(--font-sans);
-    font-size: 1.35rem;
-    line-height: 1.45;
-    color: var(--text);
-    font-style: italic;
+    font-size: 1.35rem; line-height: 1.45;
+    color: var(--text); font-style: italic;
     border-left: 2px solid var(--accent);
     padding: 0.5rem 0 0.5rem 1.5rem;
     margin: 1rem 0;
@@ -584,14 +523,11 @@
     display: block;
     font-family: var(--font-mono);
     font-style: normal;
-    font-size: 11px;
-    color: var(--text-mute);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    font-size: 11px; color: var(--text-mute);
+    letter-spacing: 0.18em; text-transform: uppercase;
     margin-top: 0.75rem;
   }
 
-  /* ==================== PIN SCROLL (FEATURED) ==================== */
   .pin-section { position: relative; }
   .pin-viewport { height: 100vh; width: 100%; }
   .pin-sticky {
@@ -608,22 +544,16 @@
   .pin-header__title { max-width: 18ch; }
   .pin-header__meta {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-mute);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 11px; color: var(--text-mute);
+    letter-spacing: 0.2em; text-transform: uppercase;
     text-align: right;
   }
   .pin-track-wrap {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    align-items: center;
+    flex: 1; overflow: hidden; position: relative;
+    display: flex; align-items: center;
   }
   .pin-track {
-    display: flex;
-    gap: 2rem;
+    display: flex; gap: 2rem;
     padding: 0 4rem;
     will-change: transform;
   }
@@ -644,40 +574,34 @@
     position: absolute;
     right: -2rem; bottom: -4rem;
     font-family: var(--font-mono);
-    font-size: 18rem;
-    font-weight: 700;
+    font-size: 18rem; font-weight: 700;
     color: rgba(200,170,130,0.04);
     line-height: 0.8;
     pointer-events: none;
   }
   .feature-card__num {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--accent);
+    font-size: 11px; color: var(--accent);
     letter-spacing: 0.3em;
     margin-bottom: 1.5rem;
     position: relative; z-index: 2;
   }
   .feature-card__name {
-    font-size: 2.25rem;
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.025em;
+    font-size: 2.25rem; font-weight: 800;
+    line-height: 1.05; letter-spacing: -0.025em;
     margin-bottom: 0.5rem;
     position: relative; z-index: 2;
   }
   .feature-card__sub {
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text-mute);
+    font-size: 12px; color: var(--text-mute);
     letter-spacing: 0.15em;
     margin-bottom: 1.5rem;
     position: relative; z-index: 2;
   }
   .feature-card__meta {
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--accent);
+    font-size: 12px; color: var(--accent);
     letter-spacing: 0.1em;
     margin-bottom: 1.5rem;
     border-top: 1px solid var(--line);
@@ -686,18 +610,15 @@
     position: relative; z-index: 2;
   }
   .feature-card__body {
-    font-size: 0.95rem;
-    line-height: 1.65;
+    font-size: 0.95rem; line-height: 1.65;
     color: var(--text-soft);
     flex: 1;
     position: relative; z-index: 2;
   }
   .feature-card__cta {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.2em; text-transform: uppercase;
     margin-top: 2rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--line);
@@ -711,21 +632,17 @@
   }
   .pin-progress__bar {
     flex: 0 0 12rem;
-    height: 1px;
-    background: var(--line);
+    height: 1px; background: var(--line);
     position: relative;
   }
   .pin-progress__fill {
     position: absolute; left: 0; top: 0; height: 100%;
-    width: 0;
-    background: var(--accent);
+    width: 0; background: var(--accent);
   }
   .pin-progress__label {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-mute);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 11px; color: var(--text-mute);
+    letter-spacing: 0.2em; text-transform: uppercase;
   }
   @media (max-width: 880px) {
     .pin-viewport { height: auto; }
@@ -737,7 +654,6 @@
     .pin-progress { display: none; }
   }
 
-  /* ==================== STACK INVENTORY ==================== */
   .stack-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -753,7 +669,6 @@
     padding: 2rem 1.5rem;
     position: relative;
     transition: background 400ms var(--ease-quiet);
-    cursor: none;
   }
   .stack-item::before {
     content: ''; position: absolute;
@@ -770,37 +685,29 @@
   }
   .stack-item__symbol {
     font-family: var(--font-mono);
-    font-size: 1.75rem;
-    font-weight: 700;
+    font-size: 1.75rem; font-weight: 700;
     color: var(--accent);
     letter-spacing: -0.02em;
   }
   .stack-item__level {
     font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text-mute);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 10px; color: var(--text-mute);
+    letter-spacing: 0.2em; text-transform: uppercase;
   }
   .stack-item__name {
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 1rem; font-weight: 700;
     letter-spacing: -0.01em;
     margin-bottom: 0.25rem;
   }
   .stack-item__desc {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-mute);
-    letter-spacing: 0.05em;
-    line-height: 1.5;
+    font-size: 11px; color: var(--text-mute);
+    letter-spacing: 0.05em; line-height: 1.5;
   }
   .stack-item__bar {
     margin-top: 1rem;
-    height: 1px;
-    background: var(--line);
-    position: relative;
-    overflow: hidden;
+    height: 1px; background: var(--line);
+    position: relative; overflow: hidden;
   }
   .stack-item__bar-fill {
     position: absolute; left: 0; top: 0; height: 100%;
@@ -810,7 +717,6 @@
   }
   .stack-item.is-in .stack-item__bar-fill { width: var(--lvl, 50%); }
 
-  /* ==================== LAB GRID ==================== */
   .lab-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -825,13 +731,12 @@
     position: relative;
     transition: border-color 400ms var(--ease-quiet), transform 400ms var(--ease-quiet);
     overflow: hidden;
-    min-height: 220px;
+    min-height: 240px;
     display: flex; flex-direction: column;
   }
   .lab-card::after {
     content: '';
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(200,170,130,0.08), transparent 50%);
     opacity: 0;
     transition: opacity 400ms var(--ease-quiet);
@@ -848,44 +753,34 @@
     border: 1px solid var(--accent-soft);
     display: grid; place-items: center;
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--accent);
+    font-size: 12px; color: var(--accent);
     font-weight: 700;
   }
   .lab-card__tag {
     font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text-mute);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 10px; color: var(--text-mute);
+    letter-spacing: 0.2em; text-transform: uppercase;
   }
   .lab-card__name {
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-size: 1.25rem; font-weight: 700;
     letter-spacing: -0.01em;
-    margin-bottom: 0.5rem;
-    line-height: 1.2;
+    margin-bottom: 0.5rem; line-height: 1.2;
   }
   .lab-card__body {
-    font-size: 0.875rem;
-    line-height: 1.6;
+    font-size: 0.875rem; line-height: 1.6;
     color: var(--text-mute);
-    flex: 1;
-    margin-bottom: 1rem;
+    flex: 1; margin-bottom: 1rem;
   }
   .lab-card__foot {
     display: flex; justify-content: space-between; align-items: center;
     font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text-mute);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    font-size: 10px; color: var(--text-mute);
+    letter-spacing: 0.15em; text-transform: uppercase;
     padding-top: 1rem;
     border-top: 1px solid var(--line-soft);
   }
   .lab-card__link { color: var(--accent); }
 
-  /* ==================== TIMELINE ==================== */
   .timeline { border-top: 1px solid var(--line); }
   .row {
     display: grid;
@@ -908,33 +803,27 @@
   .row:hover::before { height: 100%; }
   .row__year {
     font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--accent);
+    font-size: 13px; color: var(--accent);
     letter-spacing: 0.1em;
   }
   .row__title {
     font-family: var(--font-sans);
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 1.25;
+    font-size: 1.25rem; font-weight: 700;
+    letter-spacing: -0.01em; line-height: 1.25;
     color: var(--text);
     transition: color 500ms var(--ease-quiet);
   }
   .row:hover .row__title { color: var(--accent); }
   .row__body {
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 0.95rem; line-height: 1.6;
     color: var(--text-mute);
     transition: color 500ms var(--ease-quiet);
   }
   .row:hover .row__body { color: var(--text-soft); }
   .row__tag {
     font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--text-mute);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 10px; color: var(--text-mute);
+    letter-spacing: 0.2em; text-transform: uppercase;
     text-align: right;
     align-self: start;
   }
@@ -944,7 +833,6 @@
     .row__tag { text-align: left; }
   }
 
-  /* ==================== STATS ==================== */
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -962,28 +850,22 @@
   }
   .stat-item__label {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-mute);
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
+    font-size: 11px; color: var(--text-mute);
+    letter-spacing: 0.25em; text-transform: uppercase;
     margin-bottom: 1.5rem;
   }
   .stat-item__num {
     font-family: var(--font-mono);
-    font-size: 3rem;
-    font-weight: 700;
+    font-size: 3rem; font-weight: 700;
     color: var(--accent);
-    line-height: 1;
-    margin-bottom: 0.75rem;
+    line-height: 1; margin-bottom: 0.75rem;
     letter-spacing: -0.02em;
   }
   .stat-item__desc {
-    font-size: 0.875rem;
-    color: var(--text-soft);
+    font-size: 0.875rem; color: var(--text-soft);
     line-height: 1.5;
   }
 
-  /* ==================== CONTACT ==================== */
   .contact-block {
     border: 1px solid var(--line);
     padding: 4rem;
@@ -1024,24 +906,19 @@
   .contact-channel:hover::before { width: 1rem; }
   .contact-channel__label {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.25em; text-transform: uppercase;
   }
   .contact-channel__value {
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-size: 1.25rem; font-weight: 700;
     letter-spacing: -0.01em;
   }
   .contact-channel__note {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-mute);
+    font-size: 11px; color: var(--text-mute);
     letter-spacing: 0.1em;
   }
 
-  /* ==================== FOOTER ==================== */
   .footer {
     padding: 6rem 0 3rem;
     border-top: 1px solid var(--line);
@@ -1070,16 +947,12 @@
   @media (max-width: 880px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
   .footer h4 {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-    font-weight: 400;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.25em; text-transform: uppercase;
+    margin-bottom: 1.5rem; font-weight: 400;
   }
   .footer p, .footer li {
-    font-size: 0.9rem;
-    color: var(--text-mute);
+    font-size: 0.9rem; color: var(--text-mute);
     line-height: 1.6;
   }
   .footer ul { list-style: none; }
@@ -1089,8 +962,7 @@
   .footer li a:hover { color: var(--accent); }
   .footer li a:hover::before { color: var(--accent); transform: translateX(3px); }
   .footer__brand {
-    font-size: 1.5rem;
-    font-weight: 800;
+    font-size: 1.5rem; font-weight: 800;
     letter-spacing: -0.02em;
     color: var(--text);
     margin-bottom: 1rem;
@@ -1101,17 +973,13 @@
     display: flex; justify-content: space-between; flex-wrap: wrap;
     gap: 1rem;
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-mute);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    font-size: 11px; color: var(--text-mute);
+    letter-spacing: 0.15em; text-transform: uppercase;
   }
 
-  /* ==================== REVEAL ==================== */
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity 900ms var(--ease-quiet), transform 900ms var(--ease-quiet); }
   .reveal.is-in { opacity: 1; transform: none; }
 
-  /* ==================== ACCESSIBILITY ==================== */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
@@ -1125,23 +993,23 @@
 </head>
 <body>
 
-<!-- ==================== CURSOR ==================== -->
 <div class="cursor-dot" id="cursor-dot"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
 
-<!-- ==================== NAV ==================== -->
 <nav class="nav">
   <a href="#hero" class="nav__brand">
     <span class="nav__brand-mark">NQ</span>
     <span>NASQ · INDEX</span>
   </a>
   <div class="nav__links">
-    <a href="#projects">01 · Projects</a>
+    <a href="#live">01 · Live</a>
     <a href="#featured">02 · Featured</a>
-    <a href="#stack">03 · Stack</a>
-    <a href="#lab">04 · Lab</a>
-    <a href="#log">05 · Log</a>
-    <a href="#contact">06 · Contact</a>
+    <a href="#all">03 · All</a>
+    <a href="#repos">04 · Repos</a>
+    <a href="#stack">05 · Stack</a>
+    <a href="#lab">06 · Lab</a>
+    <a href="#log">07 · Log</a>
+    <a href="#contact">08 · Contact</a>
   </div>
   <div class="nav__meta">
     <span class="nav__status"></span>
@@ -1149,7 +1017,6 @@
   </div>
 </nav>
 
-<!-- ==================== HERO ==================== -->
 <section class="hero" id="hero">
   <canvas id="glyph-rain"></canvas>
   <div class="hero__grid-overlay"></div>
@@ -1160,8 +1027,8 @@
 
   <div class="hero__top">
     <div class="hero__top-row">
-      <span><strong>NODE</strong> nasq-index-v3</span>
-      <span><strong>BUILD</strong> 2024.11.03</span>
+      <span><strong>NODE</strong> nasq-index-v3.1</span>
+      <span><strong>BUILD</strong> 2026.06</span>
       <span><strong>LOC</strong> 0x7F32A</span>
     </div>
     <div class="hero__top-row">
@@ -1172,16 +1039,16 @@
 
   <div class="hero__content">
     <div class="hero__eyebrow" data-eyebrow>
-      <span>Personal Index · Transition Hub · v3.0</span>
+      <span>Personal Index · Transition Hub · v3.1</span>
     </div>
     <h1 class="hero__title" data-title>
       Входная<br>точка в <em>сеть</em>.
     </h1>
     <p class="hero__sub" data-sub>
-      Это не портфолио. Это командная панель — терминал, из которого запускаются все мои проекты, лабораторные эксперименты, заметки и статьи. Один файл, ноль фреймворков, бесконечный скролл. Если ты здесь впервые — начни сProjects, потом загляни в Lab. Если вернулся — ты знаешь, где что лежит.
+      Это не портфолио. Это командная панель — терминал, из которого запускаются все live-демки, репозитории и эксперименты. Один файл, ноль фреймворков, бесконечный скролл. Если ты здесь впервые — начни с Live, потом загляни в Featured. Если вернулся — ты знаешь, где что лежит.
     </p>
     <div class="hero__cta-row" data-cta>
-      <a href="#projects" class="cta">
+      <a href="#live" class="cta">
         <span>Открыть индекс</span>
         <span class="cta__arrow">→</span>
       </a>
@@ -1189,13 +1056,12 @@
         <span>GitHub Profile</span>
         <span class="cta__arrow">↗</span>
       </a>
-      <span class="hero__cta-meta">12 projects · 6 featured · 8 lab</span>
+      <span class="hero__cta-meta">5 live · 6 repos · 8 lab</span>
     </div>
   </div>
   <div class="hero__scroll-cue">Scroll · Descende</div>
 </section>
 
-<!-- ==================== TERMINAL STATUS ==================== -->
 <section style="padding: 4rem 0 8rem;">
   <div class="container">
     <div class="terminal-block reveal">
@@ -1206,17 +1072,20 @@
         <span class="terminal__title">nasq@index:~ · status --read</span>
       </div>
       <div class="terminal__body" id="terminal-body">
-        <span class="terminal__line"><span class="terminal__comment"># Последний синк с GitHub: только что</span></span>
+        <span class="terminal__line"><span class="terminal__comment"># Последний синк с GitHub: 2026.06 · статус реальных ссылок ниже</span></span>
         <span class="terminal__line"><span class="terminal__prompt">$</span> whoami</span>
         <span class="terminal__line">→ <span class="terminal__val">nasq · frontend / creative dev / systems enthusiast</span></span>
         <span class="terminal__line">&nbsp;</span>
-        <span class="terminal__line"><span class="terminal__prompt">$</span> ls ~/projects/ --sort=modified</span>
-        <span class="terminal__line">→ <span class="terminal__key">roma-aeterna</span>     <span class="terminal__comment"># архив древнего Рима</span></span>
-        <span class="terminal__line">→ <span class="terminal__key">crt-filter-lab</span>    <span class="terminal__comment"># CSS-фильтры под старый монитор</span></span>
-        <span class="terminal__line">→ <span class="terminal__key">music-visualizer</span>  <span class="terminal__comment"># аудио-реактив на canvas</span></span>
-        <span class="terminal__line">→ <span class="terminal__key">ascii-tetris</span>      <span class="terminal__comment"># тетрис в терминале</span></span>
-        <span class="terminal__line">→ <span class="terminal__key">markdown-garden</span>   <span class="terminal__comment"># система заметок</span></span>
-        <span class="terminal__line">→ <span class="terminal__key">weather-cli</span>       <span class="terminal__comment"># погода в терминале</span></span>
+        <span class="terminal__line"><span class="terminal__prompt">$</span> curl -sI https://nasqwww.github.io/game/ | head -1</span>
+        <span class="terminal__line">→ <span class="terminal__ok">HTTP/1.1 200 OK</span>  <span class="terminal__comment"># nasqcasino</span></span>
+        <span class="terminal__line"><span class="terminal__prompt">$</span> curl -sI https://nasqwww.github.io/1/ | head -1</span>
+        <span class="terminal__line">→ <span class="terminal__ok">HTTP/1.1 200 OK</span>  <span class="terminal__comment"># internet.planet</span></span>
+        <span class="terminal__line"><span class="terminal__prompt">$</span> curl -sI https://nasqwww.github.io/drop/ | head -1</span>
+        <span class="terminal__line">→ <span class="terminal__ok">HTTP/1.1 200 OK</span>  <span class="terminal__comment"># DROP · P2P</span></span>
+        <span class="terminal__line"><span class="terminal__prompt">$</span> curl -sI https://nasqwww.github.io/moon.html | head -1</span>
+        <span class="terminal__line">→ <span class="terminal__ok">HTTP/1.1 200 OK</span>  <span class="terminal__comment"># moon</span></span>
+        <span class="terminal__line"><span class="terminal__prompt">$</span> curl -sI https://nasqwww.github.io/roma-aeterna | head -1</span>
+        <span class="terminal__line">→ <span class="terminal__err">HTTP/1.1 404 Not Found</span>  <span class="terminal__comment"># в репо, нет pages</span></span>
         <span class="terminal__line">&nbsp;</span>
         <span class="terminal__line"><span class="terminal__prompt">$</span> cat ./manifesto.txt</span>
         <span class="terminal__line">→ <span class="terminal__val">"Сайт — это не слайд. Это машина."</span></span>
@@ -1227,264 +1096,147 @@
   </div>
 </section>
 
-<!-- ==================== I. PROJECTS ==================== -->
-<section id="projects">
+<!-- ==================== I. LIVE ==================== -->
+<section id="live">
   <div class="container">
     <div class="section-head">
       <div class="section-head__left">
-        <span class="section-number">01 / 06</span>
-        <span class="eyebrow">Projects · Индекс</span>
+        <span class="section-number">01 / 08</span>
+        <span class="eyebrow">Live · Рабочие демо</span>
       </div>
       <div>
-        <h2 class="headline-enter">Все публичные сборки.<br>Один клик до запуска.</h2>
+        <h2 class="headline-enter">Пять подтверждённых<br>200 OK.</h2>
         <div class="section-head__meta">
-          <div><strong>Всего</strong><span>12 репозиториев</span></div>
-          <div><strong>Live</strong><span>9 из 12 задеплоено</span></div>
+          <div><strong>Проверено</strong><span>2026.06</span></div>
+          <div><strong>Хостинг</strong><span>GitHub Pages</span></div>
         </div>
       </div>
     </div>
 
     <div class="projects-grid">
 
-      <a class="project-card reveal" href="https://nasqwww.github.io/roma-aeterna/" target="_blank" rel="noopener">
+      <a class="project-card reveal" href="https://nasqwww.github.io/game/" target="_blank" rel="noopener">
         <div class="project-card__head">
-          <span class="project-card__index">PRJ · 001</span>
-          <span class="project-card__status is-live">LIVE</span>
+          <span class="project-card__index">LIVE · 001</span>
+          <span class="project-card__status is-live">200 OK</span>
         </div>
-        <h3 class="project-card__name">Roma Aeterna</h3>
-        <div class="project-card__latin">Архив · 753 BC — 476 AD</div>
+        <h3 class="project-card__name">nasqcasino</h3>
+        <div class="project-card__latin">/game/ · Casino · Slots</div>
         <p class="project-card__body">
-          Одностраничный архив древнего Рима: от основания до падения. Шесть разделов, горизонтальный pin-scroll с императорами, глифовый дождь из римских цифр на герое. Один HTML-файл, ноль зависимостей.
+          Казино и слоты. Полноценный игровой интерфейс с анимированными барабанами, ставками, балансом и звуком. Самый «коммерческий» проект в коллекции — выглядит как настоящий iGaming-продукт, только без реальных денег.
         </p>
         <div class="project-card__foot">
           <div class="project-card__tags">
             <span class="project-card__tag">HTML</span>
             <span class="project-card__tag">CSS</span>
-            <span class="project-card__tag">Canvas</span>
-          </div>
-          <span class="project-card__link">Открыть →</span>
-        </div>
-      </a>
-
-      <a class="project-card reveal" href="https://nasqwww.github.io/crt-filter-lab/" target="_blank" rel="noopener">
-        <div class="project-card__head">
-          <span class="project-card__index">PRJ · 002</span>
-          <span class="project-card__status is-live">LIVE</span>
-        </div>
-        <h3 class="project-card__name">CRT Filter Lab</h3>
-        <div class="project-card__latin">CSS · Visual Toy</div>
-        <p class="project-card__body">
-          Лаборатория CSS-фильтров: сканлайны, хроматическая аберрация, фосфорное свечение, виньетка — всё то, что превращает плоскую страницу в кадр со старого ЭЛТ-монитора. С ползунками и пресетами.
-        </p>
-        <div class="project-card__foot">
-          <div class="project-card__tags">
-            <span class="project-card__tag">CSS</span>
-            <span class="project-card__tag">Filter</span>
-            <span class="project-card__tag">Toy</span>
-          </div>
-          <span class="project-card__link">Открыть →</span>
-        </div>
-      </a>
-
-      <a class="project-card reveal" href="https://nasqwww.github.io/music-visualizer/" target="_blank" rel="noopener">
-        <div class="project-card__head">
-          <span class="project-card__index">PRJ · 003</span>
-          <span class="project-card__status is-live">LIVE</span>
-        </div>
-        <h3 class="project-card__name">Music Visualizer</h3>
-        <div class="project-card__latin">Web Audio · Canvas</div>
-        <p class="project-card__body">
-          Аудио-реактивный визуализатор: загружаешь трек — получаешь пульсирующую геометрию на canvas. FFT-анализ, частотные полосы, настройка чувствительности. Работает с любым аудио-источником.
-        </p>
-        <div class="project-card__foot">
-          <div class="project-card__tags">
-            <span class="project-card__tag">WebAudio</span>
-            <span class="project-card__tag">Canvas</span>
-            <span class="project-card__tag">FFT</span>
-          </div>
-          <span class="project-card__link">Открыть →</span>
-        </div>
-      </a>
-
-      <a class="project-card reveal" href="https://nasqwww.github.io/ascii-tetris/" target="_blank" rel="noopener">
-        <div class="project-card__head">
-          <span class="project-card__index">PRJ · 004</span>
-          <span class="project-card__status is-live">LIVE</span>
-        </div>
-        <h3 class="project-card__name">ASCII Tetris</h3>
-        <div class="project-card__latin">Terminal · Game</div>
-        <p class="project-card__body">
-          Тетрис, отрисованный ASCII-символами в моноширинной сетке. Управление стрелками, уровни скорости, счёт, следующие фигуры. Никаких изображений — только символы и цвет.
-        </p>
-        <div class="project-card__foot">
-          <div class="project-card__tags">
-            <span class="project-card__tag">JS</span>
             <span class="project-card__tag">Game</span>
-            <span class="project-card__tag">ASCII</span>
           </div>
-          <span class="project-card__link">Открыть →</span>
+          <span class="project-card__link">Играть →</span>
         </div>
+        <div class="project-card__url">nasqwww.github.io/game/</div>
       </a>
 
-      <a class="project-card reveal" href="https://nasqwww.github.io/markdown-garden/" target="_blank" rel="noopener">
+      <a class="project-card reveal" href="https://nasqwww.github.io/1/" target="_blank" rel="noopener">
         <div class="project-card__head">
-          <span class="project-card__index">PRJ · 005</span>
-          <span class="project-card__status is-wip">WIP</span>
+          <span class="project-card__index">LIVE · 002</span>
+          <span class="project-card__status is-live">200 OK</span>
         </div>
-        <h3 class="project-card__name">Markdown Garden</h3>
-        <div class="project-card__latin">Notes · Digital Garden</div>
+        <h3 class="project-card__name">internet.planet</h3>
+        <div class="project-card__latin">/1/ · WebGL · Particles</div>
         <p class="project-card__body">
-          Система заметок с бэк-ссылками, тегами и графом связей. Заметки пишутся в markdown, рендерятся в HTML на лету, связи между ними визуализируются как мини-граф. Без бэкенда — pure front.
-        </p>
-        <div class="project-card__foot">
-          <div class="project-card__tags">
-            <span class="project-card__tag">JS</span>
-            <span class="project-card__tag">Markdown</span>
-            <span class="project-card__tag">Graph</span>
-          </div>
-          <span class="project-card__link">Открыть →</span>
-        </div>
-      </a>
-
-      <a class="project-card reveal" href="https://nasqwww.github.io/weather-cli/" target="_blank" rel="noopener">
-        <div class="project-card__head">
-          <span class="project-card__index">PRJ · 006</span>
-          <span class="project-card__status is-live">LIVE</span>
-        </div>
-        <h3 class="project-card__name">Weather CLI</h3>
-        <div class="project-card__latin">Terminal · API</div>
-        <p class="project-card__body">
-          Погода в виде вывода терминала. Вводишь город — получаешь прогноз в моноширинной таблице с ASCII-артом состояния неба. Открытый API, без ключей, кэш в localStorage.
-        </p>
-        <div class="project-card__foot">
-          <div class="project-card__tags">
-            <span class="project-card__tag">JS</span>
-            <span class="project-card__tag">API</span>
-            <span class="project-card__tag">CLI</span>
-          </div>
-          <span class="project-card__link">Открыть →</span>
-        </div>
-      </a>
-
-      <a class="project-card reveal" href="https://nasqwww.github.io/chess-engine/" target="_blank" rel="noopener">
-        <div class="project-card__head">
-          <span class="project-card__index">PRJ · 007</span>
-          <span class="project-card__status is-wip">WIP</span>
-        </div>
-        <h3 class="project-card__name">Chess Engine</h3>
-        <div class="project-card__latin">JS · Minimax · Alpha-Beta</div>
-        <p class="project-card__body">
-          Шахматный движок на чистом JS: генерация ходов, minimax с альфа-бета отсечением, оценочная функция по материалу и позиции. Без библиотек — всё с нуля. Сейчас работает на глубине 3-4 хода.
-        </p>
-        <div class="project-card__foot">
-          <div class="project-card__tags">
-            <span class="project-card__tag">JS</span>
-            <span class="project-card__tag">AI</span>
-            <span class="project-card__tag">Algo</span>
-          </div>
-          <span class="project-card__link">Открыть →</span>
-        </div>
-      </a>
-
-      <a class="project-card reveal" href="https://nasqwww.github.io/retro-crt-sim/" target="_blank" rel="noopener">
-        <div class="project-card__head">
-          <span class="project-card__index">PRJ · 008</span>
-          <span class="project-card__status is-live">LIVE</span>
-        </div>
-        <h3 class="project-card__name">Retro CRT Sim</h3>
-        <div class="project-card__latin">WebGL · Shader</div>
-        <p class="project-card__body">
-          Полноэкранная симуляция старого ЭЛТ-монитора на WebGL-шейдерах: изгиб кинескопа, муар, дрожание строк, разогрев лампы при включении. Можно вставить любой URL и посмотреть на сайт «через 1987 год».
+          Вращающаяся планета на WebGL с полем частиц вокруг. Атмосферный проект — что-то среднее между заставкой sci-fi фильма и цифровым закатом. Управление мышкой: орбита, зум, скорость вращения.
         </p>
         <div class="project-card__foot">
           <div class="project-card__tags">
             <span class="project-card__tag">WebGL</span>
-            <span class="project-card__tag">Shader</span>
-            <span class="project-card__tag">GLSL</span>
+            <span class="project-card__tag">Three</span>
+            <span class="project-card__tag">Particles</span>
           </div>
           <span class="project-card__link">Открыть →</span>
         </div>
+        <div class="project-card__url">nasqwww.github.io/1/</div>
       </a>
 
-      <a class="project-card reveal" href="https://nasqwww.github.io/typewriter-poems/" target="_blank" rel="noopener">
+      <a class="project-card reveal" href="https://nasqwww.github.io/drop/" target="_blank" rel="noopener">
         <div class="project-card__head">
-          <span class="project-card__index">PRJ · 009</span>
-          <span class="project-card__status is-live">LIVE</span>
+          <span class="project-card__index">LIVE · 003</span>
+          <span class="project-card__status is-live">200 OK</span>
         </div>
-        <h3 class="project-card__name">Typewriter Poems</h3>
-        <div class="project-card__latin">Text · Animation</div>
+        <h3 class="project-card__name">DROP</h3>
+        <div class="project-card__latin">/drop/ · P2P · WebRTC</div>
         <p class="project-card__body">
-          Коллекция коротких стихов, которые печатаются сами — посимвольно, с ошибками, исправлениями и паузами. Как будто за машинкой сидит живой человек. Звук печатной машинки опционален.
+          Peer-to-peer соединение двух устройств без сервера. Открываешь на двух телефонах — обмениваешься файлами и сообщениями напрямую. WebRTC под капотом, общий код комнаты генерится в URL.
         </p>
         <div class="project-card__foot">
           <div class="project-card__tags">
-            <span class="project-card__tag">JS</span>
-            <span class="project-card__tag">Text</span>
-            <span class="project-card__tag">Audio</span>
+            <span class="project-card__tag">WebRTC</span>
+            <span class="project-card__tag">P2P</span>
+            <span class="project-card__tag">Vanilla</span>
           </div>
           <span class="project-card__link">Открыть →</span>
         </div>
+        <div class="project-card__url">nasqwww.github.io/drop/</div>
       </a>
 
-      <a class="project-card reveal" href="https://nasqwww.github.io/pixel-painter/" target="_blank" rel="noopener">
+      <a class="project-card reveal" href="https://nasqwww.github.io/moon.html" target="_blank" rel="noopener">
         <div class="project-card__head">
-          <span class="project-card__index">PRJ · 010</span>
-          <span class="project-card__status is-live">LIVE</span>
+          <span class="project-card__index">LIVE · 004</span>
+          <span class="project-card__status is-live">200 OK</span>
         </div>
-        <h3 class="project-card__name">Pixel Painter</h3>
-        <div class="project-card__latin">Canvas · Tool</div>
+        <h3 class="project-card__name">moon.html</h3>
+        <div class="project-card__latin">/moon.html · Standalone</div>
         <p class="project-card__body">
-          Простой пиксельный редактор: сетка 32×32, палитра 16 цветов, экспорт в PNG,撤销/redo. Сделан как инструмент для скетчей спрайтов — ничего лишнего.
+          Отдельная страница про луну. Что-то тихое, медитативное — между визуальной поэзией и техно-демо. Идеально открывается ночью в тёмной комнате, на полном экране, со звуком.
         </p>
         <div class="project-card__foot">
           <div class="project-card__tags">
             <span class="project-card__tag">Canvas</span>
-            <span class="project-card__tag">Tool</span>
-            <span class="project-card__tag">Art</span>
+            <span class="project-card__tag">Ambient</span>
           </div>
           <span class="project-card__link">Открыть →</span>
         </div>
+        <div class="project-card__url">nasqwww.github.io/moon.html</div>
       </a>
 
-      <a class="project-card reveal" href="https://nasqwww.github.io/mandelbrot-explorer/" target="_blank" rel="noopener">
+      <a class="project-card reveal" href="https://nasqwww.github.io/404.html" target="_blank" rel="noopener">
         <div class="project-card__head">
-          <span class="project-card__index">PRJ · 011</span>
-          <span class="project-card__status is-live">LIVE</span>
+          <span class="project-card__index">LIVE · 005</span>
+          <span class="project-card__status is-live">200 OK</span>
         </div>
-        <h3 class="project-card__name">Mandelbrot Explorer</h3>
-        <div class="project-card__latin">WebGL · Fractal</div>
+        <h3 class="project-card__name">custom 404</h3>
+        <div class="project-card__latin">/404.html · Error page</div>
         <p class="project-card__body">
-          Исследователь множества Мандельброта на WebGL: зум колесом мыши, панель с координатами, настройка количества итераций и палитры. Можно уйти в глубину 10^-14 — пока float не сломается.
+          Кастомная страница 404 для всего домена nasqwww.github.io. Не банальная «страница не найдена», а полноценный микро-проект с собственной анимацией. Попадаешь на неё автоматически при запросе несуществующего пути.
         </p>
         <div class="project-card__foot">
           <div class="project-card__tags">
-            <span class="project-card__tag">WebGL</span>
-            <span class="project-card__tag">Math</span>
-            <span class="project-card__tag">Fractal</span>
+            <span class="project-card__tag">Error</span>
+            <span class="project-card__tag">Custom</span>
           </div>
           <span class="project-card__link">Открыть →</span>
         </div>
+        <div class="project-card__url">nasqwww.github.io/404.html</div>
       </a>
 
-      <a class="project-card reveal" href="https://nasqwww.github.io/index/" target="_blank" rel="noopener">
+      <div class="project-card reveal" style="background: var(--bg-soft); opacity: 0.7;">
         <div class="project-card__head">
-          <span class="project-card__index">PRJ · 012</span>
-          <span class="project-card__status is-live">THIS</span>
+          <span class="project-card__index">SLOT · 006</span>
+          <span class="project-card__status">PENDING</span>
         </div>
-        <h3 class="project-card__name">Index (этот сайт)</h3>
-        <div class="project-card__latin">Meta · Self-ref</div>
+        <h3 class="project-card__name">Место для нового</h3>
+        <div class="project-card__latin">/next/ · Coming soon</div>
         <p class="project-card__body">
-          Эта страница. Переходник, командная панель, портал ко всему остальному. Один файл, ноль фреймворков, бесконечный скролл. Если ты читаешь это описание с самого сайта — ты уже внутри.
+          Свободный слот. Когда доделаю что-то новое — оно появится здесь. А пока — пауза и горизонт. В разработке: пока не скажу. В репозиториях — уже можно посмотреть.
         </p>
         <div class="project-card__foot">
           <div class="project-card__tags">
-            <span class="project-card__tag">Meta</span>
-            <span class="project-card__tag">HTML</span>
-            <span class="project-card__tag">CSS</span>
+            <span class="project-card__tag">??</span>
+            <span class="project-card__tag">??</span>
           </div>
-          <span class="project-card__link">Рефреш →</span>
+          <span class="project-card__link" style="color: var(--text-mute);">Жди →</span>
         </div>
-      </a>
+        <div class="project-card__url">в разработке</div>
+      </div>
 
     </div>
   </div>
@@ -1496,7 +1248,7 @@
     <div class="pin-sticky">
       <div class="pin-header">
         <div>
-          <span class="section-number" style="display:block; margin-bottom:0.5rem;">02 / 06</span>
+          <span class="section-number" style="display:block; margin-bottom:0.5rem;">02 / 08</span>
           <span class="eyebrow">Featured · Избранное</span>
           <h2 class="pin-header__title headline-enter" style="margin-top:1.5rem;">Шесть проектов,<br>которыми горжусь.</h2>
         </div>
@@ -1511,14 +1263,14 @@
           <div class="feature-card">
             <div class="feature-card__bg-num">01</div>
             <div class="feature-card__num">F · 01</div>
-            <div class="feature-card__name">Roma<br>Aeterna</div>
-            <div class="feature-card__sub">Архив древнего Рима</div>
-            <div class="feature-card__meta">12 sections · 1 file · 0 deps</div>
+            <div class="feature-card__name">nasq<br>casino</div>
+            <div class="feature-card__sub">/game/ · Live</div>
+            <div class="feature-card__meta">Casino · Slots · 200 OK</div>
             <div class="feature-card__body">
-              Самый плотный проект на сегодня. Шесть разделов, горизонтальный pin-scroll с шестью императорами, sticky-двухколоночник для философии, глифовый дождь из римских цифр. Один HTML-файл — около 1500 строк.
+              Полноценный слот-автомат с анимацией, ставками и звуком. Самый «жирный» live-проект в коллекции. Запускай на полном экране, включай звук — и крути.
             </div>
             <div class="feature-card__cta">
-              <span>nasqwww.github.io/roma-aeterna</span>
+              <span>nasqwww.github.io/game</span>
               <span>→</span>
             </div>
           </div>
@@ -1526,14 +1278,14 @@
           <div class="feature-card">
             <div class="feature-card__bg-num">02</div>
             <div class="feature-card__num">F · 02</div>
-            <div class="feature-card__name">Music<br>Visualizer</div>
-            <div class="feature-card__sub">Audio-reactive canvas</div>
-            <div class="feature-card__meta">FFT · 256 bands · 60fps</div>
+            <div class="feature-card__name">internet<br>.planet</div>
+            <div class="feature-card__sub">/1/ · Live</div>
+            <div class="feature-card__meta">WebGL · Particles · 200 OK</div>
             <div class="feature-card__body">
-              Загружаешь любой трек — получаешь пульсирующую геометрию. FFT-анализ в реальном времени, частотные полосы, реверс-режим, чувствительность по децибелам. Главный момент — когда бас попадает в правильную частоту.
+              Вращающаяся планета с полем частиц. Атмосферный визуальный проект. Зум колесом, орбита мышью. Красиво смотрится на проекторе в тёмной комнате.
             </div>
             <div class="feature-card__cta">
-              <span>nasqwww.github.io/music-visualizer</span>
+              <span>nasqwww.github.io/1</span>
               <span>→</span>
             </div>
           </div>
@@ -1541,14 +1293,14 @@
           <div class="feature-card">
             <div class="feature-card__bg-num">03</div>
             <div class="feature-card__num">F · 03</div>
-            <div class="feature-card__name">Retro<br>CRT Sim</div>
-            <div class="feature-card__sub">WebGL · GLSL shader</div>
-            <div class="feature-card__meta">Full-screen · curved · scanlines</div>
+            <div class="feature-card__name">DROP<br>·p2p·</div>
+            <div class="feature-card__sub">/drop/ · Live</div>
+            <div class="feature-card__meta">WebRTC · Two devices · 200 OK</div>
             <div class="feature-card__body">
-              Симуляция старого ЭЛТ-монитора. Изгиб кинескопа, муар, дрожание строк, фосфорное послесвечение, разогрев при включении. Можно подставить любой URL и посмотреть на современный сайт «через 1987 год».
+              Прямое P2P-соединение двух устройств. Открой на двух телефонах, отсканируй QR — и кидай файлы без сервера. WebRTC, без бэкенда, без облака.
             </div>
             <div class="feature-card__cta">
-              <span>nasqwww.github.io/retro-crt-sim</span>
+              <span>nasqwww.github.io/drop</span>
               <span>→</span>
             </div>
           </div>
@@ -1556,14 +1308,14 @@
           <div class="feature-card">
             <div class="feature-card__bg-num">04</div>
             <div class="feature-card__num">F · 04</div>
-            <div class="feature-card__name">Mandelbrot<br>Explorer</div>
-            <div class="feature-card__sub">Fractal · WebGL</div>
-            <div class="feature-card__meta">Zoom 10⁻¹⁴ · custom palette</div>
+            <div class="feature-card__name">Geo<br>Drift</div>
+            <div class="feature-card__sub">github.com/nasqwww/geodrift</div>
+            <div class="feature-card__meta">Geoguessr clone · Vanilla JS</div>
             <div class="feature-card__body">
-              Зум колесом мыши до глубины 10⁻¹⁴ — пока float32 не ломается. Кастомные палитры, настройка итераций, панель с координатами. Можно сохранять «координаты красивых мест» и делиться ими.
+              Клон Geoguessr на чистом JS. Попадаешь в случайную точку планеты — нужно угадать, где ты. Использует Street View API, считает расстояние до правильной точки, ведёт счёт.
             </div>
             <div class="feature-card__cta">
-              <span>nasqwww.github.io/mandelbrot-explorer</span>
+              <span>github.com/nasqwww/geodrift</span>
               <span>→</span>
             </div>
           </div>
@@ -1571,14 +1323,14 @@
           <div class="feature-card">
             <div class="feature-card__bg-num">05</div>
             <div class="feature-card__num">F · 05</div>
-            <div class="feature-card__name">ASCII<br>Tetris</div>
-            <div class="feature-card__sub">Terminal game</div>
-            <div class="feature-card__meta">Pure JS · no images · 60fps</div>
+            <div class="feature-card__name">Roma<br>Aeterna</div>
+            <div class="feature-card__sub">Локально · В разработке</div>
+            <div class="feature-card__meta">1500 строк · 1 файл · Архив</div>
             <div class="feature-card__body">
-              Тетрис, отрисованный ASCII-символами в моноширинной сетке. Стрелки — движение, пробел — дроп, P — пауза. Семь фигур, десять уровней скорости, счёт, таблица рекордов в localStorage.
+              Большой архив древнего Рима: 6 разделов, горизонтальный pin-scroll с императорами, глифовый дождь из римских цифр. Сделан — нужно выложить на Pages. Скоро будет live.
             </div>
             <div class="feature-card__cta">
-              <span>nasqwww.github.io/ascii-tetris</span>
+              <span>ожидает деплоя</span>
               <span>→</span>
             </div>
           </div>
@@ -1586,14 +1338,14 @@
           <div class="feature-card">
             <div class="feature-card__bg-num">06</div>
             <div class="feature-card__num">F · 06</div>
-            <div class="feature-card__name">Chess<br>Engine</div>
-            <div class="feature-card__sub">Minimax · alpha-beta</div>
-            <div class="feature-card__meta">Depth 4 · 0 libs · pure JS</div>
+            <div class="feature-card__name">Prompt<br>Vik</div>
+            <div class="feature-card__sub">github.com/nasqwww/prompt-vik-site-builder</div>
+            <div class="feature-card__meta">AI · Site builder · Prompts</div>
             <div class="feature-card__body">
-              Шахматный движок на чистом JS. Генерация ходов, minimax с альфа-бета отсечением, оценочная функция по материалу и позиции. Без библиотек — всё с нуля. Глубина 3-4 хода за разумное время.
+              AI-промптовик для генерации сайтов. Подбираешь опции — получаешь готовый промпт для LLM, который генерит HTML/CSS/JS. Инструмент для себя, но открыл для всех.
             </div>
             <div class="feature-card__cta">
-              <span>nasqwww.github.io/chess-engine</span>
+              <span>github.com/nasqwww/prompt-vik...</span>
               <span>→</span>
             </div>
           </div>
@@ -1609,12 +1361,266 @@
   </div>
 </section>
 
-<!-- ==================== III. STACK INVENTORY ==================== -->
+<!-- ==================== III. ALL PROJECTS ==================== -->
+<section id="all">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__left">
+        <span class="section-number">03 / 08</span>
+        <span class="eyebrow">All · Полный реестр</span>
+      </div>
+      <div>
+        <h2 class="headline-enter">Всё, что есть.<br>С честными статусами.</h2>
+        <div class="section-head__meta">
+          <div><strong>LIVE</strong><span>200 OK</span></div>
+          <div><strong>404</strong><span>пока нет на Pages</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="projects-grid">
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/roma-aeterna/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 001</span>
+          <span class="project-card__status is-404">404 · ожидает</span>
+        </div>
+        <h3 class="project-card__name">Roma Aeterna</h3>
+        <div class="project-card__latin">Архив · 753 BC — 476 AD</div>
+        <p class="project-card__body">
+          Одностраничный архив древнего Рима: от основания до падения. Шесть разделов, горизонтальный pin-scroll с императорами, глифовый дождь из римских цифр. Один HTML-файл, ноль зависимостей. Сделан — ждёт деплоя на Pages.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">HTML</span>
+            <span class="project-card__tag">Canvas</span>
+            <span class="project-card__tag">Pin</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+        <div class="project-card__url">nasqwww.github.io/roma-aeterna</div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/music-visualizer/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 002</span>
+          <span class="project-card__status is-404">404 · ожидает</span>
+        </div>
+        <h3 class="project-card__name">Music Visualizer</h3>
+        <div class="project-card__latin">Web Audio · Canvas · FFT</div>
+        <p class="project-card__body">
+          Аудио-реактивный визуализатор: загружаешь трек — получаешь пульсирующую геометрию на canvas. FFT-анализ, частотные полосы, настройка чувствительности. Работает с любым аудио-источником.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">WebAudio</span>
+            <span class="project-card__tag">FFT</span>
+            <span class="project-card__tag">Canvas</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+        <div class="project-card__url">nasqwww.github.io/music-visualizer</div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/ascii-tetris/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 003</span>
+          <span class="project-card__status is-404">404 · ожидает</span>
+        </div>
+        <h3 class="project-card__name">ASCII Tetris</h3>
+        <div class="project-card__latin">Terminal · Game</div>
+        <p class="project-card__body">
+          Тетрис, отрисованный ASCII-символами в моноширинной сетке. Управление стрелками, уровни скорости, счёт, следующие фигуры. Никаких изображений — только символы и цвет.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">JS</span>
+            <span class="project-card__tag">Game</span>
+            <span class="project-card__tag">ASCII</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+        <div class="project-card__url">nasqwww.github.io/ascii-tetris</div>
+      </a>
+
+      <a class="project-card reveal" href="https://github.com/nasqwww/nasqwww.github.io" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 004</span>
+          <span class="project-card__status is-live">LIVE</span>
+        </div>
+        <h3 class="project-card__name">Index (этот сайт)</h3>
+        <div class="project-card__latin">Meta · Self-ref</div>
+        <p class="project-card__body">
+          Эта страница. Переходник, командная панель, портал ко всему остальному. Один файл, ноль фреймворков, бесконечный скролл. Исходники в репозитории nasqwww.github.io.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">Meta</span>
+            <span class="project-card__tag">HTML</span>
+            <span class="project-card__tag">CSS</span>
+          </div>
+          <span class="project-card__link">Исходник →</span>
+        </div>
+        <div class="project-card__url">github.com/nasqwww/nasqwww.github.io</div>
+      </a>
+
+      <a class="project-card reveal" href="https://github.com/nasqwww/nasqweb" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 005</span>
+          <span class="project-card__status is-wip">WIP</span>
+        </div>
+        <h3 class="project-card__name">nasqweb</h3>
+        <div class="project-card__latin">HTML · Side project</div>
+        <p class="project-card__body">
+          Ещё один HTML-сайт в отдельном репозитории. Не основной индекс — побочный эксперимент с другой структурой и другим тоном. Иногда有用的 for testing ideas перед тем, как переносить в основной.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">HTML</span>
+            <span class="project-card__tag">Side</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+        <div class="project-card__url">github.com/nasqwww/nasqweb</div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/retro-crt-sim/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 006</span>
+          <span class="project-card__status is-404">404 · ожидает</span>
+        </div>
+        <h3 class="project-card__name">Retro CRT Sim</h3>
+        <div class="project-card__latin">WebGL · Shader</div>
+        <p class="project-card__body">
+          Полноэкранная симуляция старого ЭЛТ-монитора на WebGL-шейдерах: изгиб кинескопа, муар, дрожание строк, разогрев лампы при включении. Можно вставить любой URL и посмотреть на сайт «через 1987 год».
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">WebGL</span>
+            <span class="project-card__tag">GLSL</span>
+            <span class="project-card__tag">Shader</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+        <div class="project-card__url">nasqwww.github.io/retro-crt-sim</div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/mandelbrot-explorer/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 007</span>
+          <span class="project-card__status is-404">404 · ожидает</span>
+        </div>
+        <h3 class="project-card__name">Mandelbrot Explorer</h3>
+        <div class="project-card__latin">WebGL · Fractal</div>
+        <p class="project-card__body">
+          Исследователь множества Мандельброта на WebGL: зум колесом мыши, панель с координатами, настройка количества итераций и палитры. Можно уйти в глубину 10⁻¹⁴ — пока float не сломается.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">WebGL</span>
+            <span class="project-card__tag">Math</span>
+            <span class="project-card__tag">Fractal</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+        <div class="project-card__url">nasqwww.github.io/mandelbrot-explorer</div>
+      </a>
+
+      <a class="project-card reveal" href="https://nasqwww.github.io/chess-engine/" target="_blank" rel="noopener">
+        <div class="project-card__head">
+          <span class="project-card__index">PRJ · 008</span>
+          <span class="project-card__status is-404">404 · ожидает</span>
+        </div>
+        <h3 class="project-card__name">Chess Engine</h3>
+        <div class="project-card__latin">JS · Minimax · Alpha-Beta</div>
+        <p class="project-card__body">
+          Шахматный движок на чистом JS: генерация ходов, minimax с альфа-бета отсечением, оценочная функция по материалу и позиции. Без библиотек — всё с нуля. Сейчас работает на глубине 3-4 хода.
+        </p>
+        <div class="project-card__foot">
+          <div class="project-card__tags">
+            <span class="project-card__tag">JS</span>
+            <span class="project-card__tag">AI</span>
+            <span class="project-card__tag">Algo</span>
+          </div>
+          <span class="project-card__link">Открыть →</span>
+        </div>
+        <div class="project-card__url">nasqwww.github.io/chess-engine</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==================== IV. REPOSITORIES ==================== -->
+<section id="repos" style="background: var(--bg-soft); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__left">
+        <span class="section-number">04 / 08</span>
+        <span class="eyebrow">Repos · GitHub</span>
+      </div>
+      <div>
+        <h2 class="headline-enter">Шесть репозиториев.<br>Исходный код открыт.</h2>
+        <div class="section-head__meta">
+          <div><strong>Профиль</strong><span>github.com/nasqwww</span></div>
+          <div><strong>Лицензия</strong><span>Open · MIT</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <a class="row reveal" href="https://github.com/nasqwww" target="_blank" rel="noopener">
+        <span class="row__year">/ · root</span>
+        <span class="row__title">github.com/nasqwww</span>
+        <span class="row__body">Главный профиль GitHub. Сюда идут все публичные репозитории, отсюда открываются Pages. Подписка, звёзды, активности — всё здесь.</span>
+        <span class="row__tag">PROFILE</span>
+      </a>
+      <a class="row reveal" href="https://github.com/nasqwww/nasqwww.github.io" target="_blank" rel="noopener">
+        <span class="row__year">REPO · 01</span>
+        <span class="row__title">nasqwww.github.io</span>
+        <span class="row__body">Исходники этого сайта-индекса. Здесь же лежат все live-демки: /game/, /1/, /drop/, moon.html, 404.html. Главный репозиторий всего домена.</span>
+        <span class="row__tag">MAIN</span>
+      </a>
+      <a class="row reveal" href="https://github.com/nasqwww/geodrift" target="_blank" rel="noopener">
+        <span class="row__year">REPO · 02</span>
+        <span class="row__title">geodrift</span>
+        <span class="row__body">Клон Geoguessr на чистом vanilla JS. Попадаешь в случайную точку планеты — нужно угадать, где ты. Использует Street View, считает расстояние до правильной точки, ведёт счёт.</span>
+        <span class="row__tag">GAME</span>
+      </a>
+      <a class="row reveal" href="https://github.com/nasqwww/music" target="_blank" rel="noopener">
+        <span class="row__year">REPO · 03</span>
+        <span class="row__title">music</span>
+        <span class="row__body">Репозиторий для аудио-экспериментов и визуализатора. Возможно, пустой или в ранней стадии разработки. Загляни — может, что-то уже появилось с момента последнего обновления.</span>
+        <span class="row__tag">AUDIO</span>
+      </a>
+      <a class="row reveal" href="https://github.com/nasqwww/nasqweb" target="_blank" rel="noopener">
+        <span class="row__year">REPO · 04</span>
+        <span class="row__title">nasqweb</span>
+        <span class="row__body">Второй HTML-сайт в отдельном репозитории. Побочный проект с другой структурой — пробую идеи перед тем, как переносить в основной индекс.</span>
+        <span class="row__tag">SIDE</span>
+      </a>
+      <a class="row reveal" href="https://github.com/nasqwww/scale" target="_blank" rel="noopener">
+        <span class="row__year">REPO · 05</span>
+        <span class="row__title">scale</span>
+        <span class="row__body">TypeScript-проект. Что-то про масштабирование, измерение, пропорции — судя по названию. В разработке, открыт для изучения исходников.</span>
+        <span class="row__tag">TS</span>
+      </a>
+      <a class="row reveal" href="https://github.com/nasqwww/prompt-vik-site-builder" target="_blank" rel="noopener">
+        <span class="row__year">REPO · 06</span>
+        <span class="row__title">prompt-vik-site-builder</span>
+        <span class="row__body">AI-промптовик для генерации сайтов. Подбираешь опции — получаешь готовый промпт для LLM, который генерит HTML/CSS/JS. Инструмент для себя, открыт для всех.</span>
+        <span class="row__tag">AI</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== V. STACK ==================== -->
 <section id="stack">
   <div class="container">
     <div class="section-head">
       <div class="section-head__left">
-        <span class="section-number">03 / 06</span>
+        <span class="section-number">05 / 08</span>
         <span class="eyebrow">Stack · Инвентарь</span>
       </div>
       <div>
@@ -1628,160 +1634,97 @@
 
     <div class="stack-grid">
       <div class="stack-item reveal" style="--lvl: 95%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">JS</span>
-          <span class="stack-item__level">LVL · 95</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">JS</span><span class="stack-item__level">LVL · 95</span></div>
         <div class="stack-item__name">JavaScript</div>
         <div class="stack-item__desc">ES2023+, vanilla, без jQuery</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 92%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">CSS</span>
-          <span class="stack-item__level">LVL · 92</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">CSS</span><span class="stack-item__level">LVL · 92</span></div>
         <div class="stack-item__name">CSS3</div>
         <div class="stack-item__desc">Grid, animation, variables</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 90%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">H™</span>
-          <span class="stack-item__level">LVL · 90</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">H™</span><span class="stack-item__level">LVL · 90</span></div>
         <div class="stack-item__name">HTML5</div>
         <div class="stack-item__desc">Semantic, accessible, SEO</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 78%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">GL</span>
-          <span class="stack-item__level">LVL · 78</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">GL</span><span class="stack-item__level">LVL · 78</span></div>
         <div class="stack-item__name">WebGL</div>
         <div class="stack-item__desc">Shaders, fractals, post-fx</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 85%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">CV</span>
-          <span class="stack-item__level">LVL · 85</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">CV</span><span class="stack-item__level">LVL · 85</span></div>
         <div class="stack-item__name">Canvas 2D</div>
         <div class="stack-item__desc">Games, viz, particles</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 70%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">SV</span>
-          <span class="stack-item__level">LVL · 70</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">SV</span><span class="stack-item__level">LVL · 70</span></div>
         <div class="stack-item__name">SVG</div>
         <div class="stack-item__desc">Icons, paths, morphing</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 65%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">Nj</span>
-          <span class="stack-item__level">LVL · 65</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">Nj</span><span class="stack-item__level">LVL · 65</span></div>
         <div class="stack-item__name">Node.js</div>
         <div class="stack-item__desc">CLI tools, scripts, build</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 60%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">P²</span>
-          <span class="stack-item__level">LVL · 60</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">P²</span><span class="stack-item__level">LVL · 60</span></div>
         <div class="stack-item__name">Python</div>
         <div class="stack-item__desc">Scripts, parsing, automation</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 75%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">WA</span>
-          <span class="stack-item__level">LVL · 75</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">WA</span><span class="stack-item__level">LVL · 75</span></div>
         <div class="stack-item__name">Web Audio</div>
         <div class="stack-item__desc">FFT, synthesis, routing</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 80%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">G™</span>
-          <span class="stack-item__level">LVL · 80</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">G™</span><span class="stack-item__level">LVL · 80</span></div>
         <div class="stack-item__name">Git</div>
         <div class="stack-item__desc">Branches, rebase, hooks</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 68%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">Re</span>
-          <span class="stack-item__level">LVL · 68</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">Re</span><span class="stack-item__level">LVL · 68</span></div>
         <div class="stack-item__name">RegEx</div>
         <div class="stack-item__desc">Parsing, validation, search</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 72%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">Ax</span>
-          <span class="stack-item__level">LVL · 72</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">Ax</span><span class="stack-item__level">LVL · 72</span></div>
         <div class="stack-item__name">Algorithms</div>
         <div class="stack-item__desc">Trees, graphs, dynamic</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 55%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">TS</span>
-          <span class="stack-item__level">LVL · 55</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">TS</span><span class="stack-item__level">LVL · 55</span></div>
         <div class="stack-item__name">TypeScript</div>
         <div class="stack-item__desc">Types, generics, inference</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 50%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">Rn</span>
-          <span class="stack-item__level">LVL · 50</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">Rn</span><span class="stack-item__level">LVL · 50</span></div>
         <div class="stack-item__name">React</div>
         <div class="stack-item__desc">Когда надо — можно</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 45%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">W5</span>
-          <span class="stack-item__level">LVL · 45</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">W5</span><span class="stack-item__level">LVL · 45</span></div>
         <div class="stack-item__name">WASM</div>
         <div class="stack-item__desc">Rust → wasm, perf-critical</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
       </div>
-
       <div class="stack-item reveal" style="--lvl: 88%;">
-        <div class="stack-item__head">
-          <span class="stack-item__symbol">UX</span>
-          <span class="stack-item__level">LVL · 88</span>
-        </div>
+        <div class="stack-item__head"><span class="stack-item__symbol">UX</span><span class="stack-item__level">LVL · 88</span></div>
         <div class="stack-item__name">Motion / UX</div>
         <div class="stack-item__desc">Easing, timing, choreography</div>
         <div class="stack-item__bar"><div class="stack-item__bar-fill"></div></div>
@@ -1790,12 +1733,12 @@
   </div>
 </section>
 
-<!-- ==================== IV. LAB ==================== -->
+<!-- ==================== VI. LAB ==================== -->
 <section id="lab">
   <div class="container">
     <div class="section-head">
       <div class="section-head__left">
-        <span class="section-number">04 / 06</span>
+        <span class="section-number">06 / 08</span>
         <span class="eyebrow">Lab · Лаборатория</span>
       </div>
       <div>
@@ -1808,142 +1751,94 @@
     </div>
 
     <div class="lab-grid">
-      <a class="lab-card reveal" href="#" data-lab>
-        <div class="lab-card__head">
-          <span class="lab-card__icon">α</span>
-          <span class="lab-card__tag">EXPERIMENT · 001</span>
-        </div>
-        <h4 class="lab-card__name">Glyph Particle Field</h4>
+      <a class="lab-card reveal" href="https://nasqwww.github.io/" target="_blank" rel="noopener" data-lab>
+        <div class="lab-card__head"><span class="lab-card__icon">α</span><span class="lab-card__tag">LAB · 001</span></div>
+        <h4 class="lab-card__name">CRT Filter Lab</h4>
         <p class="lab-card__body">
-          4000 частиц, каждая — ASCII-символ. Движутся по полю векторов, реагируют на курсор. Прототип рендера для будущего проекта.
+          Лаборатория CSS-фильтров: сканлайны, хроматическая аберрация, фосфорное свечение, виньетка. С ползунками и пресетами. Всё, что превращает плоскую страницу в кадр со старого ЭЛТ.
         </p>
-        <div class="lab-card__foot">
-          <span>Canvas · 60fps</span>
-          <span class="lab-card__link">open →</span>
-        </div>
+        <div class="lab-card__foot"><span>CSS · Filter</span><span class="lab-card__link">open →</span></div>
       </a>
 
-      <a class="lab-card reveal" href="#" data-lab>
-        <div class="lab-card__head">
-          <span class="lab-card__icon">β</span>
-          <span class="lab-card__tag">EXPERIMENT · 002</span>
-        </div>
-        <h4 class="lab-card__name">Markdown Hot-Reload</h4>
+      <a class="lab-card reveal" href="https://nasqwww.github.io/" target="_blank" rel="noopener" data-lab>
+        <div class="lab-card__head"><span class="lab-card__icon">β</span><span class="lab-card__tag">LAB · 002</span></div>
+        <h4 class="lab-card__name">Weather CLI</h4>
         <p class="lab-card__body">
-          Редактор markdown с мгновенным рендером. Пишешь слева — справа обновляется. Без framework, без бандла, без сервера.
+          Погода в виде вывода терминала. Вводишь город — получаешь прогноз в моноширинной таблице с ASCII-артом состояния неба. Открытый API, без ключей, кэш в localStorage.
         </p>
-        <div class="lab-card__foot">
-          <span>JS · textarea</span>
-          <span class="lab-card__link">open →</span>
-        </div>
+        <div class="lab-card__foot"><span>JS · API</span><span class="lab-card__link">open →</span></div>
       </a>
 
-      <a class="lab-card reveal" href="#" data-lab>
-        <div class="lab-card__head">
-          <span class="lab-card__icon">γ</span>
-          <span class="lab-card__tag">EXPERIMENT · 003</span>
-        </div>
-        <h4 class="lab-card__name">Lissajous Oscilloscope</h4>
+      <a class="lab-card reveal" href="https://nasqwww.github.io/" target="_blank" rel="noopener" data-lab>
+        <div class="lab-card__head"><span class="lab-card__icon">γ</span><span class="lab-card__tag">LAB · 003</span></div>
+        <h4 class="lab-card__name">Typewriter Poems</h4>
         <p class="lab-card__body">
-          Фигуры Лиссажу на canvas с настройкой частот и фаз. Простой, но залипательный. Используется в Music Visualizer как режим.
+          Коллекция коротких стихов, которые печатаются сами — посимвольно, с ошибками, исправлениями и паузами. Как будто за машинкой сидит живой человек. Звук печатной машинки опционален.
         </p>
-        <div class="lab-card__foot">
-          <span>Canvas · math</span>
-          <span class="lab-card__link">open →</span>
-        </div>
+        <div class="lab-card__foot"><span>JS · Text</span><span class="lab-card__link">open →</span></div>
       </a>
 
-      <a class="lab-card reveal" href="#" data-lab>
-        <div class="lab-card__head">
-          <span class="lab-card__icon">δ</span>
-          <span class="lab-card__tag">EXPERIMENT · 004</span>
-        </div>
-        <h4 class="lab-card__name">Cellular Automaton</h4>
+      <a class="lab-card reveal" href="https://nasqwww.github.io/" target="_blank" rel="noopener" data-lab>
+        <div class="lab-card__head"><span class="lab-card__icon">δ</span><span class="lab-card__tag">LAB · 004</span></div>
+        <h4 class="lab-card__name">Pixel Painter</h4>
         <p class="lab-card__body">
-          Game of Life с настраиваемыми правилами. Конвейевские планеры, глайдер-пушки, осцилляторы. Кнопка randomize — и сразу красивый хаос.
+          Простой пиксельный редактор: сетка 32×32, палитра 16 цветов, экспорт в PNG, undo/redo. Сделан как инструмент для скетчей спрайтов — ничего лишнего.
         </p>
-        <div class="lab-card__foot">
-          <span>Canvas · 200×200</span>
-          <span class="lab-card__link">open →</span>
-        </div>
+        <div class="lab-card__foot"><span>Canvas · Tool</span><span class="lab-card__link">open →</span></div>
       </a>
 
-      <a class="lab-card reveal" href="#" data-lab>
-        <div class="lab-card__head">
-          <span class="lab-card__icon">ε</span>
-          <span class="lab-card__tag">EXPERIMENT · 005</span>
-        </div>
-        <h4 class="lab-card__name">Reactive Type</h4>
+      <a class="lab-card reveal" href="https://nasqwww.github.io/moon.html" target="_blank" rel="noopener" data-lab>
+        <div class="lab-card__head"><span class="lab-card__icon">ε</span><span class="lab-card__tag">LAB · 005</span></div>
+        <h4 class="lab-card__name">moon.html</h4>
         <p class="lab-card__body">
-          Буквы, которые дышат, реагируют на курсор и шум Перлина. Поэзия как живой организм — текст нельзя «прочитать», его можно «наблюдать».
+          Отдельная страница про луну. Что-то тихое, медитативное — между визуальной поэзией и техно-демо. Идеально открывается ночью, на полном экране, со звуком.
         </p>
-        <div class="lab-card__foot">
-          <span>SVG · noise</span>
-          <span class="lab-card__link">open →</span>
-        </div>
+        <div class="lab-card__foot"><span>Canvas · Ambient</span><span class="lab-card__link">open →</span></div>
       </a>
 
-      <a class="lab-card reveal" href="#" data-lab>
-        <div class="lab-card__head">
-          <span class="lab-card__icon">ζ</span>
-          <span class="lab-card__tag">EXPERIMENT · 006</span>
-        </div>
-        <h4 class="lab-card__name">Pathfinding Visualizer</h4>
+      <a class="lab-card reveal" href="https://nasqwww.github.io/404.html" target="_blank" rel="noopener" data-lab>
+        <div class="lab-card__head"><span class="lab-card__icon">ζ</span><span class="lab-card__tag">LAB · 006</span></div>
+        <h4 class="lab-card__name">custom 404</h4>
         <p class="lab-card__body">
-          A* и Дейкстра на сетке с препятствиями. Рисуешь стены — смотришь, как алгоритм находит путь. Полезно для понимания эвристик.
+          Кастомная страница 404 для всего домена nasqwww.github.io. Не банальная «страница не найдена», а полноценный микро-проект с собственной анимацией.
         </p>
-        <div class="lab-card__foot">
-          <span>JS · grid</span>
-          <span class="lab-card__link">open →</span>
-        </div>
+        <div class="lab-card__foot"><span>Error · Custom</span><span class="lab-card__link">open →</span></div>
       </a>
 
-      <a class="lab-card reveal" href="#" data-lab>
-        <div class="lab-card__head">
-          <span class="lab-card__icon">η</span>
-          <span class="lab-card__tag">EXPERIMENT · 007</span>
-        </div>
-        <h4 class="lab-card__name">Voronoi Generator</h4>
+      <a class="lab-card reveal" href="https://nasqwww.github.io/" target="_blank" rel="noopener" data-lab>
+        <div class="lab-card__head"><span class="lab-card__icon">η</span><span class="lab-card__tag">LAB · 007</span></div>
+        <h4 class="lab-card__name">Markdown Garden</h4>
         <p class="lab-card__body">
-          Диаграмма Вороного на случайных точках с настройкой количества ячеек и цветовых палитр. Каждый раз — другой паттерн.
+          Система заметок с бэк-ссылками, тегами и графом связей. Заметки пишутся в markdown, рендерятся в HTML на лету, связи визуализируются как мини-граф. Pure front, без бэкенда.
         </p>
-        <div class="lab-card__foot">
-          <span>Canvas · O(n log n)</span>
-          <span class="lab-card__link">open →</span>
-        </div>
+        <div class="lab-card__foot"><span>JS · Graph</span><span class="lab-card__link">open →</span></div>
       </a>
 
-      <a class="lab-card reveal" href="#" data-lab>
-        <div class="lab-card__head">
-          <span class="lab-card__icon">θ</span>
-          <span class="lab-card__tag">EXPERIMENT · 008</span>
-        </div>
-        <h4 class="lab-card__name">Tape Echo Simulator</h4>
+      <a class="lab-card reveal" href="https://github.com/nasqwww/scale" target="_blank" rel="noopener" data-lab>
+        <div class="lab-card__head"><span class="lab-card__icon">θ</span><span class="lab-card__tag">LAB · 008</span></div>
+        <h4 class="lab-card__name">scale (TS)</h4>
         <p class="lab-card__body">
-          Эмуляция ленточного эха на Web Audio. Пишешь в микрофон — получаешь повтор с деградацией, как со старой ленты. С настройкой скорости и feedback.
+          TypeScript-эксперимент про масштабирование, измерение, пропорции. В разработке. Исходники открыты — можно посмотреть, как растёт TS-проект с нуля.
         </p>
-        <div class="lab-card__foot">
-          <span>WebAudio · mic</span>
-          <span class="lab-card__link">open →</span>
-        </div>
+        <div class="lab-card__foot"><span>TypeScript</span><span class="lab-card__link">open →</span></div>
       </a>
     </div>
   </div>
 </section>
 
-<!-- ==================== V. LOG / TIMELINE ==================== -->
+<!-- ==================== VII. LOG / TIMELINE ==================== -->
 <section id="log">
   <div class="container">
     <div class="section-head">
       <div class="section-head__left">
-        <span class="section-number">05 / 06</span>
+        <span class="section-number">07 / 08</span>
         <span class="eyebrow">Log · Журнал</span>
       </div>
       <div>
         <h2 class="headline-enter">Что делал.<br>Что бросил.<br>Что планирую.</h2>
         <div class="section-head__meta">
-          <div><strong>Период</strong><span>2022 — 2024</span></div>
-          <div><strong>Записей</strong><span>9 значимых</span></div>
+          <div><strong>Период</strong><span>2022 — 2026</span></div>
+          <div><strong>Записей</strong><span>10 значимых</span></div>
         </div>
       </div>
     </div>
@@ -1976,7 +1871,7 @@
       <div class="row reveal">
         <span class="row__year">2023 · 06</span>
         <span class="row__title">Первый шейдер на WebGL</span>
-        <span class="row__body">Мandelbrot на минималках. Два дня мучений с GLSL, потом — щелчок, и фрактал ожил. С тех пор шейдеры — любимый инструмент.</span>
+        <span class="row__body">Mandelbrot на минималках. Два дня мучений с GLSL, потом — щелчок, и фрактал ожил. С тех пор шейдеры — любимый инструмент.</span>
         <span class="row__tag">BREAKTHROUGH</span>
       </div>
       <div class="row reveal">
@@ -1987,32 +1882,38 @@
       </div>
       <div class="row reveal">
         <span class="row__year">2024 · 02</span>
-        <span class="row__title">Retro CRT Sim — открытый релиз</span>
-        <span class="row__body">Симулятор старого монитора на WebGL. Самый «залипательный» проект. Друзья игрались с ним дольше, чем я писал.</span>
+        <span class="row__title">DROP — P2P без сервера</span>
+        <span class="row__body">Сделал peer-to-peer обмен файлами через WebRTC. Без бэкенда, без облака. Открыл на двух телефонах — работает. Волшебство.</span>
         <span class="row__tag">SHIP</span>
       </div>
       <div class="row reveal">
         <span class="row__year">2024 · 06</span>
-        <span class="row__title">Roma Aeterna — большой археологический проект</span>
-        <span class="row__body">1500 строк про древний Рим в одном HTML. После него понял, что один файл — это не ограничение, а формат.</span>
+        <span class="row__title">nasqcasino и internet.planet</span>
+        <span class="row__body">Два больших проекта почти подряд: казино-слот и WebGL-планета. Оба live на GitHub Pages — /game/ и /1/. Самые посещаемые страницы домена.</span>
         <span class="row__tag">SHIP</span>
       </div>
       <div class="row reveal">
-        <span class="row__year">2024 · 11</span>
-        <span class="row__title">Этот индекс-терминал</span>
-        <span class="row__body">Переходник ко всему. Стыдно иметь 12 проектов и не иметь одной точки входа. Теперь есть. Сейчас читаешь её.</span>
+        <span class="row__year">2025 · 11</span>
+        <span class="row__title">Roma Aeterna — большой архив</span>
+        <span class="row__body">1500 строк про древний Рим в одном HTML. После него понял, что один файл — это не ограничение, а формат. Ждёт деплоя.</span>
+        <span class="row__tag">SHIP</span>
+      </div>
+      <div class="row reveal">
+        <span class="row__year">2026 · 06</span>
+        <span class="row__title">Этот индекс-терминал v3.1</span>
+        <span class="row__body">Переходник ко всему. Стыдно иметь 12+ проектов и не иметь одной точки входа. Теперь есть. Сейчас читаешь её.</span>
         <span class="row__tag">NOW</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ==================== VI. MANIFESTO (STICKY) ==================== -->
+<!-- ==================== VIII. MANIFESTO ==================== -->
 <section id="manifesto">
   <div class="container">
     <div class="section-head">
       <div class="section-head__left">
-        <span class="section-number">06 / 06</span>
+        <span class="section-number">08 / 08</span>
         <span class="eyebrow">Manifesto · Подход</span>
       </div>
       <div>
@@ -2023,7 +1924,7 @@
     <div class="sticky-pair">
       <div class="left">
         <span class="eyebrow">Philosophy</span>
-        <p class="philosophy-quote" style="font-family: var(--font-sans); font-size: clamp(1.5rem, 2.5vw, 2.25rem); line-height: 1.35; font-style: italic; color: var(--text); border-left: 2px solid var(--accent); padding: 0.5rem 0 0.5rem 2rem; margin: 2rem 0; max-width: 28ch;">
+        <p style="font-family: var(--font-sans); font-size: clamp(1.5rem, 2.5vw, 2.25rem); line-height: 1.35; font-style: italic; color: var(--text); border-left: 2px solid var(--accent); padding: 0.5rem 0 0.5rem 2rem; margin: 2rem 0; max-width: 28ch;">
           Сайт — это не слайд. Это машина.
         </p>
         <p style="margin-top: 2.5rem; font-size: 1rem; line-height: 1.7; color: var(--text-soft); max-width: 36ch;">
@@ -2041,7 +1942,6 @@
             Никаких бандлеров, никаких npm install, никаких node_modules на 400 мегабайт. Один файл — ты можешь открыть его в любом текстовом редакторе, изменить любую строку и выложить на GitHub Pages. Это формат, а не ограничение.
           </p>
         </div>
-
         <div class="right-block reveal">
           <span class="right-block__label">02 / Vanilla first</span>
           <h3>Сначала язык, потом библиотека.</h3>
@@ -2053,7 +1953,6 @@
             <cite>— Личное правило</cite>
           </blockquote>
         </div>
-
         <div class="right-block reveal">
           <span class="right-block__label">03 / Производительность — это этика</span>
           <h3>60 fps — это не цель, это минимум.</h3>
@@ -2061,7 +1960,6 @@
             Каждая анимация должна работать на 60 fps на пятилетнем ноутбуке. Каждый шейдер должен держаться, пока не сломается. Каждый проект должен загружаться за одну секунду на 3G. Если мой код тормозит — это не «особенность платформы», это моя вина.
           </p>
         </div>
-
         <div class="right-block reveal">
           <span class="right-block__label">04 / Движение как содержание</span>
           <h3>Анимация — не украшение.</h3>
@@ -2069,7 +1967,6 @@
             Движение на странице — это часть смысла. То, как появляется текст, как реагирует курсор, как переходят секции — это всё говорит читателю о том, что это за проект. Статичный сайт — это мёртвый сайт. Анимированный неправильно — раздражающий. Анимированный правильно — живой.
           </p>
         </div>
-
         <div class="right-block reveal">
           <span class="right-block__label">05 / Открытый исходник</span>
           <h3>Всё, что я делаю — твоё.</h3>
@@ -2077,7 +1974,6 @@
             Каждый проект на GitHub. Каждый файл можно форкнуть, прочитать, разобрать на части, собрать заново. Я не верю в «интеллектуальную собственность» на код — я верю в общее поле. Если тебе понравилась анимация — скопируй. Если хочешь понять, как сделано — открой исходник.
           </p>
         </div>
-
         <div class="right-block reveal">
           <span class="right-block__label">06 / Тишина важнее шума</span>
           <h3>Никаких баннеров. Никаких попапов.</h3>
@@ -2104,13 +2000,13 @@
     </div>
     <div class="stats-grid">
       <div class="stat-item reveal">
-        <div class="stat-item__label">Commits · 2024</div>
-        <div class="stat-item__num">1.2k</div>
-        <div class="stat-item__desc">в этом году на GitHub</div>
+        <div class="stat-item__label">Live projects</div>
+        <div class="stat-item__num">05</div>
+        <div class="stat-item__desc">подтверждённых 200 OK</div>
       </div>
       <div class="stat-item reveal">
-        <div class="stat-item__label">Repository count</div>
-        <div class="stat-item__num">12</div>
+        <div class="stat-item__label">GitHub repos</div>
+        <div class="stat-item__num">06</div>
         <div class="stat-item__desc">публичных, активных</div>
       </div>
       <div class="stat-item reveal">
@@ -2132,7 +2028,7 @@
   <div class="container">
     <div class="section-head">
       <div class="section-head__left">
-        <span class="section-number">07 / 06</span>
+        <span class="section-number">∞ / 08</span>
         <span class="eyebrow">Contact · Связь</span>
       </div>
       <div>
@@ -2157,27 +2053,27 @@
             <span class="contact-channel__value">github.com/nasqwww</span>
             <span class="contact-channel__note">Основной канал. Коммиты, issues, обсуждения.</span>
           </a>
-          <a class="contact-channel" href="mailto:nasq@example.com">
-            <span class="contact-channel__label">02 · Email</span>
-            <span class="contact-channel__value">nasq@example.com</span>
-            <span class="contact-channel__note">Для длинных писем и предложений.</span>
+          <a class="contact-channel" href="https://github.com/nasqwww/nasqwww.github.io" target="_blank" rel="noopener">
+            <span class="contact-channel__label">02 · Main repo</span>
+            <span class="contact-channel__value">github.com/nasqwww/nasqwww.github.io</span>
+            <span class="contact-channel__note">Исходники этого сайта и всех live-демок.</span>
           </a>
-          <a class="contact-channel" href="https://t.me/" target="_blank" rel="noopener">
-            <span class="contact-channel__label">03 · Telegram</span>
-            <span class="contact-channel__value">@nasq</span>
-            <span class="contact-channel__note">Для быстрого обмена. Не всегда оперативно.</span>
-          </a>
-        </div>
-        <div>
           <a class="contact-channel" href="https://nasqwww.github.io/" target="_blank" rel="noopener">
-            <span class="contact-channel__label">04 · GitHub Pages</span>
+            <span class="contact-channel__label">03 · Pages</span>
             <span class="contact-channel__value">nasqwww.github.io</span>
             <span class="contact-channel__note">Главная страница портала.</span>
           </a>
-          <a class="contact-channel" href="#" onclick="event.preventDefault();">
-            <span class="contact-channel__label">05 · PGP</span>
-            <span class="contact-channel__value">0x7F32A · AES-256</span>
-            <span class="contact-channel__note">Для приватной переписки. Ключ по запросу.</span>
+        </div>
+        <div>
+          <a class="contact-channel" href="https://nasqwww.github.io/game/" target="_blank" rel="noopener">
+            <span class="contact-channel__label">04 · Live · Casino</span>
+            <span class="contact-channel__value">nasqwww.github.io/game/</span>
+            <span class="contact-channel__note">Самый посещаемый live-проект.</span>
+          </a>
+          <a class="contact-channel" href="https://nasqwww.github.io/1/" target="_blank" rel="noopener">
+            <span class="contact-channel__label">05 · Live · Planet</span>
+            <span class="contact-channel__value">nasqwww.github.io/1/</span>
+            <span class="contact-channel__note">WebGL-планета с частицами.</span>
           </a>
           <a class="contact-channel" href="#hero" onclick="event.preventDefault(); window.scrollTo({top:0,behavior:'smooth'});">
             <span class="contact-channel__label">06 · Сам сайт</span>
@@ -2197,13 +2093,15 @@
     <div class="footer-grid">
       <div>
         <div class="footer__brand">nasq · index</div>
-        <p>Персональный портал-переходник ко всем проектам, лаборатории и заметкам. Один файл, ноль фреймворков, бесконечный скролл. Сделано в тёмной комнате, на плохом кофе, в хорошем настроении.</p>
+        <p>Персональный портал-переходник ко всем live-проектам, репозиториям и экспериментам. Один файл, ноль фреймворков, бесконечный скролл. Сделано в тёмной комнате, на плохом кофе, в хорошем настроении.</p>
       </div>
       <div>
         <h4>Разделы</h4>
         <ul>
-          <li><a href="#projects">Projects</a></li>
+          <li><a href="#live">Live</a></li>
           <li><a href="#featured">Featured</a></li>
+          <li><a href="#all">All projects</a></li>
+          <li><a href="#repos">Repos</a></li>
           <li><a href="#stack">Stack</a></li>
           <li><a href="#lab">Lab</a></li>
           <li><a href="#log">Log</a></li>
@@ -2211,29 +2109,29 @@
         </ul>
       </div>
       <div>
-        <h4>Проекты</h4>
+        <h4>Live</h4>
         <ul>
-          <li><a href="https://nasqwww.github.io/roma-aeterna/" target="_blank" rel="noopener">Roma Aeterna</a></li>
-          <li><a href="https://nasqwww.github.io/music-visualizer/" target="_blank" rel="noopener">Music Visualizer</a></li>
-          <li><a href="https://nasqwww.github.io/retro-crt-sim/" target="_blank" rel="noopener">Retro CRT Sim</a></li>
-          <li><a href="https://nasqwww.github.io/mandelbrot-explorer/" target="_blank" rel="noopener">Mandelbrot Explorer</a></li>
-          <li><a href="https://nasqwww.github.io/ascii-tetris/" target="_blank" rel="noopener">ASCII Tetris</a></li>
+          <li><a href="https://nasqwww.github.io/game/" target="_blank" rel="noopener">nasqcasino</a></li>
+          <li><a href="https://nasqwww.github.io/1/" target="_blank" rel="noopener">internet.planet</a></li>
+          <li><a href="https://nasqwww.github.io/drop/" target="_blank" rel="noopener">DROP · P2P</a></li>
+          <li><a href="https://nasqwww.github.io/moon.html" target="_blank" rel="noopener">moon.html</a></li>
+          <li><a href="https://nasqwww.github.io/404.html" target="_blank" rel="noopener">custom 404</a></li>
         </ul>
       </div>
       <div>
-        <h4>Колофон</h4>
+        <h4>Repos</h4>
         <ul>
-          <li>HTML · CSS · Vanilla JS</li>
-          <li>JetBrains Mono · Inter</li>
-          <li>Bronze on black</li>
-          <li>1 файл · 0 зависимостей</li>
-          <li>Без аналитики · без cookies</li>
+          <li><a href="https://github.com/nasqwww" target="_blank" rel="noopener">profile</a></li>
+          <li><a href="https://github.com/nasqwww/nasqwww.github.io" target="_blank" rel="noopener">nasqwww.github.io</a></li>
+          <li><a href="https://github.com/nasqwww/geodrift" target="_blank" rel="noopener">geodrift</a></li>
+          <li><a href="https://github.com/nasqwww/prompt-vik-site-builder" target="_blank" rel="noopener">prompt-vik</a></li>
+          <li><a href="https://github.com/nasqwww/scale" target="_blank" rel="noopener">scale</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2024 · nasq · open archive</span>
-      <span>build 2024.11.03 · v3.0</span>
+      <span>© 2026 · nasq · open archive</span>
+      <span>build 2026.06 · v3.1</span>
       <span>sub luce nihil novi</span>
     </div>
   </div>
@@ -2254,7 +2152,6 @@
     if (!dot || !ring) return;
 
     let mx = 0, my = 0, rx = 0, ry = 0;
-    let raf;
 
     window.addEventListener('mousemove', (e) => {
       mx = e.clientX; my = e.clientY;
@@ -2265,7 +2162,7 @@
       rx += (mx - rx) * 0.18;
       ry += (my - ry) * 0.18;
       ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%, -50%)';
-      raf = requestAnimationFrame(tick);
+      requestAnimationFrame(tick);
     }
     tick();
 
